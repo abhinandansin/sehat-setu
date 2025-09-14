@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Portal</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #007BFF, #00C6FF);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .form-container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
+      width: 750px;
+      max-width: 95%;
+    }
+    h2 {
+      text-align: center;
+      color: #007BFF;
+      margin-bottom: 25px;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 12px;
+      cursor: pointer;
+      border: none;
+      background: #f1f1f1;
+      font-size: 16px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .tab-btn.active {
+      background: #007BFF;
+      color: white;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: border 0.3s;
+    }
+    input:focus, textarea:focus {
+      border: 1px solid #007BFF;
+      box-shadow: 0px 0px 5px rgba(0,123,255,0.5);
+    }
+    textarea {
+      resize: none;
+    }
+    .full-width {
+      grid-column: span 2;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #007BFF;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+      grid-column: span 2;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Doctor Portal</h2>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showForm('signup')">Sign Up</button>
+      <button class="tab-btn" onclick="showForm('login')">Login</button>
+    </div>
+
+    <!-- Sign Up Form -->
+    <form id="signupForm" onsubmit="handleSignUp(event)" class="form-grid">
+      
+      <div>
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname" placeholder="Enter doctor's full name" required>
+      </div>
+      
+      <div>
+        <label for="specialization">Specialization</label>
+        <select id="specialization" name="specialization" required>
+          <option value="">-- Select Specialization --</option>
+          <option value="general">General Physician</option>
+          <option value="pediatrician">Pediatrician</option>
+          <option value="cardiologist">Cardiologist</option>
+          <option value="gynecologist">Gynecologist</option>
+          <option value="dermatologist">Dermatologist</option>
+          <option value="orthopedic">Orthopedic</option>
+        </select>
+      </div>
+      
+      <div>
+        <label for="experience">Experience (in years)</label>
+        <input type="number" id="experience" name="experience" placeholder="e.g. 5" min="0" required>
+      </div>
+      
+      <div>
+        <label for="qualification">Qualification</label>
+        <input type="text" id="qualification" name="qualification" placeholder="e.g. MBBS, MD" required>
+      </div>
+      
+      <div class="full-width">
+        <label for="availability">Availability (Free Time)</label>
+        <input type="text" id="availability" name="availability" placeholder="e.g. 2 PM to 3 PM" required>
+      </div>
+      
+      <div>
+        <label for="contact">Contact Number</label>
+        <input type="tel" id="contact" name="contact" placeholder="Enter mobile number" pattern="[0-9]{10}" required>
+      </div>
+      
+      <div>
+        <label for="email">Email ID</label>
+        <input type="email" id="email" name="email" placeholder="Enter email address" required>
+      </div>
+
+      <div>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter password" required>
+      </div>
+
+      <div>
+        <label for="confirmPassword">Confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required>
+      </div>
+      
+      <div class="full-width">
+        <label for="address">Address</label>
+        <textarea id="address" name="address" rows="3" placeholder="Enter address" required></textarea>
+      </div>
+
+      <!-- New Upload Fields -->
+      <div>
+        <label for="photo">Upload Doctor Photo</label>
+        <input type="file" id="photo" name="photo" accept="image/*" required>
+      </div>
+
+      <div>
+        <label for="signature">Upload Signature</label>
+        <input type="file" id="signature" name="signature" accept="image/*" required>
+      </div>
+
+      <div class="full-width">
+        <label for="certificate">Upload Certificate</label>
+        <input type="file" id="certificate" name="certificate" accept=".jpg,.png,.pdf" required>
+      </div>
+      <!-- End Upload Fields -->
+      
+      <button type="submit">Sign Up</button>
+    </form>
+
+    <!-- Login Form -->
+    <form id="loginForm" onsubmit="handleLogin(event)" class="form-grid hidden">
+      <div class="full-width">
+        <label for="doctorID">Doctor ID</label>
+        <input type="text" id="doctorID" name="doctorID" placeholder="Enter your Doctor ID" required>
+      </div>
+
+      <div class="full-width">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter password" required>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+    // Switch Forms
+    function showForm(type) {
+      document.getElementById("signupForm").classList.add("hidden");
+      document.getElementById("loginForm").classList.add("hidden");
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+
+      if (type === "signup") {
+        document.getElementById("signupForm").classList.remove("hidden");
+        document.querySelectorAll(".tab-btn")[0].classList.add("active");
+      } else {
+        document.getElementById("loginForm").classList.remove("hidden");
+        document.querySelectorAll(".tab-btn")[1].classList.add("active");
+      }
+    }
+
+    // Convert File to Base64 (for storage)
+    function toBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    // Sign Up Handler
+    async function handleSignUp(event) {
+      event.preventDefault();
+
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("❌ Passwords do not match!");
+        return;
+      }
+
+      const doctorID = "DOC" + Math.floor(Math.random() * 1000000);
+
+      const photoFile = document.getElementById("photo").files[0];
+      const signatureFile = document.getElementById("signature").files[0];
+      const certificateFile = document.getElementById("certificate").files[0];
+
+      const doctorData = {
+        id: doctorID,
+        fullname: document.getElementById("fullname").value,
+        specialization: document.getElementById("specialization").value,
+        experience: document.getElementById("experience").value,
+        qualification: document.getElementById("qualification").value,
+        availability: document.getElementById("availability").value,
+        contact: document.getElementById("contact").value,
+        email: document.getElementById("email").value,
+        address: document.getElementById("address").value,
+        password: password,
+        photo: photoFile ? await toBase64(photoFile) : null,
+        signature: signatureFile ? await toBase64(signatureFile) : null,
+        certificate: certificateFile ? await toBase64(certificateFile) : null
+      };
+
+      localStorage.setItem("doctorData", JSON.stringify(doctorData));
+
+      alert("✅ Sign Up Successful!\nYour Doctor ID is: " + doctorID + "\nPlease use this ID for login.");
+      window.location.href = "docterd.html";
+      event.target.reset();
+    }
+
+    // Login Handler
+    function handleLogin(event) {
+      event.preventDefault();
+
+      const enteredID = document.getElementById("doctorID").value;
+      const enteredPassword = document.getElementById("loginPassword").value;
+
+      const doctorData = JSON.parse(localStorage.getItem("doctorData"));
+
+      if (doctorData && enteredID === doctorData.id && enteredPassword === doctorData.password) {
+        alert("✅ Login Successful! Welcome Dr. " + doctorData.fullname);
+        window.location.href = "docterd.html";
+      } else {
+        alert("❌ Invalid Doctor ID or Password!");
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sehet Satu</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: linear-gradient(-45deg, #00C6FF, #007BFF, #00FFE1, #005FFF);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      overflow: hidden;
+      position: relative;
+      color: #fff;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+      animation: float 20s linear infinite;
+    }
+
+    .particle:nth-child(1) { width: 20px; height: 20px; top: 10%; left: 15%; animation-duration: 18s; }
+    .particle:nth-child(2) { width: 15px; height: 15px; top: 50%; left: 80%; animation-duration: 22s; }
+    .particle:nth-child(3) { width: 25px; height: 25px; top: 70%; left: 30%; animation-duration: 20s; }
+    .particle:nth-child(4) { width: 10px; height: 10px; top: 30%; left: 50%; animation-duration: 25s; }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-50px) rotate(180deg); }
+      100% { transform: translateY(0) rotate(360deg); }
+    }
+
+    /* Title */
+    h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+    }
+    h2 {
+      font-size: 22px;
+      margin-bottom: 50px;
+      opacity: 0.9;
+      text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+    }
+
+    /* Cards for login */
+    .card-container {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      padding: 30px 40px;
+      border-radius: 20px;
+      text-align: center;
+      width: 250px;
+      transition: 0.3s;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      background: rgba(255,255,255,0.25);
+    }
+
+    .card i {
+      font-size: 50px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .card p {
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 15px;
+      font-size: 14px;
+      opacity: 0.8;
+      z-index: 1;
+    }
+
+    @media (max-width: 768px) {
+      h1 { font-size: 36px; }
+      h2 { font-size: 18px; margin-bottom: 30px; }
+      .card { width: 200px; padding: 20px; }
+    }
+  </style>
+  <!-- Font Awesome for icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Particles -->
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+
+  <h1>Welcome to Sehat Setu</h1>
+  <h2>Your Digital Healthcare Partner</h2>
+
+  <div class="card-container">
+    <!-- Doctor Card -->
+    <a href="docter.html" class="card">
+      <i class="fas fa-user-md"></i>
+      <p>Doctor Login/Sign In</p>
+    </a>
+
+    <!-- Patient Card -->
+    <a href="pateint.html" class="card">
+      <i class="fas fa-user-injured"></i>
+      <p>Patient Login/Sign In</p>
+    </a>
+  </div>
+
+  <div class="footer">© 2025 Telemedicine Portal</div>
+
+</body>
+</html>
