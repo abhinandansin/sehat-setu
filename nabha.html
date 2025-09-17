@@ -3,95 +3,147 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sehat Setu — Clean Prototype</title>
+  <title>Sehat Setu — Punjabi Language Update</title>
 
-  <!-- Google font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Font Awesome (icons) -->
   <script src="https://kit.fontawesome.com/6d42e9e0ce.js" crossorigin="anonymous"></script>
-
-  <!-- Chart.js for IoT charts -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- jsPDF for PDF export -->
+  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
+    /* CSS code remains the same as the previous animated version */
     :root{
       --brand: #2a9d8f;
+      --brand-dark: #21867a;
       --accent:#e76f51;
-      --muted:#6c757d;
-      --glass: rgba(255,255,255,0.7);
-      --bg: #f6f8fa;
+      --muted:#899198;
+      --bg: #f7f9fc;
       --card: #ffffff;
+      --text-dark: #12181c;
+      --text-light: #4a545c;
+      --border-light: #eef2f5;
+      --shadow: 0 10px 30px rgba(18, 24, 28, 0.07);
     }
     *{box-sizing:border-box}
-    body{font-family:'Poppins',system-ui,Arial;margin:0;background:var(--bg);color:#111;-webkit-font-smoothing:antialiased}
+    body{font-family:'Poppins',system-ui,Arial;margin:0;background:var(--bg);color:var(--text-dark);-webkit-font-smoothing:antialiased; transition: background 0.3s, color 0.3s;}
     .app{display:flex;min-height:100vh}
-    /* Sidebar */
-    .sidebar{width:240px;background:linear-gradient(180deg,var(--brand),#1e6b60);color:white;padding:18px;display:flex;flex-direction:column;gap:12px}
-    .brand{font-weight:700;font-size:18px}
-    .muted{color:rgba(255,255,255,0.9);font-size:13px}
-    .nav{margin-top:12px;display:flex;flex-direction:column;gap:6px}
-    .nav button{background:transparent;border:none;color:inherit;text-align:left;padding:10px;border-radius:8px;cursor:pointer;display:flex;gap:10px;align-items:center;font-weight:600}
-    .nav button.active{background:rgba(255,255,255,0.08)}
-    .sidebar-footer{margin-top:auto;font-size:12px;opacity:0.95}
-    /* Main */
-    .main{flex:1;padding:18px}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px}
-    .controls{display:flex;gap:8px;align-items:center}
-    .btn{background:linear-gradient(90deg,var(--brand),#21867a);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
-    .mini{background:#fff;border:1px solid #ddd;padding:8px 10px;border-radius:8px;color:var(--brand);cursor:pointer}
-    .card{background:var(--card);border-radius:10px;padding:14px;box-shadow:0 8px 28px rgba(12,18,24,0.06)}
-    .grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-top:14px}
-    @media(max-width:980px){ .sidebar{display:none} .grid{grid-template-columns:1fr} }
-    h2{margin:0 0 8px 0}
-    input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eef0}
+    
+    @keyframes fadeIn { 
+        from { opacity: 0; transform: translateY(10px); } 
+        to { opacity: 1; transform: translateY(0); } 
+    }
+    @keyframes popIn {
+        from { opacity: 0; transform: scale(0.95); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    
+    .sidebar{width:240px;background:var(--brand);color:white;padding:20px;display:flex;flex-direction:column;gap:15px;transition: transform 0.3s ease-in-out; z-index: 100;}
+    .brand{font-weight:700;font-size:20px; padding-bottom: 10px;}
+    .muted{color:rgba(255,255,255,0.8);font-size:13px}
+    .nav{margin-top:15px;display:flex;flex-direction:column;gap:8px}
+    .nav button{background:transparent;border:none;color:inherit;text-align:left;padding:12px 15px;border-radius:8px;cursor:pointer;display:flex;gap:12px;align-items:center;font-weight:500; font-size: 15px; position: relative; transition: background 0.2s, transform 0.2s;}
+    .nav button:hover { background: rgba(255,255,255,0.05); transform: translateX(5px); }
+    .nav button .fa-fw { transition: transform 0.3s; }
+    .nav button:hover .fa-fw { transform: scale(1.2) rotate(-5deg); }
+    .nav button.active{background:rgba(255,255,255,0.1); font-weight: 600;}
+    .nav button.active::before {
+        content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+        height: 60%; width: 4px; background: white; border-radius: 0 4px 4px 0;
+    }
+    .sidebar-footer{margin-top:auto;font-size:12px;opacity:0.8}
+    
+    .main{flex:1;padding:24px; overflow-y: auto;}
+    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px; margin-bottom: 24px;}
+    .hamburger-menu { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--brand); }
+    
+    .btn{background:var(--brand);color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer; font-weight: 600; font-family: 'Poppins'; transition: all 0.2s ease-out;}
+    .btn:hover { background: var(--brand-dark); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(42, 157, 143, 0.3); }
+    .btn:active { transform: translateY(0) scale(0.95); box-shadow: none; }
+    .mini{background:var(--card);border:1px solid var(--border-light);padding:8px 12px;border-radius:8px;color:var(--brand);cursor:pointer; font-weight: 600; transition: all 0.2s ease-out;}
+    .mini:hover { border-color: var(--brand); background: #f1fcfb; transform: translateY(-2px); }
+    .mini:active { transform: translateY(0) scale(0.95); }
+    
+    .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:var(--shadow); transition: transform 0.3s, box-shadow 0.3s;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:24px;margin-top:24px}
+    h2{font-size: 24px;} h3 {font-size: 18px;}
+    
+    .view { display: none; animation: fadeIn 0.5s ease-out; }
+    .view.active { display: block; }
+    
+    #dashboard.active .card { animation: popIn 0.5s ease-out forwards; opacity: 0; }
+    #dashboard.active .card:nth-child(1) { animation-delay: 0.1s; }
+    #dashboard.active .card:nth-child(2) { animation-delay: 0.2s; }
+    #dashboard.active .card:nth-child(3) { animation-delay: 0.3s; }
+    #dashboard.active .grid > div:nth-child(2) .card { animation-delay: 0.4s; }
+    
+    input,textarea,select{width:100%;padding:12px;border-radius:8px;border:1px solid var(--border-light); font-family: 'Poppins', sans-serif; transition: border-color 0.2s, box-shadow 0.2s; background: #fcfdff; }
+    input:focus, textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.15); outline: none; }
     textarea{min-height:90px;resize:vertical}
-    .muted-dark{color:var(--muted);font-size:13px}
+    .muted-dark{color:var(--text-light);font-size:14px}
 
-    /* Chat */
-    .chat{display:flex;flex-direction:column;height:420px}
-    .messages{flex:1;overflow:auto;padding:12px;border-radius:8px;background:linear-gradient(180deg,#f7fffb,#f0f9f8)}
-    .msg{display:flex;margin:8px 0}
-    .msg.bot .bubble{background:#eef7f6;color:#06372f}
+    .chat{display:flex;flex-direction:column;height:calc(100vh - 120px); max-height: 500px;}
+    .messages{flex:1;overflow:auto;padding:15px;border-radius:8px;background:var(--bg);}
+    .msg{display:flex;margin:10px 0; animation: fadeIn 0.3s;}
+    .msg.bot .bubble{background:#e9f5f3;color:var(--text-dark); border-radius: 18px 18px 18px 4px;}
     .msg.user{justify-content:flex-end}
-    .bubble{padding:8px 12px;border-radius:12px;max-width:78%}
-    .chat-controls{display:flex;gap:8px;margin-top:8px}
+    .msg.user .bubble { background: var(--brand); color: white; border-radius: 18px 18px 4px 18px; }
+    .bubble{padding:10px 16px;max-width:80%; line-height: 1.5;}
+    .chat-controls{display:flex;gap:8px;margin-top:15px}
+    
+    .typing-indicator { display: flex; align-items: center; }
+    .typing-indicator span {
+        height: 8px; width: 8px; margin: 0 2px;
+        background-color: #a0a0a0; border-radius: 50%;
+        display: inline-block;
+        animation: bounce 1.4s infinite ease-in-out both;
+    }
+    .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+    .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(0); }
+      40% { transform: scale(1.0); }
+    }
+    
+    #toast{position:fixed;right:20px;bottom:20px;background:var(--brand);color:#fff;padding:12px 18px;border-radius:10px;opacity:0;transform:translateY(10px);transition:all .3s;z-index:999; box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
 
-    /* IoT chart */
-    #iotChart{max-width:100%;height:240px}
-
-    /* toast */
-    #toast{position:fixed;right:20px;bottom:20px;background:var(--brand);color:#fff;padding:10px 14px;border-radius:10px;opacity:0;transform:translateY(8px);transition:all .28s;z-index:999}
-
-    /* dark */
-    body.dark{background:#071023;color:#e6f0f6}
-    body.dark .card{background:#071826;box-shadow:0 8px 30px rgba(0,0,0,0.45)}
-    body.dark input,body.dark textarea{background:#05232b;color:#cfe8e5;border:1px solid rgba(255,255,255,0.04)}
-    a{color:var(--brand)}
-    small{font-size:12px;color:var(--muted)}
+    body.dark{--bg: #0d1117; --card: #161b22; --text-dark: #c9d1d9; --text-light: #8b949e; --border-light: #30363d;}
+    body.dark .mini { color: #c9d1d9; }
+    
+    @media(max-width:980px){
+        .app { flex-direction: column; }
+        .sidebar{position: fixed; top: 0; left: 0; height: 100%; transform: translateX(-100%);}
+        .sidebar.show { transform: translateX(0); box-shadow: 0 0 50px rgba(0,0,0,0.3); }
+        .main { width: 100%; }
+        .grid{grid-template-columns:1fr}
+        .hamburger-menu { display: block; }
+    }
   </style>
 </head>
 <body>
   <div class="app">
     <aside class="sidebar" id="sidebar">
-      <div class="brand">Sehat Setu</div>
-      <div class="muted">Multilingual • Demo • Local data</div>
+      <div class="brand"><i class="fas fa-heartbeat"></i> Sehat Setu</div>
+      <div class="muted">Multilingual • Offline-First</div>
 
       <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="mini" id="darkToggle">🌙</button>
-        <button class="mini" id="langToggle">EN</button>
+        <button class="mini" id="darkToggle" title="Toggle Dark Mode">🌙</button>
+        <button class="mini" id="langToggle" title="Change Language">EN</button>
+      </div>
+      
+      <div style="margin-top:12px;padding:10px;background:rgba(0,0,0,0.2);border-radius:8px">
+          <div style="font-weight:600" data-lang-key="logged_in_as">Logged In As</div>
+          <div style="font-size:14px">Balwinder Singh</div>
       </div>
 
       <nav class="nav" id="nav">
-        <button class="active" data-view="dashboard"><i class="fas fa-th-large"></i> Dashboard</button>
-        <button data-view="video"><i class="fas fa-video"></i> Video</button>
-        <button data-view="chatbot"><i class="fas fa-robot"></i> Chatbot</button>
-        <button data-view="records"><i class="fas fa-file-medical"></i> Records</button>
-        <button data-view="iot"><i class="fas fa-microchip"></i> IoT</button>
-        <button data-view="emergency"><i class="fas fa-ambulance"></i> Emergency</button>
+        <button class="active" data-view="dashboard" data-lang-key="dashboard"><i class="fas fa-th-large fa-fw"></i> Dashboard</button>
+        <button data-view="profile" data-lang-key="profile"><i class="fas fa-user fa-fw"></i> Profile</button>
+        <button data-view="video" data-lang-key="video"><i class="fas fa-video fa-fw"></i> Video</button>
+        <button data-view="chatbot" data-lang-key="chatbot"><i class="fas fa-robot fa-fw"></i> Chatbot</button>
+        <button data-view="records" data-lang-key="records"><i class="fas fa-file-medical fa-fw"></i> Records</button>
+        <button data-view="iot" data-lang-key="iot"><i class="fas fa-microchip fa-fw"></i> IoT</button>
+        <button data-view="emergency" data-lang-key="emergency"><i class="fas fa-ambulance fa-fw"></i> Emergency</button>
       </nav>
 
       <div class="sidebar-footer">© Nabha Prototype — Demo</div>
@@ -99,156 +151,54 @@
 
     <main class="main">
       <div class="topbar">
-        <div><h2 style="margin:0">Sehat Setu</h2><small class="muted-dark">Single-file prototype — replace with backend for production</small></div>
+        <button class="hamburger-menu" id="hamburger-menu">☰</button>
+        <div><h2 style="margin:0">Sehat Setu</h2><small class="muted-dark" data-lang-key="prototype_subtitle">Single-file prototype — replace with backend for production</small></div>
         <div class="controls"><div id="activityShort" class="muted-dark">No activity</div></div>
       </div>
 
       <section id="views">
-        <!-- Dashboard -->
         <div id="dashboard" class="view">
-          <div class="grid">
-            <div>
-              <div class="card">
-                <h2>Welcome 👋</h2>
-                <p class="muted-dark">Use left menu to navigate features. App saves demo data in your browser's localStorage.</p>
-                <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-                  <button class="btn" onclick="openView('video')"><i class="fas fa-video"></i> Start Video</button>
-                  <button class="btn" onclick="openView('chatbot')"><i class="fas fa-robot"></i> Open Chatbot</button>
-                  <button class="mini" onclick="openView('records')"><i class="fas fa-file-medical"></i> Records</button>
-                </div>
-              </div>
-
-              <div class="card" style="margin-top:12px">
-                <h3>Activity Log</h3>
-                <div id="activityList" class="muted-dark" style="max-height:220px;overflow:auto;margin-top:8px">No activity yet.</div>
-              </div>
-            </div>
-
-            <aside>
-              <div class="card">
-                <h3>Emergency Quick</h3>
-                <p class="muted-dark">One-tap call (demo)</p>
-                <div style="display:flex;gap:8px;margin-top:8px">
-                  <a href="tel:108"><button class="btn">Call 108</button></a>
-                  <button class="mini" onclick="showAmbulanceInfo()">More</button>
-                </div>
-              </div>
-
-              <div class="card" style="margin-top:12px">
-                <h3>Stats</h3>
-                <div style="display:flex;gap:16px;margin-top:8px">
-                  <div><strong id="statRecords">0</strong><div class="muted-dark">Records</div></div>
-                  <div><strong id="statPresc">0</strong><div class="muted-dark">Prescriptions</div></div>
-                </div>
-              </div>
-            </aside>
-          </div>
-        </div>
-
-        <!-- Video -->
-        <div id="video" class="view" style="display:none">
-          <div class="card">
-            <h2>Video Consultation — Local Demo</h2>
-            <p class="muted-dark">This preview uses your camera locally. For real consults integrate WebRTC + signaling servers.</p>
-            <div style="display:flex;gap:8px;margin-top:12px">
-              <button class="btn" id="startCam">Start Camera</button>
-              <button class="mini" id="stopCam">Stop</button>
-              <button class="mini" onclick="openWaitingRoom()">Open Waiting Room</button>
-            </div>
-
-            <div id="videoArea" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"></div>
-          </div>
-        </div>
-
-        <!-- Chatbot -->
-        <div id="chatbot" class="view" style="display:none">
-          <div class="card chat">
-            <h2>AI Symptom Checker</h2>
-            <small class="muted-dark">Type symptoms in English / हिन्दी. For production, connect an AI backend.</small>
-
-            <div id="messages" class="messages" style="margin-top:10px">
-              <div class="msg bot"><div class="bubble">नमस्ते — अपनी symptoms बताइए / Type symptoms (e.g. fever)</div></div>
-            </div>
-
-            <div class="chat-controls" style="margin-top:10px">
-              <input id="chatInput" placeholder="Type symptoms (English / हिन्दी)" />
-              <button class="mini" id="voiceBtn"><i class="fas fa-microphone"></i></button>
-              <button class="btn" id="sendBtn">Send</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Records -->
-        <div id="records" class="view" style="display:none">
-          <div class="card">
-            <h2>Digital Health Records & e-Prescriptions</h2>
-            <small class="muted-dark">Records saved locally (demo). Export to PDF or JSON for backup.</small>
-
-            <div style="margin-top:12px;display:grid;grid-template-columns:1fr 320px;gap:12px">
-              <div>
-                <input id="recName" placeholder="Patient name" />
-                <textarea id="recNotes" placeholder="Notes / complaints" style="margin-top:8px"></textarea>
-                <div style="display:flex;gap:8px;margin-top:8px">
-                  <button class="btn" id="saveRecordBtn">Save Record</button>
-                  <button class="mini" id="exportRecordPDFBtn">Export PDF</button>
-                  <button class="mini" id="downloadRecordsBtn">Download JSON</button>
-                </div>
-
-                <hr style="margin:12px 0" />
-                <h4>Quick Prescription</h4>
-                <input id="presName" placeholder="Patient name" />
-                <input id="presMed" placeholder="Medicine & dose (e.g. Paracetamol 500mg)" style="margin-top:8px" />
-                <div style="display:flex;gap:8px;margin-top:8px">
-                  <button class="btn" id="savePrescBtn">Save Prescription</button>
-                  <button class="mini" id="prescPdfBtn">PDF</button>
-                </div>
-              </div>
-
-              <aside>
+            <div class="grid">
+              <div class="card-container">
                 <div class="card">
-                  <h4>Recent Records</h4>
-                  <div id="recordsList" style="margin-top:8px;max-height:220px;overflow:auto" class="muted-dark">No records</div>
+                  <h2 data-lang-key="welcome">Welcome 👋</h2>
+                  <p class="muted-dark" data-lang-key="welcome_msg">Use left menu to navigate features. App saves demo data in your browser's localStorage.</p>
+                  <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+                    <button class="btn" onclick="openView('video')"><i class="fas fa-video"></i> <span data-lang-key="start_video">Start Video</span></button>
+                    <button class="btn" onclick="openView('chatbot')"><i class="fas fa-robot"></i> <span data-lang-key="open_chatbot">Open Chatbot</span></button>
+                    <button class="mini" onclick="openView('records')"><i class="fas fa-file-medical"></i> <span data-lang-key="records">Records</span></button>
+                  </div>
                 </div>
-
-                <div class="card" style="margin-top:12px">
-                  <h4>Recent Prescriptions</h4>
-                  <div id="presList" style="margin-top:8px;max-height:120px;overflow:auto" class="muted-dark">No prescriptions</div>
+                <div class="card" style="margin-top:24px">
+                  <h3 data-lang-key="activity_log">Activity Log</h3>
+                  <div id="activityList" class="muted-dark" style="max-height:220px;overflow:auto;margin-top:8px">No activity yet.</div>
                 </div>
+              </div>
+              <aside class="card">
+                  <h3 data-lang-key="emergency_quick">Emergency Quick</h3>
+                  <p class="muted-dark" data-lang-key="one_tap_call">One-tap call (demo)</p>
+                  <div style="display:flex;gap:8px;margin-top:8px">
+                    <a href="tel:108"><button class="btn" data-lang-key="call_108">Call 108</button></a>
+                    <button class="mini" onclick="showAmbulanceInfo()" data-lang-key="more">More</button>
+                  </div>
               </aside>
             </div>
           </div>
-        </div>
-
-        <!-- IoT -->
-        <div id="iot" class="view" style="display:none">
-          <div class="card">
-            <h2>IoT Device Simulation</h2>
-            <small class="muted-dark">Simulate BP / Glucose / ECG and sync to records.</small>
-
-            <div style="display:flex;gap:8px;margin-top:12px">
-              <button class="btn" id="simBP">Simulate BP</button>
-              <button class="mini" id="simGlucose">Simulate Glucose</button>
-              <button class="mini" id="simECG">Simulate ECG</button>
-              <button class="mini" id="syncDevice">Sync to Latest Record</button>
+        <div id="profile" class="view">
+            <div class="card">
+              <h2 data-lang-key="patient_profile">Patient Profile</h2>
+              <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="name" style="font-weight:600;font-size:14px;color:var(--muted);">Name</label><div id="profileName" style="font-size:16px;margin-top:2px;">Balwinder Singh</div></div>
+              <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="age" style="font-weight:600;font-size:14px;color:var(--muted);">Age</label><div id="profileAge" style="font-size:16px;margin-top:2px;">45 Years</div></div>
+              <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="blood_group" style="font-weight:600;font-size:14px;color:var(--muted);">Blood Group</label><div id="profileBloodGroup" style="font-size:16px;margin-top:2px;">O+</div></div>
+              <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="contact" style="font-weight:600;font-size:14px;color:var(--muted);">Contact</label><div id="profileContact" style="font-size:16px;margin-top:2px;">+91-9876543210</div></div>
+              <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="address" style="font-weight:600;font-size:14px;color:var(--muted);">Address</label><div id="profileAddress" style="font-size:16px;margin-top:2px;">Village & PO Bhadson, Nabha, Punjab</div></div>
             </div>
-
-            <canvas id="iotChart" style="margin-top:12px"></canvas>
-            <div id="iotText" class="muted-dark" style="margin-top:10px">No device readings yet.</div>
-          </div>
         </div>
-
-        <!-- Emergency -->
-        <div id="emergency" class="view" style="display:none">
-          <div class="card">
-            <h2>Emergency</h2>
-            <small class="muted-dark">Call local ambulance. This is a demo link.</small>
-            <div style="display:flex;gap:8px;margin-top:12px">
-              <a href="tel:108"><button class="btn">Call 108</button></a>
-              <button class="mini" onclick="showAmbulanceInfo()">More Info</button>
-            </div>
-          </div>
-        </div>
-
+        <div id="video" class="view"><div class="card"><h2 data-lang-key="video_consultation">Video Consultation — Local Demo</h2><p class="muted-dark" data-lang-key="video_msg">This preview uses your camera locally. For real consults integrate WebRTC + signaling servers.</p><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" id="startCam" data-lang-key="start_camera">Start Camera</button><button class="mini" id="stopCam" data-lang-key="stop">Stop</button></div><div id="videoArea" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap; background: #eee; border-radius: 8px; min-height: 240px;"></div></div></div>
+        <div id="chatbot" class="view"><div class="card chat"><h2 data-lang-key="symptom_checker">AI Symptom Checker</h2><small class="muted-dark" data-lang-key="symptom_checker_msg">Type symptoms in English / हिन्दी. For production, connect an AI backend.</small><div id="messages" class="messages" style="margin-top:10px"></div><div class="chat-controls" style="margin-top:10px"><input id="chatInput" placeholder="Type symptoms..." data-lang-key="chat_placeholder"/><button class="mini" id="voiceBtn"><i class="fas fa-microphone"></i></button><button class="btn" id="sendBtn" data-lang-key="send">Send</button></div></div></div>
+        <div id="records" class="view"><div class="card"><h2 data-lang-key="records_title">Digital Health Records & e-Prescriptions</h2><small class="muted-dark" data-lang-key="records_msg">Records saved locally (demo). Export to PDF for backup.</small><div style="margin-top:12px;display:grid;grid-template-columns:1fr 320px;gap:24px"><div><input id="recName" placeholder="Patient name" data-lang-key="patient_name_placeholder" /><textarea id="recNotes" placeholder="Notes / complaints" style="margin-top:8px" data-lang-key="notes_placeholder"></textarea><div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="saveRecordBtn" data-lang-key="save_record">Save Record</button><button class="mini" id="exportRecordPDFBtn" data-lang-key="export_pdf">Export PDF</button></div></div><aside><div class="card"><h4 data-lang-key="recent_records">Recent Records</h4><div id="recordsList" style="margin-top:8px;max-height:220px;overflow:auto" class="muted-dark">No records</div></div></aside></div></div></div>
+        <div id="iot" class="view"><div class="card"><h2 data-lang-key="iot_title">IoT Device Simulation</h2><small class="muted-dark" data-lang-key="iot_msg">Enter readings and sync to the latest record.</small><div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;"><input type="text" id="iotBP" placeholder="BP (e.g., 120/80 mmHg)"><input type="text" id="iotSugar" placeholder="Sugar (e.g., 90 mg/dL)"><input type="text" id="iotFever" placeholder="Fever (e.g., 99.5 °F)"></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" id="syncDevice" data-lang-key="sync_device">Sync to Latest Record</button></div><div id="iotText" class="muted-dark" style="margin-top:10px">No device readings yet.</div></div></div>
+        <div id="emergency" class="view"><div class="card"><h2 data-lang-key="emergency">Emergency</h2><small class="muted-dark" data-lang-key="emergency_msg">Call local ambulance. This is a demo link.</small><div style="display:flex;gap:8px;margin-top:12px"><a href="tel:108"><button class="btn" data-lang-key="call_108">Call 108</button></a><button class="mini" onclick="showAmbulanceInfo()" data-lang-key="more_info">More Info</button></div></div></div>
       </section>
     </main>
   </div>
@@ -256,15 +206,71 @@
   <div id="toast">Notification</div>
 
   <script>
-    /* ---------------------------
-       Lightweight single-file app
-       --------------------------- */
+    /* --- Main JS Code --- */
+    function openView(id){
+      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+      setTimeout(() => {
+          document.getElementById(id).classList.add('active');
+      }, 50);
+      logActivity('Opened view: ' + id);
+    }
+    
+    document.getElementById('hamburger-menu').addEventListener('click', () => {
+        document.getElementById('sidebar').classList.toggle('show');
+    });
 
-    // Keys for localStorage
-    const RECORDS_KEY = 'nabha_records_v3';
-    const PRESC_KEY = 'nabha_presc_v3';
-
-    // DOM helpers
+    function showTypingIndicator() {
+        const typingEl = document.createElement('div');
+        typingEl.className = 'msg bot';
+        typingEl.id = 'typing';
+        typingEl.innerHTML = `<div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+        messagesEl.appendChild(typingEl);
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+        return typingEl;
+    }
+    
+    const RECORDS_KEY = 'nabha_records_v4';
+    
+    /* --- Punjabi Language Added --- */
+    const langStrings = {
+      en: {
+        logged_in_as: 'Logged In As', dashboard: 'Dashboard', profile: 'Profile', video: 'Video', chatbot: 'Chatbot', records: 'Records', iot: 'IoT', emergency: 'Emergency',
+        prototype_subtitle: 'Single-file prototype — replace with backend for production', welcome: 'Welcome 👋', welcome_msg: "Use left menu to navigate. App saves demo data in your browser's localStorage.",
+        start_video: 'Start Video', open_chatbot: 'Open Chatbot', activity_log: 'Activity Log', emergency_quick: 'Emergency Quick', one_tap_call: 'One-tap call (demo)', call_108: 'Call 108', more: 'More',
+        patient_profile: 'Patient Profile', name: 'Name', age: 'Age', blood_group: 'Blood Group', contact: 'Contact', address: 'Address',
+        video_consultation: 'Video Consultation', video_msg: 'This preview uses your camera locally. Integrate WebRTC for real consults.', start_camera: 'Start Camera', stop: 'Stop',
+        symptom_checker: 'AI Symptom Checker', symptom_checker_msg: 'Type symptoms in English / हिन्दी / ਪੰਜਾਬੀ.', chat_placeholder: 'Type symptoms...', send: 'Send',
+        records_title: 'Digital Health Records', records_msg: 'Records saved locally. Export to PDF for backup.', patient_name_placeholder: 'Patient name', notes_placeholder: 'Notes / complaints',
+        save_record: 'Save Record', export_pdf: 'Export PDF', recent_records: 'Recent Records',
+        iot_title: 'IoT Device Simulation', iot_msg: 'Enter readings and sync to the latest record.', sync_device: 'Sync to Latest Record',
+        emergency_msg: 'Call local ambulance. This is a demo link.', more_info: 'More Info'
+      },
+      hi: {
+        logged_in_as: 'लॉगिन हैं', dashboard: 'tableau', profile: 'प्रोफ़ाइल', video: 'वीडियो', chatbot: 'चैटबॉट', records: 'अभिलेख', iot: 'IoT', emergency: 'आपातकालीन',
+        prototype_subtitle: 'एकल-फ़ाइल प्रोटोटाइप — उत्पादन के लिए बैकएंड से बदलें', welcome: 'नमस्ते 👋', welcome_msg: "सुविधाओं पर जाने के लिए बाएँ मेनू का उपयोग करें। ऐप डेमो डेटा आपके ब्राउज़र में सहेजता है।",
+        start_video: 'वीडियो शुरू करें', open_chatbot: 'चैटबॉट खोलें', activity_log: 'गतिविधि लॉग', emergency_quick: 'त्वरित आपातकाल', one_tap_call: 'एक-टैप कॉल (डेमो)', call_108: '108 पर कॉल करें', more: 'और',
+        patient_profile: 'रोगी प्रोफ़ाइल', name: 'नाम', age: 'आयु', blood_group: 'रक्त समूह', contact: 'संपर्क', address: 'पता',
+        video_consultation: 'वीडियो परामर्श', video_msg: 'यह पूर्वावलोकन आपके कैमरे का स्थानीय रूप से उपयोग करता है।', start_camera: 'कैमरा शुरू करें', stop: 'रोकें',
+        symptom_checker: 'AI लक्षण परीक्षक', symptom_checker_msg: 'लक्षण अंग्रेजी / हिन्दी / ਪੰਜਾਬੀ में टाइप करें।', chat_placeholder: 'लक्षण टाइप करें...', send: 'भेजें',
+        records_title: 'डिजिटल स्वास्थ्य रिकॉर्ड', records_msg: 'रिकॉर्ड स्थानीय रूप से सहेजे गए। बैकअप के लिए PDF निर्यात करें।', patient_name_placeholder: 'रोगी का नाम', notes_placeholder: 'नोट्स / शिकायतें',
+        save_record: 'रिकॉर्ड सहेजें', export_pdf: 'PDF निर्यात करें', recent_records: 'हाल के रिकॉर्ड',
+        iot_title: 'IoT डिवाइस सिमुलेशन', iot_msg: 'रीडिंग दर्ज करें और नवीनतम रिकॉर्ड से सिंक करें।', sync_device: 'नवीनतम रिकॉर्ड से सिंक करें',
+        emergency_msg: 'स्थानीय एम्बुलेंस को कॉल करें। यह एक डेमो लिंक है।', more_info: 'और जानकारी'
+      },
+      pa: {
+        logged_in_as: 'ਇਸ ਵਜੋਂ ਲੌਗਇਨ ਕੀਤਾ', dashboard: 'ਡੈਸ਼ਬੋਰਡ', profile: 'ਪ੍ਰੋਫਾਈਲ', video: 'ਵੀਡੀਓ', chatbot: 'ਚੈਟਬਾਟ', records: 'ਰਿਕਾਰਡ', iot: 'ਆਈਓਟੀ', emergency: 'ਐਮਰਜੈਂਸੀ',
+        prototype_subtitle: 'ਸਿੰਗਲ-ਫਾਈਲ ਪ੍ਰੋਟੋਟਾਈਪ — ਉਤਪਾਦਨ ਲਈ ਬੈਕਐਂਡ ਨਾਲ ਬਦਲੋ', welcome: 'ਜੀ ਆਇਆਂ ਨੂੰ 👋', welcome_msg: "ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਲਈ ਖੱਬੇ ਪਾਸੇ ਮੇਨੂ ਦੀ ਵਰਤੋਂ ਕਰੋ। ਐਪ ਡੈਮੋ ਡੇਟਾ ਨੂੰ ਤੁਹਾਡੇ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਕਰਦਾ ਹੈ।",
+        start_video: 'ਵੀਡੀਓ ਸ਼ੁਰੂ ਕਰੋ', open_chatbot: 'ਚੈਟਬਾਟ ਖੋਲ੍ਹੋ', activity_log: 'ਗਤੀਵਿਧੀ ਲੌਗ', emergency_quick: 'ਤੁਰੰਤ ਐਮਰਜੈਂਸੀ', one_tap_call: 'ਇੱਕ-ਟੈਪ ਕਾਲ (ਡੈਮੋ)', call_108: '108 ਤੇ ਕਾਲ ਕਰੋ', more: 'ਹੋਰ',
+        patient_profile: 'ਮਰੀਜ਼ ਦੀ ਪ੍ਰੋਫਾਈਲ', name: 'ਨਾਮ', age: 'ਉਮਰ', blood_group: 'ਖੂਨ ਦਾ ਗਰੁੱਪ', contact: 'ਸੰਪਰਕ', address: 'ਪਤਾ',
+        video_consultation: 'ਵੀਡੀਓ ਸਲਾਹ-ਮਸ਼ਵਰਾ', video_msg: 'ਇਹ ਪੂਰਵਦਰਸ਼ਨ ਤੁਹਾਡੇ ਕੈਮਰੇ ਦੀ ਸਥਾਨਕ ਤੌਰ ਤੇ ਵਰਤੋਂ ਕਰਦਾ ਹੈ।', start_camera: 'ਕੈਮਰਾ ਸ਼ੁਰੂ ਕਰੋ', stop: 'ਰੋਕੋ',
+        symptom_checker: 'AI ਲੱਛਣ ਜਾਂਚਕਰਤਾ', symptom_checker_msg: 'ਲੱਛਣ ਅੰਗਰੇਜ਼ੀ / हिन्दी / ਪੰਜਾਬੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ।', chat_placeholder: 'ਲੱਛਣ ਟਾਈਪ ਕਰੋ...', send: 'ਭੇਜੋ',
+        records_title: 'ਡਿਜੀਟਲ ਸਿਹਤ ਰਿਕਾਰਡ', records_msg: 'ਰਿਕਾਰਡ ਸਥਾਨਕ ਤੌਰ ਤੇ ਸੁਰੱਖਿਅਤ ਕੀਤੇ ਗਏ। ਬੈਕਅੱਪ ਲਈ PDF ਵਿੱਚ ਐਕਸਪੋਰਟ ਕਰੋ।', patient_name_placeholder: 'ਮਰੀਜ਼ ਦਾ ਨਾਮ', notes_placeholder: 'ਨੋਟਸ / ਸ਼ਿਕਾਇਤਾਂ',
+        save_record: 'ਰਿਕਾਰਡ ਸੁਰੱਖਿਅਤ ਕਰੋ', export_pdf: 'PDF ਐਕਸਪੋਰਟ ਕਰੋ', recent_records: 'ਤਾਜ਼ਾ ਰਿਕਾਰਡ',
+        iot_title: 'ਆਈਓਟੀ ਡਿਵਾਈਸ ਸਿਮੂਲੇਸ਼ਨ', iot_msg: 'ਰੀਡਿੰਗ ਦਰਜ ਕਰੋ ਅਤੇ ਨਵੀਨਤਮ ਰਿਕਾਰਡ ਨਾਲ ਸਿੰਕ ਕਰੋ।', sync_device: 'ਨਵੀਨਤਮ ਰਿਕਾਰਡ ਨਾਲ ਸਿੰਕ ਕਰੋ',
+        emergency_msg: 'ਸਥਾਨਕ ਐਂਬੂਲੈਂਸ ਨੂੰ ਕਾਲ ਕਰੋ। ਇਹ ਇੱਕ ਡੈਮੋ ਲਿੰਕ ਹੈ।', more_info: 'ਹੋਰ ਜਾਣਕਾਰੀ'
+      }
+    };
+    
     const toastEl = document.getElementById('toast');
     function showToast(msg){
       toastEl.textContent = msg;
@@ -272,48 +278,64 @@
       toastEl.style.transform = 'translateY(0)';
       setTimeout(()=>{ toastEl.style.opacity = 0; toastEl.style.transform = 'translateY(8px)'; }, 2000);
     }
-
     function logActivity(text){
       const el = document.getElementById('activityList');
-      const ts = new Date().toLocaleString();
-      el.innerHTML = `<div>${ts}: ${escapeHtml(text)}</div>` + el.innerHTML;
+      const ts = new Date().toLocaleTimeString();
+      el.innerHTML = `<div><small>${ts}:</small> ${escapeHtml(text)}</div>` + el.innerHTML;
       document.getElementById('activityShort').textContent = text;
     }
     function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
-
-    // Simple view router
+    
     document.querySelectorAll('.nav button').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
         btn.classList.add('active');
         openView(btn.dataset.view);
+        document.getElementById('sidebar').classList.remove('show');
       });
     });
-    function openView(id){
-      document.querySelectorAll('.view').forEach(v=>v.style.display = 'none');
-      document.getElementById(id).style.display = 'block';
-      logActivity('Opened view: ' + id);
+    
+    document.getElementById('darkToggle').addEventListener('click', ()=>{ document.body.classList.toggle('dark'); });
+    
+    /* --- Language Button Logic Updated for 3 Languages --- */
+    const langBtn = document.getElementById('langToggle');
+    const languages = ['en', 'hi', 'pa'];
+    let currentLangIndex = 0;
+    langBtn.addEventListener('click', ()=>{
+      currentLangIndex = (currentLangIndex + 1) % languages.length;
+      const newLang = languages[currentLangIndex];
+      langBtn.textContent = newLang.toUpperCase();
+      updateUIText(newLang);
+    });
+
+    function updateUIText(lang){
+        document.querySelectorAll('[data-lang-key]').forEach(el => {
+            const key = el.dataset.langKey;
+            const langText = langStrings[lang][key];
+            if (langText) {
+                const span = el.querySelector('span');
+                if(el.placeholder) {
+                    el.placeholder = langText;
+                } else if (span && !['i'].includes(span.tagName.toLowerCase())) {
+                    span.innerHTML = langText;
+                } else {
+                    const icon = el.querySelector('i');
+                    if (icon) { el.innerHTML = `<i class="${icon.className}"></i> ${langText}`; } 
+                    else { el.innerHTML = langText; }
+                }
+            }
+        });
+        const initialMessages = {
+            en: 'Hello — Type your symptoms',
+            hi: 'नमस्ते — अपनी symptoms बताइए',
+            pa: 'ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ — ਆਪਣੇ ਲੱਛਣ ਦੱਸੋ'
+        };
+        appendBotMsg(initialMessages[lang]);
     }
 
-    // Toggle dark & language
-    document.getElementById('darkToggle').addEventListener('click', ()=>{
-      document.body.classList.toggle('dark');
-    });
-    const langBtn = document.getElementById('langToggle');
-    let lang = 'en';
-    langBtn.addEventListener('click', ()=>{
-      lang = lang === 'en' ? 'hi' : 'en';
-      langBtn.textContent = lang.toUpperCase();
-      showToast('Language: ' + lang.toUpperCase());
-    });
-
-    /* ---------------------------
-       Video (local camera preview)
-       --------------------------- */
     let localStream = null;
     document.getElementById('startCam').addEventListener('click', startCamera);
     document.getElementById('stopCam').addEventListener('click', stopCamera);
-
     async function startCamera(){
       try{
         const s = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
@@ -322,98 +344,70 @@
         const v = document.createElement('video'); v.autoplay = true; v.playsInline = true; v.muted = true;
         v.srcObject = s; v.style.width = '320px'; v.style.borderRadius = '8px';
         area.appendChild(v);
-        showToast('Camera started');
-        logActivity('Camera started');
-      }catch(e){
-        alert('Camera access denied or not available');
-      }
+        showToast('Camera started'); logActivity('Camera started');
+      }catch(e){ alert('Camera access denied or not available'); }
     }
     function stopCamera(){
       if(localStream) localStream.getTracks().forEach(t=>t.stop());
       localStream = null;
       document.getElementById('videoArea').innerHTML = '';
-      showToast('Camera stopped');
-      logActivity('Camera stopped');
+      showToast('Camera stopped'); logActivity('Camera stopped');
     }
-    function openWaitingRoom(){ window.open('', '_blank', 'width=700,height=520').document.write('<h3 style=\"font-family:Poppins\">Waiting Room (placeholder)</h3><p>Integrate WebRTC for real remote consults.</p>'); }
-
-    /* ---------------------------
-       Chatbot (rule-based, multilingual)
-       --------------------------- */
+    
     const messagesEl = document.getElementById('messages');
     document.getElementById('sendBtn').addEventListener('click', sendChat);
-    document.getElementById('voiceBtn').addEventListener('click', startVoice);
-
     function appendUserMsg(txt){
       const d = document.createElement('div'); d.className = 'msg user';
       d.innerHTML = `<div class="bubble">${escapeHtml(txt)}</div>`;
       messagesEl.appendChild(d); messagesEl.scrollTop = messagesEl.scrollHeight;
     }
     function appendBotMsg(txt){
+        if(!txt) return;
+        // Clear previous messages before adding a new initial one
+        if(txt.includes('Type your symptoms') || txt.includes('अपनी symptoms बताइए') || txt.includes('ਆਪਣੇ ਲੱਛਣ ਦੱਸੋ')) {
+            messagesEl.innerHTML = '';
+        }
       const d = document.createElement('div'); d.className = 'msg bot';
       d.innerHTML = `<div class="bubble">${escapeHtml(txt)}</div>`;
       messagesEl.appendChild(d); messagesEl.scrollTop = messagesEl.scrollHeight;
     }
 
+    /* --- Chatbot Language Detection Updated for Punjabi --- */
     function detectLangFromText(t){
-      if(/[\u0900-\u097F]/.test(t)) return 'hi';
+      if(/[\u0900-\u097F]/.test(t)) return 'hi'; // Hindi
+      if(/[\u0A00-\u0A7F]/.test(t)) return 'pa'; // Punjabi (Gurmukhi)
       return 'en';
     }
-
     function ruleBasedReply(text, l){
       const t = text.toLowerCase();
-      if(/(fever|bukhar|बुखार)/.test(t)) {
-        return l==='hi' ? 'बुखार 2 दिनों से ज्यादा हो तो डॉक्टर दिखाएँ। पेरासिटामोल लें और आराम करें।' : 'If fever >2 days, consult a doctor. Take paracetamol and rest.';
+      if(/(fever|bukhar|बुखार|ਬੁਖਾਰ)/.test(t)) {
+        if (l === 'pa') return 'ਜੇਕਰ ਬੁਖਾਰ 2 ਦਿਨਾਂ ਤੋਂ ਵੱਧ ਹੈ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।';
+        return l==='hi' ? 'बुखार 2 दिनों से ज्यादा हो तो डॉक्टर दिखाएँ।' : 'If fever >2 days, consult a doctor.';
       }
-      if(/(dengue|डेंगू)/.test(t)) {
-        return l==='hi' ? 'डेंगू के लक्षण: तेज बुखार, जोड़ों में दर्द — ब्लड टेस्ट कराएँ।' : 'Dengue symptoms include high fever and body ache — get a blood test.';
+      if(/(cough|khaansi|खांसी|ਖੰਘ)/.test(t)) {
+        if (l === 'pa') return 'ਜੇਕਰ ਖੰਘ ਬਣੀ ਰਹਿੰਦੀ ਹੈ, ਤਾਂ ਡਾਕਟਰ ਨੂੰ ਮਿਲੋ।';
+        return l==='hi' ? 'अगर खांसी ज़्यादा रहे तो डॉक्टर दिखाएँ।' : 'If cough persists, see a doctor.';
       }
-      if(/(cough|khaansi|खांसी)/.test(t)) {
-        return l==='hi' ? 'अगर खांसी ज़्यादा रहे तो डॉक्टर दिखाएँ और गरम पानी पिएँ।' : 'If cough persists, see a doctor and stay hydrated.';
-      }
-      if(/(help|madad|सहायता)/.test(t)) {
-        return l==='hi' ? 'मैं रिकॉर्ड सेव कर सकता हूँ और पास के हेल्पलाइन दिखा सकता हूँ।' : 'I can save records and show emergency helplines.';
-      }
+      if (l === 'pa') return 'ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਲੱਛਣਾਂ ਦਾ ਸੰਖੇਪ ਵਿੱਚ ਵਰਣਨ ਕਰੋ।';
       return l==='hi' ? 'कृपया लक्षण संक्षेप में लिखें।' : 'Please describe your symptoms briefly.';
     }
-
     async function sendChat(){
       const input = document.getElementById('chatInput');
       const txt = input.value.trim(); if(!txt) return;
       appendUserMsg(txt); input.value = '';
-      // typing indicator
-      const typing = document.createElement('div'); typing.className = 'msg bot'; typing.id = 'typing'; typing.innerHTML = `<div class="bubble">...</div>`; messagesEl.appendChild(typing); messagesEl.scrollTop = messagesEl.scrollHeight;
+      const typing = showTypingIndicator();
       const detected = detectLangFromText(txt);
       setTimeout(()=>{
         typing.remove();
         const reply = ruleBasedReply(txt, detected);
         appendBotMsg(reply);
         logActivity('Chatbot answered');
-      }, 700);
+      }, 1200);
     }
-
-    // voice input (basic)
-    let recognition;
-    function startVoice(){
-      if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) return alert('Speech recognition not supported on this browser');
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      recognition = new SR();
-      recognition.lang = (lang === 'hi' ? 'hi-IN' : 'en-IN');
-      recognition.interimResults = false; recognition.maxAlternatives = 1;
-      recognition.onresult = e => { const t = e.results[0][0].transcript; document.getElementById('chatInput').value = t; sendChat(); }
-      recognition.onerror = e => showToast('Voice error: ' + e.error);
-      recognition.start();
-    }
-
-    /* ---------------------------
-       Records & Prescriptions
-       --------------------------- */
+    
+    // The rest of the JS for Records, IoT, Emergency, and Init remains the same
     function getRecords(){ return JSON.parse(localStorage.getItem(RECORDS_KEY) || '[]'); }
-    function saveRecords(arr){ localStorage.setItem(RECORDS_KEY, JSON.stringify(arr)); renderRecords(); updateStats(); }
-
-    function getPresc(){ return JSON.parse(localStorage.getItem(PRESC_KEY) || '[]'); }
-    function savePresc(arr){ localStorage.setItem(PRESC_KEY, JSON.stringify(arr)); renderPresc(); updateStats(); }
-
+    function saveRecords(arr){ localStorage.setItem(RECORDS_KEY, JSON.stringify(arr)); renderRecords(); }
     document.getElementById('saveRecordBtn').addEventListener('click', ()=>{
       const name = document.getElementById('recName').value.trim();
       const notes = document.getElementById('recNotes').value.trim();
@@ -422,10 +416,8 @@
       arr.unshift({id:Date.now(), name, notes, created: new Date().toISOString(), devices: []});
       saveRecords(arr);
       document.getElementById('recName').value = ''; document.getElementById('recNotes').value = '';
-      showToast('Record saved');
-      logActivity('Saved record: ' + name);
+      showToast('Record saved'); logActivity('Saved record: ' + name);
     });
-
     document.getElementById('exportRecordPDFBtn').addEventListener('click', ()=>{
       const arr = getRecords(); if(arr.length===0) return alert('No records');
       const r = arr[0];
@@ -436,151 +428,47 @@
       doc.text('Notes:', 14, 50); doc.setFontSize(11); doc.text(r.notes || '-', 14, 60, { maxWidth: 180 });
       doc.save('health-record.pdf'); showToast('Record exported (PDF)');
     });
-
-    document.getElementById('downloadRecordsBtn').addEventListener('click', ()=>{
-      const data = localStorage.getItem(RECORDS_KEY) || '[]';
-      const blob = new Blob([data], {type: 'application/json'}); const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'nabha_records.json'; a.click(); URL.revokeObjectURL(url);
-      showToast('Records downloaded');
-    });
-
-    document.getElementById('savePrescBtn').addEventListener('click', ()=>{
-      const name = document.getElementById('presName').value.trim(); const med = document.getElementById('presMed').value.trim();
-      if(!name || !med) return alert('Enter prescription details');
-      const arr = getPresc(); arr.unshift({id:Date.now(), name, med, doctor: 'Dr. Demo', created: new Date().toISOString()});
-      savePresc(arr); document.getElementById('presName').value = ''; document.getElementById('presMed').value = '';
-      showToast('Prescription saved'); logActivity('Saved prescription: ' + name);
-    });
-
-    document.getElementById('prescPdfBtn').addEventListener('click', ()=>{
-      const arr = getPresc(); if(arr.length===0) return alert('No prescriptions');
-      const p = arr[0]; const { jsPDF } = window.jspdf; const doc = new jsPDF();
-      doc.setFontSize(16); doc.text('e-Prescription', 14, 20);
-      doc.setFontSize(12); doc.text(`Patient: ${p.name}`, 14, 36); doc.text(`Doctor: ${p.doctor}`, 14, 44); doc.text(`Prescription: ${p.med}`, 14, 52);
-      doc.save('prescription.pdf'); showToast('Prescription PDF generated');
-    });
-
     function renderRecords(){
       const el = document.getElementById('recordsList');
       const arr = getRecords();
-      if(arr.length === 0){ el.innerHTML = '<div class="muted-dark">No records</div>'; return; }
+      const currentLang = languages[currentLangIndex];
+      if(arr.length === 0){ el.innerHTML = `<div class="muted-dark">${langStrings[currentLang].recent_records === 'Recent Records' ? 'No records' : 'कोई रिकॉर्ड नहीं'}</div>`; return; }
       el.innerHTML = arr.map(r => `
-        <div style="border:1px solid #eef4f3;padding:8px;border-radius:8px;margin-bottom:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div><strong>${escapeHtml(r.name)}</strong><div class="muted-dark">${new Date(r.created).toLocaleString()}</div></div>
-            <div>
-              <button class="mini" onclick="viewRecord(${r.id})">View</button>
-              <button class="mini" onclick="attachDevice(${r.id})">Attach Device</button>
-            </div>
-          </div>
-          <div style="margin-top:8px">${escapeHtml(r.notes)}</div>
+        <div style="border:1px solid var(--border-light);padding:10px;border-radius:8px;margin-bottom:8px">
+          <div><strong>${escapeHtml(r.name)}</strong><div class="muted-dark" style="font-size:12px;">${new Date(r.created).toLocaleDateString()}</div></div>
+          <div style="margin-top:4px; font-size:14px;">${escapeHtml(r.notes)}</div>
         </div>
       `).join('');
     }
-    function renderPresc(){
-      const el = document.getElementById('presList'); const arr = getPresc();
-      if(arr.length === 0){ el.innerHTML = '<div class="muted-dark">No prescriptions</div>'; return; }
-      el.innerHTML = arr.map(p => `
-        <div style="border:1px solid #eef4f3;padding:8px;border-radius:8px;margin-bottom:8px">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div><strong>${escapeHtml(p.name)}</strong><div class="muted-dark">${new Date(p.created).toLocaleString()}</div></div>
-            <div><button class="mini" onclick="downloadSpecificPresc(${p.id})">PDF</button></div>
-          </div>
-          <div style="margin-top:8px">${escapeHtml(p.med)}</div>
-        </div>
-      `).join('');
-    }
-    async function downloadSpecificPresc(id){
-      const arr = getPresc(); const p = arr.find(x=>x.id===id) || arr[0]; if(!p) return;
-      const { jsPDF } = window.jspdf; const doc = new jsPDF();
-      doc.setFontSize(16); doc.text('e-Prescription', 14, 20);
-      doc.setFontSize(12); doc.text(`Patient: ${p.name}`, 14, 36); doc.text(`Doctor: ${p.doctor}`, 14, 44); doc.text(`Prescription: ${p.med}`, 14, 52);
-      doc.save('prescription.pdf'); showToast('PDF generated');
-    }
-
-    // helper to view record
-    window.viewRecord = function(id){
-      const rec = getRecords().find(r => r.id === id);
-      if(!rec) return alert('Not found');
-      alert(`Name: ${rec.name}\nCreated: ${new Date(rec.created).toLocaleString()}\nNotes: ${rec.notes}\nDevices: ${JSON.stringify(rec.devices || [], null, 2)}`);
-    };
-
-    /* ---------------------------
-       IoT simulation & Chart.js
-       --------------------------- */
-    const ctx = document.getElementById('iotChart').getContext('2d');
-    const iotState = {labels: [], sys: [], glucose: []};
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: iotState.labels,
-        datasets: [
-          { label: 'BP (systolic)', data: iotState.sys, tension: .3, borderWidth: 2, pointRadius: 2, borderColor: '#ff7f50' },
-          { label: 'Glucose (mg/dL)', data: iotState.glucose, tension: .3, borderWidth: 2, pointRadius: 2, borderColor: '#4169e1' }
-        ]
-      },
-      options: { responsive: true, plugins:{legend:{position:'bottom'}} }
-    });
-
     let lastDeviceReading = null;
-    document.getElementById('simBP').addEventListener('click', ()=>{
-      const sys = 100 + Math.floor(Math.random()*40); const dia = 60 + Math.floor(Math.random()*25);
-      lastDeviceReading = {type:'BP', sys, dia}; document.getElementById('iotText').textContent = `BP: ${sys}/${dia} mmHg`;
-      pushIotPoint(sys, null); showToast('BP simulated'); logActivity('Simulated BP ' + sys + '/' + dia);
+    document.getElementById('syncDevice').addEventListener('click', () => {
+        const bp = document.getElementById('iotBP').value.trim();
+        const sugar = document.getElementById('iotSugar').value.trim();
+        const fever = document.getElementById('iotFever').value.trim();
+        if (!bp && !sugar && !fever) return showToast('Please enter at least one reading.');
+        lastDeviceReading = { bp, sugar, fever, ts: new Date().toISOString() };
+        const arr = getRecords();
+        if (arr.length === 0) return alert('No records. Save a record first.');
+        const latestRecord = arr[0];
+        latestRecord.devices = latestRecord.devices || [];
+        latestRecord.devices.push(lastDeviceReading);
+        saveRecords(arr);
+        showToast('Device readings synced to ' + latestRecord.name);
+        logActivity('Synced IoT data');
+        document.getElementById('iotBP').value = '';
+        document.getElementById('iotSugar').value = '';
+        document.getElementById('iotFever').value = '';
     });
-    document.getElementById('simGlucose').addEventListener('click', ()=>{
-      const g = 70 + Math.floor(Math.random()*120); lastDeviceReading = {type:'Glucose', mgdl:g};
-      document.getElementById('iotText').textContent = `Glucose: ${g} mg/dL`; pushIotPoint(null, g); showToast('Glucose simulated'); logActivity('Simulated Glucose ' + g);
-    });
-    document.getElementById('simECG').addEventListener('click', ()=>{
-      const rhythms = ['Normal sinus rhythm','Sinus tachycardia','Atrial fibrillation (suspected)'];
-      const pick = rhythms[Math.floor(Math.random()*rhythms.length)]; lastDeviceReading = {type:'ECG', summary: pick};
-      document.getElementById('iotText').textContent = `ECG: ${pick}`; showToast('ECG simulated'); logActivity('Simulated ECG: ' + pick);
-    });
-    document.getElementById('syncDevice').addEventListener('click', ()=>{
-      const arr = getRecords(); if(arr.length === 0) return alert('No records. Save a record first.');
-      attachDevice(arr[0].id);
-    });
-
-    function pushIotPoint(sys, glucose){
-      const t = new Date().toLocaleTimeString();
-      iotState.labels.push(t);
-      iotState.sys.push(sys === null ? NaN : sys);
-      iotState.glucose.push(glucose === null ? NaN : glucose);
-      if(iotState.labels.length > 12){
-        iotState.labels.shift(); iotState.sys.shift(); iotState.glucose.shift();
-      }
-      chart.update();
-    }
-
-    function attachDevice(recordId){
-      const arr = getRecords(); const rec = arr.find(r=>r.id === recordId);
-      if(!rec) return alert('Record not found');
-      if(!lastDeviceReading) return alert('No device reading present. Simulate device first.');
-      rec.devices = rec.devices || []; rec.devices.push({...lastDeviceReading, ts: new Date().toISOString()});
-      saveRecords(arr); showToast('Device synced to record'); logActivity('Device attached to ' + rec.name);
-    }
-
-    /* ---------------------------
-       Emergency
-       --------------------------- */
-    function showAmbulanceInfo(){ alert('Emergency numbers:\\n108 — State Ambulance\\n102 — Medical emergency\\nLocal hospital: +91 12345 67890\\n(Replace with real numbers in production)'); logActivity('Viewed ambulance info'); }
-
-    /* ---------------------------
-       Stat updates & init
-       --------------------------- */
-    function updateStats(){ document.getElementById('statRecords').textContent = getRecords().length; document.getElementById('statPresc').textContent = getPresc().length; }
+    function showAmbulanceInfo(){ alert('Emergency numbers:\n108 — State Ambulance\n102 — Medical emergency\nLocal hospital: +91 12345 67890'); logActivity('Viewed ambulance info'); }
     function init(){
-      if(!localStorage.getItem(RECORDS_KEY)) localStorage.setItem(RECORDS_KEY, JSON.stringiffhy([]));
-      if(!localStorage.getItem(PRESC_KEY)) localStorage.setItem(PRESC_KEY, JSON.stringify([]));
-      renderRecords(); renderPresc(); updateStats(); openView('dashboard'); logActivity('App loaded');
+      if(!localStorage.getItem(RECORDS_KEY)) localStorage.setItem(RECORDS_KEY, JSON.stringify([]));
+      renderRecords();
+      openView('dashboard');
+      logActivity('App loaded');
+      updateUIText(languages[currentLangIndex]);
     }
     init();
-
-    // Expose small helpers for console debugging (optional)
     window.openView = openView;
-    window.attachDevice = attachDevice;
-    window.viewRecord = window.viewRecord; // already defined
   </script>
 </body>
 </html>
