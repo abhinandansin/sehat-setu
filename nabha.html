@@ -1,23 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sehat Setu — Punjabi Language Update</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sehat Setu — Multilingual Telemedicine</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
   <script src="https://kit.fontawesome.com/6d42e9e0ce.js" crossorigin="anonymous"></script>
-  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
-    /* CSS code remains the same as the previous animated version */
-    :root{
+    :root {
       --brand: #2a9d8f;
       --brand-dark: #21867a;
-      --accent:#e76f51;
-      --muted:#899198;
+      --accent: #e76f51;
+      --muted: #899198;
       --bg: #f7f9fc;
       --card: #ffffff;
       --text-dark: #12181c;
@@ -25,98 +22,216 @@
       --border-light: #eef2f5;
       --shadow: 0 10px 30px rgba(18, 24, 28, 0.07);
     }
-    *{box-sizing:border-box}
-    body{font-family:'Poppins',system-ui,Arial;margin:0;background:var(--bg);color:var(--text-dark);-webkit-font-smoothing:antialiased; transition: background 0.3s, color 0.3s;}
-    .app{display:flex;min-height:100vh}
-    
-    @keyframes fadeIn { 
-        from { opacity: 0; transform: translateY(10px); } 
-        to { opacity: 1; transform: translateY(0); } 
+
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', system-ui, Arial;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text-dark);
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s, color 0.3s;
     }
+
+    .app { display: flex; min-height: 100vh; }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     @keyframes popIn {
-        from { opacity: 0; transform: scale(0.95); }
-        to { opacity: 1; transform: scale(1); }
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
-    
-    .sidebar{width:240px;background:var(--brand);color:white;padding:20px;display:flex;flex-direction:column;gap:15px;transition: transform 0.3s ease-in-out; z-index: 100;}
-    .brand{font-weight:700;font-size:20px; padding-bottom: 10px;}
-    .muted{color:rgba(255,255,255,0.8);font-size:13px}
-    .nav{margin-top:15px;display:flex;flex-direction:column;gap:8px}
-    .nav button{background:transparent;border:none;color:inherit;text-align:left;padding:12px 15px;border-radius:8px;cursor:pointer;display:flex;gap:12px;align-items:center;font-weight:500; font-size: 15px; position: relative; transition: background 0.2s, transform 0.2s;}
-    .nav button:hover { background: rgba(255,255,255,0.05); transform: translateX(5px); }
+
+    .sidebar {
+      width: 240px;
+      background: var(--brand);
+      color: white;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: transform 0.3s ease-in-out;
+      z-index: 100;
+    }
+
+    .brand { font-weight: 700; font-size: 20px; padding-bottom: 10px; }
+    .muted { color: rgba(255, 255, 255, 0.8); font-size: 13px; }
+    .nav { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; }
+    .nav button {
+      background: transparent;
+      border: none;
+      color: inherit;
+      text-align: left;
+      padding: 12px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-weight: 500;
+      font-size: 15px;
+      position: relative;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .nav button:hover { background: rgba(255, 255, 255, 0.05); transform: translateX(5px); }
     .nav button .fa-fw { transition: transform 0.3s; }
     .nav button:hover .fa-fw { transform: scale(1.2) rotate(-5deg); }
-    .nav button.active{background:rgba(255,255,255,0.1); font-weight: 600;}
+    .nav button.active { background: rgba(255, 255, 255, 0.1); font-weight: 600; }
     .nav button.active::before {
-        content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-        height: 60%; width: 4px; background: white; border-radius: 0 4px 4px 0;
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 60%;
+      width: 4px;
+      background: white;
+      border-radius: 0 4px 4px 0;
     }
-    .sidebar-footer{margin-top:auto;font-size:12px;opacity:0.8}
-    
-    .main{flex:1;padding:24px; overflow-y: auto;}
-    .topbar{display:flex;justify-content:space-between;align-items:center;gap:12px; margin-bottom: 24px;}
+
+    .sidebar-footer { margin-top: auto; font-size: 12px; opacity: 0.8; }
+    .main { flex: 1; padding: 24px; overflow-y: auto; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 24px; }
     .hamburger-menu { display: none; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--brand); }
-    
-    .btn{background:var(--brand);color:#fff;border:none;padding:10px 16px;border-radius:8px;cursor:pointer; font-weight: 600; font-family: 'Poppins'; transition: all 0.2s ease-out;}
+
+    .btn {
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-family: 'Poppins';
+      transition: all 0.2s ease-out;
+    }
+
     .btn:hover { background: var(--brand-dark); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(42, 157, 143, 0.3); }
     .btn:active { transform: translateY(0) scale(0.95); box-shadow: none; }
-    .mini{background:var(--card);border:1px solid var(--border-light);padding:8px 12px;border-radius:8px;color:var(--brand);cursor:pointer; font-weight: 600; transition: all 0.2s ease-out;}
+    .mini {
+      background: var(--card);
+      border: 1px solid var(--border-light);
+      padding: 8px 12px;
+      border-radius: 8px;
+      color: var(--brand);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease-out;
+    }
+
     .mini:hover { border-color: var(--brand); background: #f1fcfb; transform: translateY(-2px); }
     .mini:active { transform: translateY(0) scale(0.95); }
-    
-    .card{background:var(--card);border-radius:12px;padding:20px;box-shadow:var(--shadow); transition: transform 0.3s, box-shadow 0.3s;}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));gap:24px;margin-top:24px}
-    h2{font-size: 24px;} h3 {font-size: 18px;}
-    
+    .card { background: var(--card); border-radius: 12px; padding: 20px; box-shadow: var(--shadow); transition: transform 0.3s, box-shadow 0.3s; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 24px; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 18px; }
     .view { display: none; animation: fadeIn 0.5s ease-out; }
     .view.active { display: block; }
-    
+
     #dashboard.active .card { animation: popIn 0.5s ease-out forwards; opacity: 0; }
     #dashboard.active .card:nth-child(1) { animation-delay: 0.1s; }
     #dashboard.active .card:nth-child(2) { animation-delay: 0.2s; }
     #dashboard.active .card:nth-child(3) { animation-delay: 0.3s; }
     #dashboard.active .grid > div:nth-child(2) .card { animation-delay: 0.4s; }
-    
-    input,textarea,select{width:100%;padding:12px;border-radius:8px;border:1px solid var(--border-light); font-family: 'Poppins', sans-serif; transition: border-color 0.2s, box-shadow 0.2s; background: #fcfdff; }
-    input:focus, textarea:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.15); outline: none; }
-    textarea{min-height:90px;resize:vertical}
-    .muted-dark{color:var(--text-light);font-size:14px}
 
-    .chat{display:flex;flex-direction:column;height:calc(100vh - 120px); max-height: 500px;}
-    .messages{flex:1;overflow:auto;padding:15px;border-radius:8px;background:var(--bg);}
-    .msg{display:flex;margin:10px 0; animation: fadeIn 0.3s;}
-    .msg.bot .bubble{background:#e9f5f3;color:var(--text-dark); border-radius: 18px 18px 18px 4px;}
-    .msg.user{justify-content:flex-end}
-    .msg.user .bubble { background: var(--brand); color: white; border-radius: 18px 18px 4px 18px; }
-    .bubble{padding:10px 16px;max-width:80%; line-height: 1.5;}
-    .chat-controls{display:flex;gap:8px;margin-top:15px}
-    
-    .typing-indicator { display: flex; align-items: center; }
-    .typing-indicator span {
-        height: 8px; width: 8px; margin: 0 2px;
-        background-color: #a0a0a0; border-radius: 50%;
-        display: inline-block;
-        animation: bounce 1.4s infinite ease-in-out both;
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-light);
+      font-family: 'Poppins', sans-serif;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fcfdff;
     }
+
+    input:focus, textarea:focus, select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.15); outline: none; }
+    textarea { min-height: 90px; resize: vertical; }
+    .muted-dark { color: var(--text-light); font-size: 14px; }
+
+    .chat {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 120px);
+      max-height: 500px;
+    }
+
+    .messages {
+      flex: 1;
+      overflow: auto;
+      padding: 15px;
+      border-radius: 8px;
+      background: var(--bg);
+    }
+
+    .msg { display: flex; margin: 10px 0; animation: fadeIn 0.3s; }
+    .msg.bot .bubble { background: #e9f5f3; color: var(--text-dark); border-radius: 18px 18px 18px 4px; }
+    .msg.user { justify-content: flex-end; }
+    .msg.user .bubble { background: var(--brand); color: white; border-radius: 18px 18px 4px 18px; }
+    .bubble { padding: 10px 16px; max-width: 80%; line-height: 1.5; }
+
+    .chat-controls { display: flex; gap: 8px; margin-top: 15px; }
+    .chat-controls select {
+      max-width: 120px;
+    }
+
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+    }
+
+    .typing-indicator span {
+      height: 8px;
+      width: 8px;
+      margin: 0 2px;
+      background-color: #a0a0a0;
+      border-radius: 50%;
+      display: inline-block;
+      animation: bounce 1.4s infinite ease-in-out both;
+    }
+
     .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
     .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
     @keyframes bounce {
       0%, 80%, 100% { transform: scale(0); }
       40% { transform: scale(1.0); }
     }
-    
-    #toast{position:fixed;right:20px;bottom:20px;background:var(--brand);color:#fff;padding:12px 18px;border-radius:10px;opacity:0;transform:translateY(10px);transition:all .3s;z-index:999; box-shadow: 0 5px 15px rgba(0,0,0,0.2);}
 
-    body.dark{--bg: #0d1117; --card: #161b22; --text-dark: #c9d1d9; --text-light: #8b949e; --border-light: #30363d;}
+    #toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      background: var(--brand);
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 10px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s;
+      z-index: 999;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    body.dark {
+      --bg: #0d1117;
+      --card: #161b22;
+      --text-dark: #c9d1d9;
+      --text-light: #8b949e;
+      --border-light: #30363d;
+    }
+
     body.dark .mini { color: #c9d1d9; }
-    
-    @media(max-width:980px){
-        .app { flex-direction: column; }
-        .sidebar{position: fixed; top: 0; left: 0; height: 100%; transform: translateX(-100%);}
-        .sidebar.show { transform: translateX(0); box-shadow: 0 0 50px rgba(0,0,0,0.3); }
-        .main { width: 100%; }
-        .grid{grid-template-columns:1fr}
-        .hamburger-menu { display: block; }
+
+    @media (max-width: 980px) {
+      .app { flex-direction: column; }
+      .sidebar { position: fixed; top: 0; left: 0; height: 100%; transform: translateX(-100%); }
+      .sidebar.show { transform: translateX(0); box-shadow: 0 0 50px rgba(0, 0, 0, 0.3); }
+      .main { width: 100%; }
+      .grid { grid-template-columns: 1fr; }
+      .hamburger-menu { display: block; }
     }
   </style>
 </head>
@@ -125,17 +240,14 @@
     <aside class="sidebar" id="sidebar">
       <div class="brand"><i class="fas fa-heartbeat"></i> Sehat Setu</div>
       <div class="muted">Multilingual • Offline-First</div>
-
       <div style="display:flex;gap:8px;margin-top:8px">
         <button class="mini" id="darkToggle" title="Toggle Dark Mode">🌙</button>
         <button class="mini" id="langToggle" title="Change Language">EN</button>
       </div>
-      
       <div style="margin-top:12px;padding:10px;background:rgba(0,0,0,0.2);border-radius:8px">
-          <div style="font-weight:600" data-lang-key="logged_in_as">Logged In As</div>
-          <div style="font-size:14px">Balwinder Singh</div>
+        <div style="font-weight:600" data-lang-key="logged_in_as">Logged In As</div>
+        <div style="font-size:14px">Balwinder Singh</div>
       </div>
-
       <nav class="nav" id="nav">
         <button class="active" data-view="dashboard" data-lang-key="dashboard"><i class="fas fa-th-large fa-fw"></i> Dashboard</button>
         <button data-view="profile" data-lang-key="profile"><i class="fas fa-user fa-fw"></i> Profile</button>
@@ -145,93 +257,138 @@
         <button data-view="iot" data-lang-key="iot"><i class="fas fa-microchip fa-fw"></i> IoT</button>
         <button data-view="emergency" data-lang-key="emergency"><i class="fas fa-ambulance fa-fw"></i> Emergency</button>
       </nav>
-
       <div class="sidebar-footer">© Nabha Prototype — Demo</div>
     </aside>
-
     <main class="main">
       <div class="topbar">
         <button class="hamburger-menu" id="hamburger-menu">☰</button>
         <div><h2 style="margin:0">Sehat Setu</h2><small class="muted-dark" data-lang-key="prototype_subtitle">Single-file prototype — replace with backend for production</small></div>
         <div class="controls"><div id="activityShort" class="muted-dark">No activity</div></div>
       </div>
-
       <section id="views">
-        <div id="dashboard" class="view">
-            <div class="grid">
-              <div class="card-container">
-                <div class="card">
-                  <h2 data-lang-key="welcome">Welcome 👋</h2>
-                  <p class="muted-dark" data-lang-key="welcome_msg">Use left menu to navigate features. App saves demo data in your browser's localStorage.</p>
-                  <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
-                    <button class="btn" onclick="openView('video')"><i class="fas fa-video"></i> <span data-lang-key="start_video">Start Video</span></button>
-                    <button class="btn" onclick="openView('chatbot')"><i class="fas fa-robot"></i> <span data-lang-key="open_chatbot">Open Chatbot</span></button>
-                    <button class="mini" onclick="openView('records')"><i class="fas fa-file-medical"></i> <span data-lang-key="records">Records</span></button>
-                  </div>
-                </div>
-                <div class="card" style="margin-top:24px">
-                  <h3 data-lang-key="activity_log">Activity Log</h3>
-                  <div id="activityList" class="muted-dark" style="max-height:220px;overflow:auto;margin-top:8px">No activity yet.</div>
+        <div id="dashboard" class="view active">
+          <div class="grid">
+            <div class="card-container">
+              <div class="card">
+                <h2 data-lang-key="welcome">Welcome 👋</h2>
+                <p class="muted-dark" data-lang-key="welcome_msg">Use left menu to navigate features. App saves demo data in your browser's localStorage.</p>
+                <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+                  <button class="btn" onclick="openView('video')"><i class="fas fa-video"></i> <span data-lang-key="start_video">Start Video</span></button>
+                  <button class="btn" onclick="openView('chatbot')"><i class="fas fa-robot"></i> <span data-lang-key="open_chatbot">Open Chatbot</span></button>
+                  <button class="mini" onclick="openView('records')"><i class="fas fa-file-medical"></i> <span data-lang-key="records">Records</span></button>
                 </div>
               </div>
-              <aside class="card">
-                  <h3 data-lang-key="emergency_quick">Emergency Quick</h3>
-                  <p class="muted-dark" data-lang-key="one_tap_call">One-tap call (demo)</p>
-                  <div style="display:flex;gap:8px;margin-top:8px">
-                    <a href="tel:108"><button class="btn" data-lang-key="call_108">Call 108</button></a>
-                    <button class="mini" onclick="showAmbulanceInfo()" data-lang-key="more">More</button>
-                  </div>
+              <div class="card" style="margin-top:24px">
+                <h3 data-lang-key="activity_log">Activity Log</h3>
+                <div id="activityList" class="muted-dark" style="max-height:220px;overflow:auto;margin-top:8px">No activity yet.</div>
+              </div>
+            </div>
+            <aside class="card">
+              <h3 data-lang-key="emergency_quick">Emergency Quick</h3>
+              <p class="muted-dark" data-lang-key="one_tap_call">One-tap call (demo)</p>
+              <div style="display:flex;gap:8px;margin-top:8px">
+                <a href="tel:108"><button class="btn" data-lang-key="call_108">Call 108</button></a>
+                <button class="mini" onclick="showAmbulanceInfo()" data-lang-key="more">More</button>
+              </div>
+            </aside>
+          </div>
+        </div>
+        <div id="profile" class="view">
+          <div class="card">
+            <h2 data-lang-key="patient_profile">Patient Profile</h2>
+            <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="name" style="font-weight:600;font-size:14px;color:var(--muted);">Name</label><div id="profileName" style="font-size:16px;margin-top:2px;">Balwinder Singh</div></div>
+            <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="age" style="font-weight:600;font-size:14px;color:var(--muted);">Age</label><div id="profileAge" style="font-size:16px;margin-top:2px;">45 Years</div></div>
+            <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="blood_group" style="font-weight:600;font-size:14px;color:var(--muted);">Blood Group</label><div id="profileBloodGroup" style="font-size:16px;margin-top:2px;">O+</div></div>
+            <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="contact" style="font-weight:600;font-size:14px;color:var(--muted);">Contact</label><div id="profileContact" style="font-size:16px;margin-top:2px;">+91-9876543210</div></div>
+            <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="address" style="font-weight:600;font-size:14px;color:var(--muted);">Address</label><div id="profileAddress" style="font-size:16px;margin-top:2px;">Village & PO Bhadson, Nabha, Punjab</div></div>
+          </div>
+        </div>
+        <div id="video" class="view">
+          <div class="card">
+            <h2 data-lang-key="video_consultation">Video Consultation — Local Demo</h2>
+            <p class="muted-dark" data-lang-key="video_msg">This preview uses your camera locally. For real consults integrate WebRTC + signaling servers.</p>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button class="btn" id="startCam" data-lang-key="start_camera">Start Camera</button>
+              <button class="mini" id="stopCam" data-lang-key="stop">Stop</button>
+            </div>
+            <div id="videoArea" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap; background: #eee; border-radius: 8px; min-height: 240px;"></div>
+          </div>
+        </div>
+        <div id="chatbot" class="view">
+          <div class="card chat">
+            <h2 data-lang-key="symptom_checker">AI Symptom Checker</h2>
+            <small class="muted-dark" data-lang-key="symptom_checker_msg">Type symptoms in English, Hindi, or Punjabi, or select from the list below.</small>
+            <div class="chat-controls" style="margin-top:10px">
+              <select id="languageSelector">
+                <option value="en">English</option>
+                <option value="hi">हिन्दी</option>
+                <option value="pa">ਪੰਜਾਬੀ</option>
+                <option value="hinglish">Hinglish</option>
+              </select>
+              <select id="symptomSelector"></select>
+            </div>
+            <div id="messages" class="messages" style="margin-top:10px"></div>
+            <div class="chat-controls" style="margin-top:10px">
+              <input id="chatInput" placeholder="Type symptoms..." data-lang-key="chat_placeholder"/>
+              <button class="mini" id="voiceBtn"><i class="fas fa-microphone"></i></button>
+              <button class="btn" id="sendBtn" data-lang-key="send">Send</button>
+            </div>
+          </div>
+        </div>
+        <div id="records" class="view">
+          <div class="card">
+            <h2 data-lang-key="records_title">Digital Health Records & e-Prescriptions</h2>
+            <small class="muted-dark" data-lang-key="records_msg">Records saved locally (demo). Export to PDF for backup.</small>
+            <div style="margin-top:12px;display:grid;grid-template-columns:1fr 320px;gap:24px">
+              <div>
+                <input id="recName" placeholder="Patient name" data-lang-key="patient_name_placeholder" />
+                <textarea id="recNotes" placeholder="Notes / complaints" style="margin-top:8px" data-lang-key="notes_placeholder"></textarea>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button class="btn" id="saveRecordBtn" data-lang-key="save_record">Save Record</button>
+                  <button class="mini" id="exportRecordPDFBtn" data-lang-key="export_pdf">Export PDF</button>
+                </div>
+              </div>
+              <aside>
+                <div class="card">
+                  <h4 data-lang-key="recent_records">Recent Records</h4>
+                  <div id="recordsList" style="margin-top:8px;max-height:220px;overflow:auto" class="muted-dark">No records</div>
+                </div>
               </aside>
             </div>
           </div>
-        <div id="profile" class="view">
-            <div class="card">
-              <h2 data-lang-key="patient_profile">Patient Profile</h2>
-              <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="name" style="font-weight:600;font-size:14px;color:var(--muted);">Name</label><div id="profileName" style="font-size:16px;margin-top:2px;">Balwinder Singh</div></div>
-              <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="age" style="font-weight:600;font-size:14px;color:var(--muted);">Age</label><div id="profileAge" style="font-size:16px;margin-top:2px;">45 Years</div></div>
-              <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="blood_group" style="font-weight:600;font-size:14px;color:var(--muted);">Blood Group</label><div id="profileBloodGroup" style="font-size:16px;margin-top:2px;">O+</div></div>
-              <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="contact" style="font-weight:600;font-size:14px;color:var(--muted);">Contact</label><div id="profileContact" style="font-size:16px;margin-top:2px;">+91-9876543210</div></div>
-              <div class="profile-field" style="margin-bottom:12px;"><label data-lang-key="address" style="font-weight:600;font-size:14px;color:var(--muted);">Address</label><div id="profileAddress" style="font-size:16px;margin-top:2px;">Village & PO Bhadson, Nabha, Punjab</div></div>
-            </div>
         </div>
-        <div id="video" class="view"><div class="card"><h2 data-lang-key="video_consultation">Video Consultation — Local Demo</h2><p class="muted-dark" data-lang-key="video_msg">This preview uses your camera locally. For real consults integrate WebRTC + signaling servers.</p><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" id="startCam" data-lang-key="start_camera">Start Camera</button><button class="mini" id="stopCam" data-lang-key="stop">Stop</button></div><div id="videoArea" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap; background: #eee; border-radius: 8px; min-height: 240px;"></div></div></div>
-        <div id="chatbot" class="view"><div class="card chat"><h2 data-lang-key="symptom_checker">AI Symptom Checker</h2><small class="muted-dark" data-lang-key="symptom_checker_msg">Type symptoms in English / हिन्दी. For production, connect an AI backend.</small><div id="messages" class="messages" style="margin-top:10px"></div><div class="chat-controls" style="margin-top:10px"><input id="chatInput" placeholder="Type symptoms..." data-lang-key="chat_placeholder"/><button class="mini" id="voiceBtn"><i class="fas fa-microphone"></i></button><button class="btn" id="sendBtn" data-lang-key="send">Send</button></div></div></div>
-        <div id="records" class="view"><div class="card"><h2 data-lang-key="records_title">Digital Health Records & e-Prescriptions</h2><small class="muted-dark" data-lang-key="records_msg">Records saved locally (demo). Export to PDF for backup.</small><div style="margin-top:12px;display:grid;grid-template-columns:1fr 320px;gap:24px"><div><input id="recName" placeholder="Patient name" data-lang-key="patient_name_placeholder" /><textarea id="recNotes" placeholder="Notes / complaints" style="margin-top:8px" data-lang-key="notes_placeholder"></textarea><div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="saveRecordBtn" data-lang-key="save_record">Save Record</button><button class="mini" id="exportRecordPDFBtn" data-lang-key="export_pdf">Export PDF</button></div></div><aside><div class="card"><h4 data-lang-key="recent_records">Recent Records</h4><div id="recordsList" style="margin-top:8px;max-height:220px;overflow:auto" class="muted-dark">No records</div></div></aside></div></div></div>
-        <div id="iot" class="view"><div class="card"><h2 data-lang-key="iot_title">IoT Device Simulation</h2><small class="muted-dark" data-lang-key="iot_msg">Enter readings and sync to the latest record.</small><div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;"><input type="text" id="iotBP" placeholder="BP (e.g., 120/80 mmHg)"><input type="text" id="iotSugar" placeholder="Sugar (e.g., 90 mg/dL)"><input type="text" id="iotFever" placeholder="Fever (e.g., 99.5 °F)"></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn" id="syncDevice" data-lang-key="sync_device">Sync to Latest Record</button></div><div id="iotText" class="muted-dark" style="margin-top:10px">No device readings yet.</div></div></div>
-        <div id="emergency" class="view"><div class="card"><h2 data-lang-key="emergency">Emergency</h2><small class="muted-dark" data-lang-key="emergency_msg">Call local ambulance. This is a demo link.</small><div style="display:flex;gap:8px;margin-top:12px"><a href="tel:108"><button class="btn" data-lang-key="call_108">Call 108</button></a><button class="mini" onclick="showAmbulanceInfo()" data-lang-key="more_info">More Info</button></div></div></div>
+        <div id="iot" class="view">
+          <div class="card">
+            <h2 data-lang-key="iot_title">IoT Device Simulation</h2>
+            <small class="muted-dark" data-lang-key="iot_msg">Enter readings and sync to the latest record.</small>
+            <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
+              <input type="text" id="iotBP" placeholder="BP (e.g., 120/80 mmHg)">
+              <input type="text" id="iotSugar" placeholder="Sugar (e.g., 90 mg/dL)">
+              <input type="text" id="iotFever" placeholder="Fever (e.g., 99.5 °F)">
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button class="btn" id="syncDevice" data-lang-key="sync_device">Sync to Latest Record</button>
+            </div>
+            <div id="iotText" class="muted-dark" style="margin-top:10px">No device readings yet.</div>
+          </div>
+        </div>
+        <div id="emergency" class="view">
+          <div class="card">
+            <h2 data-lang-key="emergency">Emergency</h2>
+            <small class="muted-dark" data-lang-key="emergency_msg">Call local ambulance. This is a demo link.</small>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <a href="tel:108"><button class="btn" data-lang-key="call_108">Call 108</button></a>
+              <button class="mini" onclick="showAmbulanceInfo()" data-lang-key="more_info">More Info</button>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   </div>
-
   <div id="toast">Notification</div>
 
   <script>
-    /* --- Main JS Code --- */
-    function openView(id){
-      document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-      setTimeout(() => {
-          document.getElementById(id).classList.add('active');
-      }, 50);
-      logActivity('Opened view: ' + id);
-    }
-    
-    document.getElementById('hamburger-menu').addEventListener('click', () => {
-        document.getElementById('sidebar').classList.toggle('show');
-    });
-
-    function showTypingIndicator() {
-        const typingEl = document.createElement('div');
-        typingEl.className = 'msg bot';
-        typingEl.id = 'typing';
-        typingEl.innerHTML = `<div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
-        messagesEl.appendChild(typingEl);
-        messagesEl.scrollTop = messagesEl.scrollHeight;
-        return typingEl;
-    }
-    
     const RECORDS_KEY = 'nabha_records_v4';
-    
-    /* --- Punjabi Language Added --- */
     const langStrings = {
       en: {
         logged_in_as: 'Logged In As', dashboard: 'Dashboard', profile: 'Profile', video: 'Video', chatbot: 'Chatbot', records: 'Records', iot: 'IoT', emergency: 'Emergency',
@@ -239,23 +396,25 @@
         start_video: 'Start Video', open_chatbot: 'Open Chatbot', activity_log: 'Activity Log', emergency_quick: 'Emergency Quick', one_tap_call: 'One-tap call (demo)', call_108: 'Call 108', more: 'More',
         patient_profile: 'Patient Profile', name: 'Name', age: 'Age', blood_group: 'Blood Group', contact: 'Contact', address: 'Address',
         video_consultation: 'Video Consultation', video_msg: 'This preview uses your camera locally. Integrate WebRTC for real consults.', start_camera: 'Start Camera', stop: 'Stop',
-        symptom_checker: 'AI Symptom Checker', symptom_checker_msg: 'Type symptoms in English / हिन्दी / ਪੰਜਾਬੀ.', chat_placeholder: 'Type symptoms...', send: 'Send',
+        symptom_checker: 'AI Symptom Checker', symptom_checker_msg: 'Type symptoms in English, Hindi, or Punjabi, or select from the list below.', chat_placeholder: 'Type symptoms...', send: 'Send',
         records_title: 'Digital Health Records', records_msg: 'Records saved locally. Export to PDF for backup.', patient_name_placeholder: 'Patient name', notes_placeholder: 'Notes / complaints',
         save_record: 'Save Record', export_pdf: 'Export PDF', recent_records: 'Recent Records',
         iot_title: 'IoT Device Simulation', iot_msg: 'Enter readings and sync to the latest record.', sync_device: 'Sync to Latest Record',
-        emergency_msg: 'Call local ambulance. This is a demo link.', more_info: 'More Info'
+        emergency_msg: 'Call local ambulance. This is a demo link.', more_info: 'More Info',
+        notFound: 'Sorry, I can only provide information for pre-programmed symptoms. Please try another common symptom.'
       },
       hi: {
-        logged_in_as: 'लॉगिन हैं', dashboard: 'tableau', profile: 'प्रोफ़ाइल', video: 'वीडियो', chatbot: 'चैटबॉट', records: 'अभिलेख', iot: 'IoT', emergency: 'आपातकालीन',
+        logged_in_as: 'लॉगिन हैं', dashboard: 'डैशबोर्ड', profile: 'प्रोफ़ाइल', video: 'वीडियो', chatbot: 'चैटबॉट', records: 'अभिलेख', iot: 'IoT', emergency: 'आपातकालीन',
         prototype_subtitle: 'एकल-फ़ाइल प्रोटोटाइप — उत्पादन के लिए बैकएंड से बदलें', welcome: 'नमस्ते 👋', welcome_msg: "सुविधाओं पर जाने के लिए बाएँ मेनू का उपयोग करें। ऐप डेमो डेटा आपके ब्राउज़र में सहेजता है।",
         start_video: 'वीडियो शुरू करें', open_chatbot: 'चैटबॉट खोलें', activity_log: 'गतिविधि लॉग', emergency_quick: 'त्वरित आपातकाल', one_tap_call: 'एक-टैप कॉल (डेमो)', call_108: '108 पर कॉल करें', more: 'और',
         patient_profile: 'रोगी प्रोफ़ाइल', name: 'नाम', age: 'आयु', blood_group: 'रक्त समूह', contact: 'संपर्क', address: 'पता',
         video_consultation: 'वीडियो परामर्श', video_msg: 'यह पूर्वावलोकन आपके कैमरे का स्थानीय रूप से उपयोग करता है।', start_camera: 'कैमरा शुरू करें', stop: 'रोकें',
-        symptom_checker: 'AI लक्षण परीक्षक', symptom_checker_msg: 'लक्षण अंग्रेजी / हिन्दी / ਪੰਜਾਬੀ में टाइप करें।', chat_placeholder: 'लक्षण टाइप करें...', send: 'भेजें',
+        symptom_checker: 'AI लक्षण परीक्षक', symptom_checker_msg: 'लक्षण अंग्रेजी, हिन्दी, या पंजाबी में टाइप करें, या नीचे दी गई सूची से चुनें।', chat_placeholder: 'लक्षण टाइप करें...', send: 'भेजें',
         records_title: 'डिजिटल स्वास्थ्य रिकॉर्ड', records_msg: 'रिकॉर्ड स्थानीय रूप से सहेजे गए। बैकअप के लिए PDF निर्यात करें।', patient_name_placeholder: 'रोगी का नाम', notes_placeholder: 'नोट्स / शिकायतें',
         save_record: 'रिकॉर्ड सहेजें', export_pdf: 'PDF निर्यात करें', recent_records: 'हाल के रिकॉर्ड',
         iot_title: 'IoT डिवाइस सिमुलेशन', iot_msg: 'रीडिंग दर्ज करें और नवीनतम रिकॉर्ड से सिंक करें।', sync_device: 'नवीनतम रिकॉर्ड से सिंक करें',
-        emergency_msg: 'स्थानीय एम्बुलेंस को कॉल करें। यह एक डेमो लिंक है।', more_info: 'और जानकारी'
+        emergency_msg: 'स्थानीय एम्बुलेंस को कॉल करें। यह एक डेमो लिंक है।', more_info: 'और जानकारी',
+        notFound: 'माफ कीजिए, मैं केवल पहले से प्रोग्राम किए गए लक्षणों के लिए जानकारी दे सकता हूँ। कृपया कोई और सामान्य लक्षण पूछें।'
       },
       pa: {
         logged_in_as: 'ਇਸ ਵਜੋਂ ਲੌਗਇਨ ਕੀਤਾ', dashboard: 'ਡੈਸ਼ਬੋਰਡ', profile: 'ਪ੍ਰੋਫਾਈਲ', video: 'ਵੀਡੀਓ', chatbot: 'ਚੈਟਬਾਟ', records: 'ਰਿਕਾਰਡ', iot: 'ਆਈਓਟੀ', emergency: 'ਐਮਰਜੈਂਸੀ',
@@ -263,176 +422,562 @@
         start_video: 'ਵੀਡੀਓ ਸ਼ੁਰੂ ਕਰੋ', open_chatbot: 'ਚੈਟਬਾਟ ਖੋਲ੍ਹੋ', activity_log: 'ਗਤੀਵਿਧੀ ਲੌਗ', emergency_quick: 'ਤੁਰੰਤ ਐਮਰਜੈਂਸੀ', one_tap_call: 'ਇੱਕ-ਟੈਪ ਕਾਲ (ਡੈਮੋ)', call_108: '108 ਤੇ ਕਾਲ ਕਰੋ', more: 'ਹੋਰ',
         patient_profile: 'ਮਰੀਜ਼ ਦੀ ਪ੍ਰੋਫਾਈਲ', name: 'ਨਾਮ', age: 'ਉਮਰ', blood_group: 'ਖੂਨ ਦਾ ਗਰੁੱਪ', contact: 'ਸੰਪਰਕ', address: 'ਪਤਾ',
         video_consultation: 'ਵੀਡੀਓ ਸਲਾਹ-ਮਸ਼ਵਰਾ', video_msg: 'ਇਹ ਪੂਰਵਦਰਸ਼ਨ ਤੁਹਾਡੇ ਕੈਮਰੇ ਦੀ ਸਥਾਨਕ ਤੌਰ ਤੇ ਵਰਤੋਂ ਕਰਦਾ ਹੈ।', start_camera: 'ਕੈਮਰਾ ਸ਼ੁਰੂ ਕਰੋ', stop: 'ਰੋਕੋ',
-        symptom_checker: 'AI ਲੱਛਣ ਜਾਂਚਕਰਤਾ', symptom_checker_msg: 'ਲੱਛਣ ਅੰਗਰੇਜ਼ੀ / हिन्दी / ਪੰਜਾਬੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ।', chat_placeholder: 'ਲੱਛਣ ਟਾਈਪ ਕਰੋ...', send: 'ਭੇਜੋ',
+        symptom_checker: 'AI ਲੱਛਣ ਜਾਂਚਕਰਤਾ', symptom_checker_msg: 'ਲੱਛਣ ਅੰਗਰੇਜ਼ੀ, ਹਿੰਦੀ, ਜਾਂ ਪੰਜਾਬੀ ਵਿੱਚ ਟਾਈਪ ਕਰੋ, ਜਾਂ ਹੇਠਾਂ ਦਿੱਤੀ ਸੂਚੀ ਵਿੱਚੋਂ ਚੁਣੋ।', chat_placeholder: 'ਲੱਛਣ ਟਾਈਪ ਕਰੋ...', send: 'ਭੇਜੋ',
         records_title: 'ਡਿਜੀਟਲ ਸਿਹਤ ਰਿਕਾਰਡ', records_msg: 'ਰਿਕਾਰਡ ਸਥਾਨਕ ਤੌਰ ਤੇ ਸੁਰੱਖਿਅਤ ਕੀਤੇ ਗਏ। ਬੈਕਅੱਪ ਲਈ PDF ਵਿੱਚ ਐਕਸਪੋਰਟ ਕਰੋ।', patient_name_placeholder: 'ਮਰੀਜ਼ ਦਾ ਨਾਮ', notes_placeholder: 'ਨੋਟਸ / ਸ਼ਿਕਾਇਤਾਂ',
         save_record: 'ਰਿਕਾਰਡ ਸੁਰੱਖਿਅਤ ਕਰੋ', export_pdf: 'PDF ਐਕਸਪੋਰਟ ਕਰੋ', recent_records: 'ਤਾਜ਼ਾ ਰਿਕਾਰਡ',
         iot_title: 'ਆਈਓਟੀ ਡਿਵਾਈਸ ਸਿਮੂਲੇਸ਼ਨ', iot_msg: 'ਰੀਡਿੰਗ ਦਰਜ ਕਰੋ ਅਤੇ ਨਵੀਨਤਮ ਰਿਕਾਰਡ ਨਾਲ ਸਿੰਕ ਕਰੋ।', sync_device: 'ਨਵੀਨਤਮ ਰਿਕਾਰਡ ਨਾਲ ਸਿੰਕ ਕਰੋ',
-        emergency_msg: 'ਸਥਾਨਕ ਐਂਬੂਲੈਂਸ ਨੂੰ ਕਾਲ ਕਰੋ। ਇਹ ਇੱਕ ਡੈਮੋ ਲਿੰਕ ਹੈ।', more_info: 'ਹੋਰ ਜਾਣਕਾਰੀ'
+        emergency_msg: 'ਸਥਾਨਕ ਐਂਬੂਲੈਂਸ ਨੂੰ ਕਾਲ ਕਰੋ। ਇਹ ਇੱਕ ਡੈਮੋ ਲਿੰਕ ਹੈ।', more_info: 'ਹੋਰ ਜਾਣਕਾਰੀ',
+        notFound: 'ਮਾਫ ਕਰਨਾ, ਮੈਂ ਸਿਰਫ਼ ਪਹਿਲਾਂ ਤੋਂ ਪ੍ਰੋਗਰਾਮ ਕੀਤੇ ਲੱਛਣਾਂ ਲਈ ਜਾਣਕਾਰੀ ਦੇ ਸਕਦਾ ਹਾਂ। ਕਿਰਪਾ ਕਰਕੇ ਕੋਈ ਹੋਰ ਆਮ ਲੱਛਣ ਪੁੱਛੋ।'
       }
     };
-    
+
+    const translations = {
+      en: {
+        notFound: "Sorry, I can only provide information for pre-programmed symptoms. Please try another common symptom.",
+        symptomOptions: [
+          "Select a symptom...", "Fever", "Common Cold", "Headache", "Stomach Ache", "Sore Throat",
+          "Diarrhea", "Vomiting", "Cough", "Body Pain", "Skin Rash", "Toothache",
+          "Eye Irritation", "Ear Pain", "Muscle Pain", "Constipation", "Joint Pain",
+          "Back Pain", "Dizziness", "Minor Cut", "Burn", "Swelling", "Tiredness",
+          "Allergies", "High Blood Pressure", "Low Blood Pressure", "Minor Injury"
+        ],
+        followUpQuestion: (symptom) => `Tell me more about your ${symptom} symptoms.`
+      },
+      hi: {
+        notFound: "माफ कीजिए, मैं केवल पहले से प्रोग्राम किए गए लक्षणों के लिए जानकारी दे सकता हूँ। कृपया कोई और सामान्य लक्षण पूछें।",
+        symptomOptions: [
+          "एक लक्षण चुनें...", "बुखार", "सामान्य सर्दी", "सिरदर्द", "पेट दर्द", "गले में खराश",
+          "दस्त", "उल्टी", "खांसी", "बदन दर्द", "त्वचा पर दाने", "दांत दर्द",
+          "आंखों में जलन", "कान में दर्द", "मांसपेशियों में दर्द", "कब्ज", "जोड़ों का दर्द",
+          "पीठ दर्द", "चक्कर आना", "हल्का कट", "जलन", "सूजन", "थकान",
+          "एलर्जी", "उच्च रक्तचाप", "निम्न रक्तचाप", "मामूली चोट"
+        ],
+        followUpQuestion: (symptom) => `अपने ${symptom} के लक्षणों के बारे में और बताएं।`
+      },
+      pa: {
+        notFound: "ਮਾਫ ਕਰਨਾ, ਮੈਂ ਸਿਰਫ਼ ਪਹਿਲਾਂ ਤੋਂ ਪ੍ਰੋਗਰਾਮ ਕੀਤੇ ਲੱਛਣਾਂ ਲਈ ਜਾਣਕਾਰੀ ਦੇ ਸਕਦਾ ਹਾਂ। ਕਿਰਪਾ ਕਰਕੇ ਕੋਈ ਹੋਰ ਆਮ ਲੱਛਣ ਪੁੱਛੋ।",
+        symptomOptions: [
+          "ਇੱਕ ਲੱਛਣ ਚੁਣੋ...", "ਬੁਖ਼ਾਰ", "ਆਮ ਜ਼ੁਕਾਮ", "ਸਿਰਦਰਦ", "ਪੇਟ ਦਰਦ", "ਗਲੇ ਵਿੱਚ ਖਰਾਸ਼",
+          "ਦਸਤ", "ਉਲਟੀ", "ਖੰਘ", "ਸਰੀਰ ਵਿੱਚ ਦਰਦ", "ਚਮੜੀ 'ਤੇ ਧੱਫੜ", "ਦੰਦਾਂ ਦਾ ਦਰਦ",
+          "ਅੱਖਾਂ ਵਿੱਚ ਜਲਣ", "ਕੰਨ ਦਾ ਦਰਦ", "ਮਾਸਪੇਸ਼ੀਆਂ ਵਿੱਚ ਦਰਦ", "ਕਬਜ਼", "ਜੋੜਾਂ ਦਾ ਦਰਦ",
+          "ਪਿੱਠ ਦਾ ਦਰਦ", "ਚੱਕਰ ਆਉਣਾ", "ਮਾਮੂਲੀ ਕੱਟ", "ਸੜਨਾ", "ਸੋਜ", "ਥਕਾਵਟ",
+          "ਐਲਰਜੀ", "ਉੱਚ ਖੂਨ ਦਾ ਦਬਾਅ", "ਘੱਟ ਖੂਨ ਦਾ ਦਬਾਅ", "ਮਾਮੂਲੀ ਸੱਟ"
+        ],
+        followUpQuestion: (symptom) => `ਆਪਣੇ ${symptom} ਲੱਛਣਾਂ ਬਾਰੇ ਹੋਰ ਦੱਸੋ।`
+      },
+      hinglish: {
+        notFound: "Sorry, main sirf pehle se programmed symptoms ke liye information de sakta hoon. Please koi aur common symptom pucho.",
+        symptomOptions: [
+          "Ek symptom choose karein...", "Fever", "Common Cold", "Headache", "Stomach Ache", "Gale me Kharash",
+          "Diarrhea", "Vomiting", "Khansi", "Badan Dard", "Skin Rash", "Dant Dard",
+          "Aankh me Jalan", "Kan me Dard", "Muscle Pain", "Kabj", "Jodo ka Dard",
+          "Peeth Dard", "Chakkar Aana", "Chota Cut", "Jalan", "Sujan", "Thakan",
+          "Allergies", "High BP", "Low BP", "Minor Injury"
+        ],
+        followUpQuestion: (symptom) => `Apne ${symptom} ke symptoms ke baare mein aur batao.`
+      }
+    };
+
+    const offline_data = [
+      {
+        keywords: ["fever", "temperature", "high temp", "hot body", "bukhar", "tapman", "गरम शरीर", "ਬੁਖ਼ਾਰ", "ਤਾਪਮਾਨ", "fever", "bukhar", "high temp"],
+        answer: {
+          en: "To reduce fever, drink plenty of fluids, rest, and consider over-the-counter medication. Always consult a doctor for a proper diagnosis.",
+          hi: "बुखार कम करने के लिए, खूब तरल पदार्थ पिएं, आराम करें और ओवर-द-काउंटर दवा लें। सही निदान के लिए हमेशा डॉक्टर से सलाह लें।",
+          pa: "ਬੁਖ਼ਾਰ ਘਟਾਉਣ ਲਈ, ਬਹੁਤ ਸਾਰੇ ਤਰਲ ਪਦਾਰਥ ਪੀਓ, ਆਰਾਮ ਕਰੋ, ਅਤੇ ਓਵਰ-ਦ-ਕਾਊਂਟਰ ਦਵਾਈ ਲਓ। ਸਹੀ ਜਾਂਚ ਲਈ ਹਮੇਸ਼ਾ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Bukhar kam karne ke liye, khoob paani piyein, aaram karein aur dawa lein. Sahi diagnosis ke liye doctor se consult karein."
+        }
+      },
+      {
+        keywords: ["cold", "common cold", "runny nose", "sore throat", "cough", "congestion", "sardi", "jukham", "bahati nak", "gale me kharash", "khansi", "jamav", "ਜ਼ੁਕਾਮ", "ਗਲ਼ੇ ਵਿੱਚ ਖ਼ਰਾਸ਼", "common cold", "sardi jukham"],
+        answer: {
+          en: "Symptoms include a runny nose, sore throat, and cough. Rest and hydration are important. Consult a doctor if symptoms worsen.",
+          hi: "लक्षणों में बहती नाक, गले में खराश, खांसी और जमाव शामिल हैं। आराम और हाइड्रेशन महत्वपूर्ण हैं। लक्षण बिगड़ने पर डॉक्टर से सलाह लें।",
+          pa: "ਲੱਛਣਾਂ ਵਿੱਚ ਨੱਕ ਵਗਣਾ, ਗਲ਼ੇ ਵਿੱਚ ਖ਼ਰਾਸ਼, ਖੰਘ, ਅਤੇ ਜਮ੍ਹਾਂ ਸ਼ਾਮਲ ਹਨ। ਆਰਾਮ ਅਤੇ ਹਾਈਡਰੇਸ਼ਨ ਮਹੱਤਵਪੂਰਨ ਹਨ। ਲੱਛਣਾਂ ਦੇ ਵਿਗੜਨ 'ਤੇ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Symptoms mein runny nose, gala kharab aur khansi hote hain. Aaram karein aur paani piyein. Agar symptoms badhein to doctor se consult karein."
+        }
+      },
+      {
+        keywords: ["headache", "migraine", "head pain", "sir dard", "sirdard", "ਸਿਰਦਰਦ", "headache", "sir dard"],
+        answer: {
+          en: "For a headache, try to relax, drink water, and avoid loud noises or bright lights. Pain relievers can help, but if the pain is severe, consult a doctor.",
+          hi: "सिरदर्द के लिए, आराम करने की कोशिश करें, पानी पिएं और तेज आवाज या तेज रोशनी से बचें। दर्द निवारक दवाएं मदद कर सकती हैं, लेकिन अगर दर्द गंभीर हो तो डॉक्टर से सलाह लें।",
+          pa: "ਸਿਰਦਰਦ ਲਈ, ਆਰਾਮ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ, ਪਾਣੀ ਪੀਓ ਅਤੇ ਉੱਚੀਆਂ ਆਵਾਜ਼ਾਂ ਜਾਂ ਚਮਕਦਾਰ ਰੌਸ਼ਨੀ ਤੋਂ ਬਚੋ। ਦਰਦ ਨਿਵਾਰਕ ਦਵਾਈਆਂ ਮਦਦ ਕਰ ਸਕਦੀਆਂ ਹਨ, ਪਰ ਜੇਕਰ ਦਰਦ ਗੰਭੀਰ ਹੋਵੇ ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Headache ke liye, aaram karo, paani piyo, aur shor-sharaaba aur tej roshni se bacho. Pain reliever le sakte hain, lekin agar dard zyada hai, toh doctor se milo."
+        }
+      },
+      {
+        keywords: ["stomach ache", "stomach pain", "abdominal pain", "pet dard", "pet mein dard", "ਪੇਟ ਦਰਦ", "stomach ache", "pet dard"],
+        answer: {
+          en: "For stomach pain, try drinking water and eating light, bland foods. If the pain is persistent or severe, it is important to see a doctor.",
+          hi: "पेट दर्द के लिए, पानी पीने और हल्का, सादा भोजन करने की कोशिश करें। यदि दर्द लगातार या गंभीर हो तो डॉक्टर को दिखाना महत्वपूर्ण है।",
+          pa: "ਪੇਟ ਦਰਦ ਲਈ, ਪਾਣੀ ਪੀਣ ਅਤੇ ਹਲਕਾ, ਸਾਦਾ ਭੋਜਨ ਕਰਨ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ। ਜੇਕਰ ਦਰਦ ਲਗਾਤਾਰ ਜਾਂ ਗੰਭੀਰ ਹੋਵੇ ਤਾਂ ਡਾਕਟਰ ਨੂੰ ਦਿਖਾਉਣਾ ਮਹੱਤਵਪੂਰਨ ਹੈ।",
+          hinglish: "Pet dard ke liye, paani piyo aur halka, simple khana khao. Agar dard lagaatar ya zyada hai, toh doctor ko dikhana zaruri hai."
+        }
+      },
+      {
+        keywords: ["sore throat", "gale me dard", "throat pain", "gala kharab", "gale me kharash", "ਗਲੇ ਵਿੱਚ ਖਰਾਸ਼", "sore throat", "gale me kharash"],
+        answer: {
+          en: "Gargle with warm salt water, and drink warm liquids like tea with honey. If the pain is severe or accompanied by fever, consult a doctor.",
+          hi: "गर्म नमक वाले पानी से गरारे करें, और शहद के साथ चाय जैसे गर्म तरल पदार्थ पिएं। यदि दर्द गंभीर हो या बुखार हो तो डॉक्टर से सलाह लें।",
+          pa: "ਗਰਮ ਲੂਣ ਵਾਲੇ ਪਾਣੀ ਨਾਲ ਗਰਾਰੇ ਕਰੋ, ਅਤੇ ਸ਼ਹਿਦ ਨਾਲ ਚਾਹ ਵਰਗੇ ਗਰਮ ਤਰਲ ਪਦਾਰਥ ਪੀਓ। ਜੇਕਰ ਦਰਦ ਗੰਭੀਰ ਹੋਵੇ ਜਾਂ ਬੁਖਾਰ ਹੋਵੇ ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Garam paani mein namak daal kar garare karo, aur shahad wali chai jaise garam cheezein piyo. Agar dard zyada hai ya bukhar hai, toh doctor ko dikhao."
+        }
+      },
+      {
+        keywords: ["diarrhea", "loose motion", "dast", "patle dast", "ਦਸਤ", "diarrhea", "dast"],
+        answer: {
+          en: "Drink plenty of fluids to stay hydrated, and eat bland foods. Avoid spicy or fatty foods. If it continues for more than a day, see a doctor.",
+          hi: "हाइड्रेटेड रहने के लिए खूब सारे तरल पदार्थ पिएं और सादा भोजन करें। मसालेदार या वसायुक्त भोजन से बचें। यदि यह एक दिन से अधिक तक जारी रहे तो डॉक्टर से मिलें।",
+          pa: "ਹਾਈਡਰੇਟਿਡ ਰਹਿਣ ਲਈ ਬਹੁਤ ਸਾਰੇ ਤਰਲ ਪਦਾਰਥ ਪੀਓ ਅਤੇ ਸਾਦਾ ਭੋਜਨ ਖਾਓ। ਮਸਾਲੇਦਾਰ ਜਾਂ ਚਰਬੀ ਵਾਲੇ ਭੋਜਨ ਤੋਂ ਪਰਹੇਜ਼ ਕਰੋ। ਜੇਕਰ ਇਹ ਇੱਕ ਦਿਨ ਤੋਂ ਵੱਧ ਜਾਰੀ ਰਹੇ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Hydrated rehne ke liye bohot saara paani piyo, aur simple khana khao. Masaledar aur oily food avoid karo. Agar ek din se zyada ho gaya hai, toh doctor ko dikhao."
+        }
+      },
+      {
+        keywords: ["vomiting", "nausea", "ulti", "matli", "ਉਲਟੀ", "ਮਤਲੀ", "vomiting", "ulti"],
+        answer: {
+          en: "Take small sips of water or clear liquids. Avoid solid food for a few hours. If vomiting is frequent, consult a doctor to prevent dehydration.",
+          hi: "पानी या साफ तरल पदार्थों के छोटे घूंट लें। कुछ घंटों के लिए ठोस भोजन से बचें। यदि बार-बार उल्टी हो रही है, तो निर्जलीकरण को रोकने के लिए डॉक्टर से सलाह लें।",
+          pa: "ਪਾਣੀ ਜਾਂ ਸਾਫ਼ ਤਰਲ ਪਦਾਰਥਾਂ ਦੇ ਛੋਟੇ ਘੁੱਟ ਲਓ। ਕੁਝ ਘੰਟਿਆਂ ਲਈ ਠੋਸ ਭੋਜਨ ਤੋਂ ਪਰਹੇਜ਼ ਕਰੋ। ਜੇਕਰ ਵਾਰ-ਵਾਰ ਉਲਟੀਆਂ ਆ ਰਹੀਆਂ ਹਨ, ਤਾਂ ਡੀਹਾਈਡਰੇਸ਼ਨ ਨੂੰ ਰੋਕਣ ਲਈ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Paani ya clear liquids thoda-thoda karke piyo. Kuch ghanton tak solid food mat khao. Agar baar-baar ulti ho rahi hai, toh doctor se milo, taaki dehydration na ho."
+        }
+      },
+      {
+        keywords: ["cough", "dry cough", "khansi", "sukhi khansi", "ਖੰਘ", "cough", "khansi"],
+        answer: {
+          en: "For a cough, drink warm liquids and use honey with warm water. Avoid irritants like smoke. If the cough is severe or long-lasting, consult a doctor.",
+          hi: "खांसी के लिए, गर्म तरल पदार्थ पिएं और गर्म पानी में शहद का उपयोग करें। धुएं जैसे जलन पैदा करने वाले पदार्थों से बचें। यदि खांसी गंभीर या लंबे समय तक रहे तो डॉक्टर से सलाह लें।",
+          pa: "ਖੰਘ ਲਈ, ਗਰਮ ਤਰਲ ਪਦਾਰਥ ਪੀਓ ਅਤੇ ਗਰਮ ਪਾਣੀ ਵਿੱਚ ਸ਼ਹਿਦ ਦੀ ਵਰਤੋਂ ਕਰੋ। ਧੂੰਏਂ ਵਰਗੀਆਂ ਚੀਜ਼ਾਂ ਤੋਂ ਬਚੋ। ਜੇਕਰ ਖੰਘ ਗੰਭੀਰ ਜਾਂ ਲੰਬੇ ਸਮੇਂ ਤੱਕ ਰਹੇ ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Khansi ke liye, garam liquids piyo aur garam paani mein shahad daal kar lo. Smoke se bacho. Agar khansi zyada hai ya lambe time tak hai, toh doctor se milo."
+        }
+      },
+      {
+        keywords: ["body pain", "body ache", "badhan dard", "sharir mein dard", "ਸਰੀਰ ਵਿੱਚ ਦਰਦ", "body pain", "badan dard"],
+        answer: {
+          en: "For body ache, rest is important. You can take a warm bath and use over-the-counter pain relievers. If the pain is severe or persistent, consult a doctor.",
+          hi: "बदन दर्द के लिए, आराम करना महत्वपूर्ण है। आप गर्म पानी से नहा सकते हैं और दर्द निवारक दवाएं ले सकते हैं। यदि दर्द गंभीर या लगातार हो तो डॉक्टर से सलाह लें।",
+          pa: "ਸਰੀਰ ਵਿੱਚ ਦਰਦ ਲਈ, ਆਰਾਮ ਕਰਨਾ ਮਹੱਤਵਪੂਰਨ ਹੈ। ਤੁਸੀਂ ਗਰਮ ਪਾਣੀ ਨਾਲ ਨਹਾ ਸਕਦੇ ਹੋ ਅਤੇ ਦਰਦ ਨਿਵਾਰਕ ਦਵਾਈਆਂ ਲੈ ਸਕਦੇ ਹੋ। ਜੇਕਰ ਦਰਦ ਗੰਭੀਰ ਜਾਂ ਲਗਾਤਾਰ ਹੋਵੇ ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Badan dard ke liye, aaram karna zaruri hai. Garam paani se naha sakte ho aur pain relievers le sakte ho. Agar dard zyada hai, toh doctor se consult karo."
+        }
+      },
+      {
+        keywords: ["skin rash", "rash", "red spots", "tvacha par dane", "lal dhabbe", "daane", "ਚਮੜੀ 'ਤੇ ਧੱਫੜ", "ਲਾਲ ਧੱਫੜ", "skin rash", "skin daane"],
+        answer: {
+          en: "For a rash, keep the area clean and dry. Avoid scratching. If the rash is spreading, itchy, or painful, you should see a doctor.",
+          hi: "दाने के लिए, क्षेत्र को साफ और सूखा रखें। खुजली करने से बचें। यदि दाने फैल रहे हैं, उनमें खुजली हो रही है, या दर्दनाक हैं, तो आपको डॉक्टर को दिखाना चाहिए।",
+          pa: "ਧੱਫੜ ਲਈ, ਖੇਤਰ ਨੂੰ ਸਾਫ਼ ਅਤੇ ਸੁੱਕਾ ਰੱਖੋ। ਖੁਰਕਣ ਤੋਂ ਬਚੋ। ਜੇਕਰ ਧੱਫੜ ਫੈਲ ਰਿਹਾ ਹੈ, ਖੁਰਕ ਰਿਹਾ ਹੈ, ਜਾਂ ਦਰਦਨਾਕ ਹੈ, ਤਾਂ ਤੁਹਾਨੂੰ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰਨੀ ਚਾਹੀਦੀ ਹੈ।",
+          hinglish: "Daane ke liye, us area ko saaf aur dry rakho. Khujli mat karo. Agar daane fail rahe hain, bohot khujli ho rahi hai, ya dard hai, toh doctor se milo."
+        }
+      },
+      {
+        keywords: ["toothache", "dental pain", "dant dard", "dant mein dard", "ਦੰਦਾਂ ਦਾ ਦਰਦ", "toothache", "dant dard"],
+        answer: {
+          en: "Rinse your mouth with warm salt water. You can also apply a cold compress to your cheek. Avoid hot or cold foods. If the pain is severe, consult a dentist.",
+          hi: "गर्म नमक वाले पानी से कुल्ला करें। आप अपने गाल पर ठंडा सेंक भी लगा सकते हैं। गर्म या ठंडे खाद्य पदार्थों से बचें। यदि दर्द गंभीर हो तो दंत चिकित्सक से सलाह लें।",
+          pa: "ਗਰਮ ਨਮਕ ਵਾਲੇ ਪਾਣੀ ਨਾਲ ਕੁਰਲੀ ਕਰੋ। ਤੁਸੀਂ ਆਪਣੇ ਗੱਲ੍ਹ 'ਤੇ ਠੰਡਾ ਸੇਕ ਵੀ ਲਗਾ ਸਕਦੇ ਹੋ। ਗਰਮ ਜਾਂ ਠੰਡੇ ਭੋਜਨ ਤੋਂ ਬਚੋ। ਜੇਕਰ ਦਰਦ ਗੰਭੀਰ ਹੋਵੇ ਤਾਂ ਦੰਦਾਂ ਦੇ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Dant dard ke liye, garam namak ke paani se kulla karo. Gaal par thandi patti bhi laga sakte ho. Garam ya thanda khana mat khao. Agar dard zyada hai, toh dentist se milo."
+        }
+      },
+      {
+        keywords: ["eye irritation", "red eye", "khujli", "aankh me jalan", "aankhon mein jalan", "aankhon mein khujli", "aankh lal hona", "ਅੱਖਾਂ ਵਿੱਚ ਜਲਣ", "ਅੱਖਾਂ ਵਿੱਚ ਖੁਜਲੀ", "eye irritation", "aankh jalan"],
+        answer: {
+          en: "Rinse your eyes with clean water. Avoid rubbing your eyes. If irritation persists or vision is affected, see a doctor.",
+          hi: "अपनी आंखों को साफ पानी से धोएं। आंखों को रगड़ने से बचें। यदि जलन बनी रहती है या दृष्टि प्रभावित होती है, तो डॉक्टर से मिलें।",
+          pa: "ਆਪਣੀਆਂ ਅੱਖਾਂ ਨੂੰ ਸਾਫ਼ ਪਾਣੀ ਨਾਲ ਧੋਵੋ। ਆਪਣੀਆਂ ਅੱਖਾਂ ਨੂੰ ਰਗੜਨ ਤੋਂ ਬਚੋ। ਜੇਕਰ ਜਲਣ ਬਣੀ ਰਹੇ ਜਾਂ ਨਜ਼ਰ ਪ੍ਰਭਾਵਿਤ ਹੋਵੇ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Apni aankhon ko saaf paani se dho. Aankhon ko ragadna mat. Agar jalan continue rahe ya dikhne mein dikkat ho, toh doctor se milo."
+        }
+      },
+      {
+        keywords: ["ear pain", "kan me dard", "kan ka dard", "ਕੰਨ ਦਾ ਦਰਦ", "ear pain", "kan dard"],
+        answer: {
+          en: "Applying a warm compress to the ear can help with pain. Do not put anything inside the ear. If the pain is severe or accompanied by fluid, see a doctor.",
+          hi: "कान पर गर्म सेंक लगाने से दर्द में मदद मिल सकती है। कान के अंदर कुछ भी न डालें। यदि दर्द गंभीर हो या तरल पदार्थ के साथ हो तो डॉक्टर से मिलें।",
+          pa: "ਕੰਨ 'ਤੇ ਗਰਮ ਸੇਕ ਲਗਾਉਣ ਨਾਲ ਦਰਦ ਵਿੱਚ ਮਦਦ ਮਿਲ ਸਕਦੀ ਹੈ। ਕੰਨ ਦੇ ਅੰਦਰ ਕੁਝ ਵੀ ਨਾ ਪਾਓ। ਜੇਕਰ ਦਰਦ ਗੰਭੀਰ ਹੋਵੇ ਜਾਂ ਤਰਲ ਪਦਾਰਥ ਦੇ ਨਾਲ ਹੋਵੇ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Kan par garam patti laga sakte ho. Kan ke andar kuch mat daalo. Agar dard zyada hai ya liquid aa raha hai, toh doctor ko dikhao."
+        }
+      },
+      {
+        keywords: ["muscle pain", "khichav", "manspeshi", "pain", "manspeshi ka dard", "manspeshi ka khichav", "ਮਾਸਪੇਸ਼ੀਆਂ ਵਿੱਚ ਦਰਦ", "muscle pain", "muscle dard"],
+        answer: {
+          en: "Rest the affected muscle and apply ice to the area. Over-the-counter pain relievers can also help. If the pain is severe, consult a doctor.",
+          hi: "प्रभावित मांसपेशी को आराम दें और उस क्षेत्र पर बर्फ लगाएं। ओवर-द-काउंटर दर्द निवारक भी मदद कर सकते हैं। यदि दर्द गंभीर हो तो डॉक्टर से सलाह लें।",
+          pa: "ਪ੍ਰਭਾਵਿਤ ਮਾਸਪੇਸ਼ੀ ਨੂੰ ਆਰਾਮ ਦਿਓ ਅਤੇ ਉਸ ਖੇਤਰ 'ਤੇ ਬਰਫ਼ ਲਗਾਓ। ਓਵਰ-ਦ-ਕਾਊਂਟਰ ਦਰਦ ਨਿਵਾਰਕ ਵੀ ਮਦਦ ਕਰ ਸਕਦੇ ਹਨ। ਜੇਕਰ ਦਰਦ ਗੰਭੀਰ ਹੋਵੇ ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Affected muscle ko aaram do aur us area par ice lagao. Pain relievers bhi le sakte ho. Agar dard zyada hai, toh doctor se consult karo."
+        }
+      },
+      {
+        keywords: ["constipation", "kabj", "constipated", "kabz", "ਕਬਜ਼", "constipation", "kabj"],
+        answer: {
+          en: "Increase your fluid and fiber intake. Exercise can also help. If constipation persists for more than a few days, you should consult a doctor.",
+          hi: "अपने तरल पदार्थ और फाइबर का सेवन बढ़ाएं। व्यायाम भी मदद कर सकता है। यदि कब्ज कुछ दिनों से अधिक समय तक बनी रहती है, तो आपको डॉक्टर से सलाह लेनी चाहिए।",
+          pa: "ਆਪਣੇ ਤਰਲ ਪਦਾਰਥ ਅਤੇ ਫਾਈਬਰ ਦੀ ਮਾਤਰਾ ਵਧਾਓ। ਕਸਰਤ ਵੀ ਮਦਦ ਕਰ ਸਕਦੀ ਹੈ। ਜੇਕਰ ਕਬਜ਼ ਕੁਝ ਦਿਨਾਂ ਤੋਂ ਵੱਧ ਸਮੇਂ ਤੱਕ ਰਹਿੰਦੀ ਹੈ, ਤਾਂ ਤੁਹਾਨੂੰ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰਨੀ ਚਾਹੀਦੀ ਹੈ।",
+          hinglish: "Apna paani aur fiber ka intake badhao. Exercise bhi madad kar sakti hai. Agar kabj kuch dino se zyada rahe, toh doctor se consult karo."
+        }
+      },
+      {
+        keywords: ["joint pain", "ghutno me dard", "jodo ka dard", "jodo mein dard", "ghutno ka dard", "ਜੋੜਾਂ ਦਾ ਦਰਦ", "joint pain", "jodo dard"],
+        answer: {
+          en: "For joint pain, rest the joint and apply a warm or cold compress. Gentle exercises can help. If the pain is severe or swollen, consult a doctor.",
+          hi: "जोड़ों के दर्द के लिए, जोड़ को आराम दें और गर्म या ठंडा सेंक लगाएं। हल्के व्यायाम मदद कर सकते हैं। यदि दर्द गंभीर हो या सूजन हो, तो डॉक्टर से सलाह लें।",
+          pa: "ਜੋੜਾਂ ਦੇ ਦਰਦ ਲਈ, ਜੋੜ ਨੂੰ ਆਰਾਮ ਦਿਓ ਅਤੇ ਗਰਮ ਜਾਂ ਠੰਡਾ ਸੇਕ ਲਗਾਓ। ਹਲਕੇ ਕਸਰਤ ਮਦਦ ਕਰ ਸਕਦੀ ਹੈ। ਜੇਕਰ ਦਰਦ ਗੰਭੀਰ ਹੋਵੇ ਜਾਂ ਸੋਜ ਹੋਵੇ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Joint pain ke liye, joint ko aaram do aur garam ya thanda patti lagao. Halka-phulka exercise bhi kar sakte ho. Agar dard zyada hai ya sujan hai, toh doctor se consult karo."
+        }
+      },
+      {
+        keywords: ["back pain", "peeth dard", "kamar dard", "ਪਿੱਠ ਦਾ ਦਰਦ", "back pain", "peeth dard"],
+        answer: {
+          en: "For back pain, apply a cold pack for the first 48 hours, then a warm compress. Avoid heavy lifting. If the pain is severe, consult a doctor.",
+          hi: "पीठ दर्द के लिए, पहले 48 घंटों तक ठंडा सेंक लगाएं, फिर गर्म सेंक। भारी सामान उठाने से बचें। यदि दर्द गंभीर हो तो डॉक्टर से सलाह लें।",
+          pa: "ਪਿੱਠ ਦੇ ਦਰਦ ਲਈ, ਪਹਿਲੇ 48 ਘੰਟਿਆਂ ਲਈ ਠੰਡਾ ਪੈਕ ਲਗਾਓ, ਫਿਰ ਗਰਮ ਸੇਕ। ਭਾਰੀ ਸਮਾਨ ਚੁੱਕਣ ਤੋਂ ਬਚੋ। ਜੇਕਰ ਦਰਦ ਗੰਭੀਰ ਹੋਵੇ ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Peeth dard ke liye, pehle 48 ghanto tak thanda patti lagao, phir garam. Bhaari cheezein mat uthao. Agar dard zyada hai, toh doctor se milo."
+        }
+      },
+      {
+        keywords: ["dizziness", "chakkar", "giddiness", "chakkar aana", "ਚੱਕਰ ਆਉਣਾ", "dizziness", "chakkar aana"],
+        answer: {
+          en: "Sit or lie down immediately to prevent falls. Drink water and eat something light. If dizziness persists, consult a doctor.",
+          hi: "गिरने से बचने के लिए तुरंत बैठ जाएं या लेट जाएं। पानी पिएं और कुछ हल्का खाएं। यदि चक्कर आना जारी रहे तो डॉक्टर से सलाह लें।",
+          pa: "ਡਿੱਗਣ ਤੋਂ ਬਚਣ ਲਈ ਤੁਰੰਤ ਬੈਠ ਜਾਓ ਜਾਂ ਲੇਟ ਜਾਓ। ਪਾਣੀ ਪੀਓ ਅਤੇ ਕੁਝ ਹਲਕਾ ਖਾਓ। ਜੇਕਰ ਚੱਕਰ ਆਉਣਾ ਜਾਰੀ ਰਹੇ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Girne se bachne ke liye jaldi se baith jao ya let jao. Paani piyo aur kuch halka khao. Agar chakkar aana continue rahe, toh doctor ko dikhao."
+        }
+      },
+      {
+        keywords: ["minor cut", "cut", "chot", "ghav", "halka cut", "cut jaana", "ਮਾਮੂਲੀ ਕੱਟ", "minor cut", "chota cut"],
+        answer: {
+          en: "Clean the wound with soap and water, and apply a sterile bandage. If the cut is deep or bleeding heavily, seek immediate medical help.",
+          hi: "घाव को साबुन और पानी से साफ करें, और एक बाँझ पट्टी लगाएं। यदि कट गहरा हो या खून ज्यादा बह रहा हो तो तुरंत चिकित्सा सहायता लें।",
+          pa: "ਜ਼ਖ਼ਮ ਨੂੰ ਸਾਬਣ ਅਤੇ ਪਾਣੀ ਨਾਲ ਸਾਫ਼ ਕਰੋ, ਅਤੇ ਇੱਕ ਨਿਰਜੀਵ ਪੱਟੀ ਲਗਾਓ। ਜੇਕਰ ਕੱਟ ਡੂੰਘਾ ਹੋਵੇ ਜਾਂ ਜ਼ਿਆਦਾ ਖੂਨ ਵਹਿ ਰਿਹਾ ਹੋਵੇ, ਤਾਂ ਤੁਰੰਤ ਡਾਕਟਰੀ ਮਦਦ ਲਓ।",
+          hinglish: "Ghav ko sabun aur paani se saaf karo, aur patti lagao. Agar cut gehra hai ya zyada khoon beh raha hai, toh turant doctor ke paas jao."
+        }
+      },
+      {
+        keywords: ["burn", "jalna", "jalan", "jal jaana", "ਸੜਨਾ", "burn", "jalan"],
+        answer: {
+          en: "For a minor burn, cool the area with cool (not cold) running water for several minutes. Do not apply ice. Cover with a sterile bandage. For severe burns, seek immediate medical help.",
+          hi: "मामूली जलन के लिए, कई मिनटों तक ठंडे (ठंडे नहीं) बहते पानी से क्षेत्र को ठंडा करें। बर्फ न लगाएं। एक बाँझ पट्टी से ढक दें। गंभीर जलन के लिए, तुरंत चिकित्सा सहायता लें।",
+          pa: "ਮਾਮੂਲੀ ਸੜਨ ਲਈ, ਕਈ ਮਿੰਟਾਂ ਲਈ ਠੰਡੇ (ਠੰਡੇ ਨਹੀਂ) ਵਗਦੇ ਪਾਣੀ ਨਾਲ ਖੇਤਰ ਨੂੰ ਠੰਡਾ ਕਰੋ। ਬਰਫ਼ ਨਾ ਲਗਾਓ। ਇੱਕ ਨਿਰਜੀਵ ਪੱਟੀ ਨਾਲ ਢੱਕੋ। ਗੰਭੀਰ ਸੜਨ ਲਈ, ਤੁਰੰਤ ਡਾਕਟਰੀ ਮਦਦ ਲਓ।",
+          hinglish: "Minor burn ke liye, us area ko thande paani se dho. Ice mat lagana. Fir usko patti se cover kar lo. Agar burn zyada hai, toh turant doctor ke paas jao."
+        }
+      },
+      {
+        keywords: ["swelling", "sujan", "ਸੋਜ", "swelling", "sujan"],
+        answer: {
+          en: "For swelling from a minor injury, elevate the area and apply a cold compress. If the swelling is severe or doesn't go down, consult a doctor.",
+          hi: "मामूली चोट से सूजन के लिए, प्रभावित क्षेत्र को ऊपर उठाएं और ठंडा सेंक लगाएं। यदि सूजन गंभीर हो या कम न हो तो डॉक्टर से सलाह लें।",
+          pa: "ਮਾਮੂਲੀ ਸੱਟ ਤੋਂ ਸੋਜ ਲਈ, ਪ੍ਰਭਾਵਿਤ ਖੇਤਰ ਨੂੰ ਉੱਚਾ ਚੁੱਕੋ ਅਤੇ ਠੰਡਾ ਸੇਕ ਲਗਾਓ। ਜੇਕਰ ਸੋਜ ਗੰਭੀਰ ਹੋਵੇ ਜਾਂ ਘੱਟ ਨਾ ਹੋਵੇ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Minor injury ke sujan ke liye, us area ko upar rakho aur thanda patti lagao. Agar sujan zyada hai ya kam nahi ho rahi, toh doctor se consult karo."
+        }
+      },
+      {
+        keywords: ["tiredness", "fatigue", "thakan", "kamjori", "ਥਕਾਵਟ", "ਕਮਜ਼ੋਰੀ", "tiredness", "thakan"],
+        answer: {
+          en: "Fatigue can be caused by a lack of sleep, dehydration, or poor nutrition. Rest, drink water, and eat a balanced diet. If it's persistent, consult a doctor to rule out underlying issues.",
+          hi: "थकान नींद की कमी, निर्जलीकरण, या खराब पोषण के कारण हो सकती है। आराम करें, पानी पिएं और संतुलित आहार लें। यदि यह लगातार बनी रहती है, तो अंतर्निहित समस्याओं का पता लगाने के लिए डॉक्टर से सलाह लें।",
+          pa: "ਥਕਾਵਟ ਨੀਂਦ ਦੀ ਘਾਟ, ਡੀਹਾਈਡਰੇਸ਼ਨ, ਜਾਂ ਮਾੜੇ ਪੋਸ਼ਣ ਕਾਰਨ ਹੋ ਸਕਦੀ ਹੈ। ਆਰਾਮ ਕਰੋ, ਪਾਣੀ ਪੀਓ ਅਤੇ ਸੰਤੁਲਿਤ ਖੁਰਾਕ ਖਾਓ। ਜੇਕਰ ਇਹ ਲਗਾਤਾਰ ਬਣੀ ਰਹੇ, ਤਾਂ ਅੰਦਰੂਨੀ ਸਮੱਸਿਆਵਾਂ ਦਾ ਪਤਾ ਲਗਾਉਣ ਲਈ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Thakan neend ki kami, paani ki kami, ya kharab khane ki vajah se ho sakti hai. Aaram karo, paani piyo aur balanced diet lo. Agar thakan lagaatar hai, toh doctor se milo."
+        }
+      },
+      {
+        keywords: ["allergies", "allergy", "khujli", "एलर्जी", "खुजली", "ਐਲਰਜੀ", "allergies", "allergy"],
+        answer: {
+          en: "For allergies, identify and avoid the trigger. Over-the-counter antihistamines can help with symptoms. If the reaction is severe, seek immediate medical attention.",
+          hi: "एलर्जी के लिए, कारण का पता लगाएं और उससे बचें। ओवर-द-काउंटर एंटीहिस्टामाइन लक्षणों में मदद कर सकते हैं। यदि प्रतिक्रिया गंभीर हो, तो तुरंत चिकित्सा सहायता लें।",
+          pa: "ਐਲਰਜੀ ਲਈ, ਕਾਰਨ ਦੀ ਪਛਾਣ ਕਰੋ ਅਤੇ ਉਸ ਤੋਂ ਬਚੋ। ਓਵਰ-ਦ-ਕਾਊਂਟਰ ਐਂਟੀਹਿਸਟਾਮਾਈਨ ਲੱਛਣਾਂ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦੇ ਹਨ। ਜੇਕਰ ਪ੍ਰਤੀਕਿਰਿਆ ਗੰਭੀਰ ਹੋਵੇ, ਤਾਂ ਤੁਰੰਤ ਡਾਕਟਰੀ ਸਹਾਇਤਾ ਲਓ।",
+          hinglish: "Allergy ke liye, us chiz ko dhoondo jis se allergy hai aur use avoid karo. Antihistamines se aaram mil sakta hai. Agar reaction zyada hai, toh turant doctor ke paas jao."
+        }
+      },
+      {
+        keywords: ["high blood pressure", "high bp", "raktchap", "hypertension", "uchch raktchap", "hai bi pi", "ਉੱਚ ਖੂਨ ਦਾ ਦਬਾਅ", "high bp", "high blood pressure"],
+        answer: {
+          en: "High blood pressure can be managed with a healthy diet, exercise, and stress reduction. If your blood pressure is consistently high, it is crucial to consult a doctor.",
+          hi: "उच्च रक्तचाप को स्वस्थ आहार, व्यायाम और तनाव कम करके नियंत्रित किया जा सकता है। यदि आपका रक्तचाप लगातार उच्च रहता है, तो डॉक्टर से सलाह लेना महत्वपूर्ण है।",
+          pa: "ਉੱਚ ਖੂਨ ਦੇ ਦਬਾਅ ਨੂੰ ਸਿਹਤਮੰਦ ਖੁਰਾਕ, ਕਸਰਤ, ਅਤੇ ਤਣਾਅ ਘਟਾ ਕੇ ਪ੍ਰਬੰਧਿਤ ਕੀਤਾ ਜਾ ਸਕਦਾ ਹੈ। ਜੇਕਰ ਤੁਹਾਡਾ ਖੂਨ ਦਾ ਦਬਾਅ ਲਗਾਤਾਰ ਉੱਚਾ ਰਹਿੰਦਾ ਹੈ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰਨਾ ਬਹੁਤ ਜ਼ਰੂਰੀ ਹੈ।",
+          hinglish: "High bp ko healthy khane, exercise aur stress kam karke manage kiya ja sakta hai. Agar aapka bp lagaatar high hai, toh doctor se consult karna bahut zaruri hai."
+        }
+      },
+      {
+        keywords: ["low blood pressure", "low bp", "nimn raktchap", "hypotension", "lo bi pi", "ਘੱਟ ਖੂਨ ਦਾ ਦਬਾਅ", "low bp", "low blood pressure"],
+        answer: {
+          en: "For low blood pressure, drink plenty of fluids and increase your salt intake. Stand up slowly from a sitting or lying position. If you feel dizzy often, consult a doctor.",
+          hi: "निम्न रक्तचाप के लिए, खूब सारे तरल पदार्थ पिएं और नमक का सेवन बढ़ाएं। बैठने या लेटने की स्थिति से धीरे-धीरे उठें। यदि आपको अक्सर चक्कर आते हैं, तो डॉक्टर से सलाह लें।",
+          pa: "ਘੱਟ ਖੂਨ ਦੇ ਦਬਾਅ ਲਈ, ਬਹੁਤ ਸਾਰੇ ਤਰਲ ਪਦਾਰਥ ਪੀਓ ਅਤੇ ਨਮਕ ਦੀ ਮਾਤਰਾ ਵਧਾਓ। ਬੈਠਣ ਜਾਂ ਲੇਟਣ ਦੀ ਸਥਿਤੀ ਤੋਂ ਹੌਲੀ-ਹੌਲੀ ਉੱਠੋ। ਜੇਕਰ ਤੁਹਾਨੂੰ ਅਕਸਰ ਚੱਕਰ ਆਉਂਦੇ ਹਨ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Low bp ke liye, bohot paani piyo aur namak zyada khao. Aaram se utho. Agar baar-baar chakkar aate hain, toh doctor se consult karo."
+        }
+      },
+      {
+        keywords: ["minor injury", "chot", "pain", "swelling", "ghav", "choti moti chot", "dard", "ਮਾਮੂਲੀ ਸੱਟ", "ਸੱਟ", "ਦਰਦ", "minor injury", "choti chot"],
+        answer: {
+          en: "For a minor injury, use the RICE method: Rest, Ice, Compression, and Elevation. If the pain or swelling is severe, or if you can't move the injured area, see a doctor.",
+          hi: "मामूली चोट के लिए, RICE विधि का उपयोग करें: आराम, बर्फ, दबाव और ऊंचाई। यदि दर्द या सूजन गंभीर हो, या यदि आप घायल क्षेत्र को हिला नहीं सकते हैं, तो डॉक्टर से मिलें।",
+          pa: "ਮਾਮੂਲੀ ਸੱਟ ਲਈ, RICE ਵਿਧੀ ਦੀ ਵਰਤੋਂ ਕਰੋ: ਆਰਾਮ, ਬਰਫ਼, ਦਬਾਅ, ਅਤੇ ਉੱਚਾਈ। ਜੇਕਰ ਦਰਦ ਜਾਂ ਸੋਜ ਗੰਭੀਰ ਹੋਵੇ, ਜਾਂ ਜੇਕਰ ਤੁਸੀਂ ਜ਼ਖਮੀ ਖੇਤਰ ਨੂੰ ਹਿਲਾ ਨਹੀਂ ਸਕਦੇ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।",
+          hinglish: "Minor injury ke liye, RICE method use karo: Rest, Ice, Compression, aur Elevation. Agar dard ya sujan zyada hai, ya tum injured area ko hila nahi pa rahe, toh doctor se milo."
+        }
+      }
+    ];
+
     const toastEl = document.getElementById('toast');
-    function showToast(msg){
+    function showToast(msg) {
       toastEl.textContent = msg;
       toastEl.style.opacity = 1;
       toastEl.style.transform = 'translateY(0)';
-      setTimeout(()=>{ toastEl.style.opacity = 0; toastEl.style.transform = 'translateY(8px)'; }, 2000);
+      setTimeout(() => {
+        toastEl.style.opacity = 0;
+        toastEl.style.transform = 'translateY(8px)';
+      }, 2000);
     }
-    function logActivity(text){
+
+    function logActivity(text) {
       const el = document.getElementById('activityList');
       const ts = new Date().toLocaleTimeString();
       el.innerHTML = `<div><small>${ts}:</small> ${escapeHtml(text)}</div>` + el.innerHTML;
       document.getElementById('activityShort').textContent = text;
     }
-    function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
-    
-    document.querySelectorAll('.nav button').forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+
+    function escapeHtml(s) {
+      return (s || '').toString().replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
+    }
+
+    function openView(id) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      setTimeout(() => {
+        document.getElementById(id).classList.add('active');
+        if (id === 'chatbot') {
+          const lang = languages[currentLangIndex] || 'en';
+          document.getElementById('languageSelector').value = lang;
+          updateChatUI(lang);
+        }
+      }, 50);
+      logActivity('Opened view: ' + id);
+    }
+
+    document.getElementById('hamburger-menu').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('show');
+    });
+
+    document.querySelectorAll('.nav button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         openView(btn.dataset.view);
         document.getElementById('sidebar').classList.remove('show');
       });
     });
-    
-    document.getElementById('darkToggle').addEventListener('click', ()=>{ document.body.classList.toggle('dark'); });
-    
-    /* --- Language Button Logic Updated for 3 Languages --- */
+
+    document.getElementById('darkToggle').addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+    });
+
     const langBtn = document.getElementById('langToggle');
     const languages = ['en', 'hi', 'pa'];
     let currentLangIndex = 0;
-    langBtn.addEventListener('click', ()=>{
+    langBtn.addEventListener('click', () => {
       currentLangIndex = (currentLangIndex + 1) % languages.length;
       const newLang = languages[currentLangIndex];
       langBtn.textContent = newLang.toUpperCase();
       updateUIText(newLang);
     });
 
-    function updateUIText(lang){
-        document.querySelectorAll('[data-lang-key]').forEach(el => {
-            const key = el.dataset.langKey;
-            const langText = langStrings[lang][key];
-            if (langText) {
-                const span = el.querySelector('span');
-                if(el.placeholder) {
-                    el.placeholder = langText;
-                } else if (span && !['i'].includes(span.tagName.toLowerCase())) {
-                    span.innerHTML = langText;
-                } else {
-                    const icon = el.querySelector('i');
-                    if (icon) { el.innerHTML = `<i class="${icon.className}"></i> ${langText}`; } 
-                    else { el.innerHTML = langText; }
-                }
+    function updateUIText(lang) {
+      document.querySelectorAll('[data-lang-key]').forEach(el => {
+        const key = el.dataset.langKey;
+        const langText = langStrings[lang][key];
+        if (langText) {
+          if (el.placeholder) {
+            el.placeholder = langText;
+          } else {
+            const span = el.querySelector('span');
+            const icon = el.querySelector('i');
+            if (span && !['i'].includes(span.tagName.toLowerCase())) {
+              span.innerHTML = langText;
+            } else if (icon) {
+              el.innerHTML = `<i class="${icon.className}"></i> ${langText}`;
+            } else {
+              el.innerHTML = langText;
             }
-        });
-        const initialMessages = {
-            en: 'Hello — Type your symptoms',
-            hi: 'नमस्ते — अपनी symptoms बताइए',
-            pa: 'ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ — ਆਪਣੇ ਲੱਛਣ ਦੱਸੋ'
-        };
-        appendBotMsg(initialMessages[lang]);
+          }
+        }
+      });
     }
 
     let localStream = null;
     document.getElementById('startCam').addEventListener('click', startCamera);
     document.getElementById('stopCam').addEventListener('click', stopCamera);
-    async function startCamera(){
-      try{
-        const s = await navigator.mediaDevices.getUserMedia({video:true,audio:true});
+
+    async function startCamera() {
+      try {
+        const s = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         localStream = s;
-        const area = document.getElementById('videoArea'); area.innerHTML = '';
-        const v = document.createElement('video'); v.autoplay = true; v.playsInline = true; v.muted = true;
-        v.srcObject = s; v.style.width = '320px'; v.style.borderRadius = '8px';
+        const area = document.getElementById('videoArea');
+        area.innerHTML = '';
+        const v = document.createElement('video');
+        v.autoplay = true;
+        v.playsInline = true;
+        v.muted = true;
+        v.srcObject = s;
+        v.style.width = '320px';
+        v.style.borderRadius = '8px';
         area.appendChild(v);
-        showToast('Camera started'); logActivity('Camera started');
-      }catch(e){ alert('Camera access denied or not available'); }
-    }
-    function stopCamera(){
-      if(localStream) localStream.getTracks().forEach(t=>t.stop());
-      localStream = null;
-      document.getElementById('videoArea').innerHTML = '';
-      showToast('Camera stopped'); logActivity('Camera stopped');
-    }
-    
-    const messagesEl = document.getElementById('messages');
-    document.getElementById('sendBtn').addEventListener('click', sendChat);
-    function appendUserMsg(txt){
-      const d = document.createElement('div'); d.className = 'msg user';
-      d.innerHTML = `<div class="bubble">${escapeHtml(txt)}</div>`;
-      messagesEl.appendChild(d); messagesEl.scrollTop = messagesEl.scrollHeight;
-    }
-    function appendBotMsg(txt){
-        if(!txt) return;
-        // Clear previous messages before adding a new initial one
-        if(txt.includes('Type your symptoms') || txt.includes('अपनी symptoms बताइए') || txt.includes('ਆਪਣੇ ਲੱਛਣ ਦੱਸੋ')) {
-            messagesEl.innerHTML = '';
-        }
-      const d = document.createElement('div'); d.className = 'msg bot';
-      d.innerHTML = `<div class="bubble">${escapeHtml(txt)}</div>`;
-      messagesEl.appendChild(d); messagesEl.scrollTop = messagesEl.scrollHeight;
+        showToast('Camera started');
+        logActivity('Camera started');
+      } catch (e) {
+        showToast('Camera access denied or not available');
+      }
     }
 
-    /* --- Chatbot Language Detection Updated for Punjabi --- */
-    function detectLangFromText(t){
-      if(/[\u0900-\u097F]/.test(t)) return 'hi'; // Hindi
-      if(/[\u0A00-\u0A7F]/.test(t)) return 'pa'; // Punjabi (Gurmukhi)
-      return 'en';
-    }
-    function ruleBasedReply(text, l){
-      const t = text.toLowerCase();
-      if(/(fever|bukhar|बुखार|ਬੁਖਾਰ)/.test(t)) {
-        if (l === 'pa') return 'ਜੇਕਰ ਬੁਖਾਰ 2 ਦਿਨਾਂ ਤੋਂ ਵੱਧ ਹੈ, ਤਾਂ ਡਾਕਟਰ ਨਾਲ ਸਲਾਹ ਕਰੋ।';
-        return l==='hi' ? 'बुखार 2 दिनों से ज्यादा हो तो डॉक्टर दिखाएँ।' : 'If fever >2 days, consult a doctor.';
+    function stopCamera() {
+      if (localStream) {
+        localStream.getTracks().forEach(t => t.stop());
+        localStream = null;
+        document.getElementById('videoArea').innerHTML = '';
+        showToast('Camera stopped');
+        logActivity('Camera stopped');
       }
-      if(/(cough|khaansi|खांसी|ਖੰਘ)/.test(t)) {
-        if (l === 'pa') return 'ਜੇਕਰ ਖੰਘ ਬਣੀ ਰਹਿੰਦੀ ਹੈ, ਤਾਂ ਡਾਕਟਰ ਨੂੰ ਮਿਲੋ।';
-        return l==='hi' ? 'अगर खांसी ज़्यादा रहे तो डॉक्टर दिखाएँ।' : 'If cough persists, see a doctor.';
+    }
+
+    const messagesEl = document.getElementById('messages');
+    const languageSelector = document.getElementById('languageSelector');
+    const symptomSelector = document.getElementById('symptomSelector');
+    document.getElementById('sendBtn').addEventListener('click', sendChat);
+    document.getElementById('chatInput').addEventListener('keypress', e => {
+      if (e.key === 'Enter') sendChat();
+    });
+symptomSelector.addEventListener('change', () => {
+  const selectedIndex = symptomSelector.selectedIndex;
+  if (selectedIndex > 0) {
+    const lang = languageSelector.value;
+    const symptomKey = translations[lang].symptomOptions[selectedIndex]; // लक्षण का टेक्स्ट लें
+    appendUserMsg(symptomKey); // यूजर का चुना हुआ लक्षण दिखाएँ
+    // offline_data से जवाब लें
+    const offlineAnswer = offline_data[selectedIndex - 1]?.answer[lang] || translations[lang].notFound;
+    appendBotMsg(offlineAnswer); // जवाब दिखाएँ
+    symptomSelector.selectedIndex = 0; // ड्रॉपडाउन रीसेट करें
+  }
+});
+    languageSelector.addEventListener('change', () => {
+      const lang = languageSelector.value;
+      updateChatUI(lang);
+    });
+
+    function updateChatUI(lang) {
+      const trans = translations[lang];
+      symptomSelector.innerHTML = '';
+      trans.symptomOptions.forEach((optionText, index) => {
+        const option = document.createElement('option');
+        option.value = index > 0 ? offline_data[index - 1].keywords[0] : '';
+        option.innerText = optionText;
+        symptomSelector.appendChild(option);
+      });
+      messagesEl.innerHTML = '';
+      const welcomeMsgs = {
+        en: 'Hello — Type your symptoms or select from the dropdown',
+        hi: 'नमस्ते — अपनी symptoms बताइए या dropdown से चुनें',
+        pa: 'ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ — ਆਪਣੇ ਲੱਛਣ ਦੱਸੋ ਜਾਂ ਡ੍ਰਾਪਡਾਊਨ ਵਿੱਚੋਂ ਚੁਣੋ',
+        hinglish: 'Hello — Apni symptoms type karo ya dropdown se choose karo'
+      };
+      appendBotMsg(welcomeMsgs[lang] || welcomeMsgs.en);
+    }
+
+    function appendUserMsg(txt) {
+      if (!txt) return;
+      const d = document.createElement('div');
+      d.className = 'msg user';
+      d.innerHTML = `<div class="bubble">${escapeHtml(txt)}</div>`;
+      messagesEl.appendChild(d);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function appendBotMsg(txt) {
+      if (!txt) return;
+      const d = document.createElement('div');
+      d.className = 'msg bot';
+      d.innerHTML = `<div class="bubble">${escapeHtml(txt)}</div>`;
+      messagesEl.appendChild(d);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+      const typingEl = document.createElement('div');
+      typingEl.className = 'msg bot';
+      typingEl.id = 'typing';
+      typingEl.innerHTML = `<div class="bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>`;
+      messagesEl.appendChild(typingEl);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      return typingEl;
+    }
+
+    function sendChat() {
+      const userText = document.getElementById('chatInput').value.trim();
+      if (!userText) return;
+      appendUserMsg(userText);
+      document.getElementById('chatInput').value = '';
+      const typingEl = showTypingIndicator();
+      setTimeout(() => {
+        typingEl.remove();
+        const lang = languageSelector.value;
+        const offlineAnswer = getOfflineAnswer(userText, lang);
+        appendBotMsg(offlineAnswer);
+      }, 1000);
+    }
+
+    function getOfflineAnswer(userText, lang) {
+      const userTextLower = userText.toLowerCase();
+      for (const data of offline_data) {
+        const foundKeyword = data.keywords.some(keyword => userTextLower.includes(keyword.toLowerCase()));
+        if (foundKeyword) {
+          return data.answer[lang] || translations[lang].notFound;
+        }
       }
-      if (l === 'pa') return 'ਕਿਰਪਾ ਕਰਕੇ ਆਪਣੇ ਲੱਛਣਾਂ ਦਾ ਸੰਖੇਪ ਵਿੱਚ ਵਰਣਨ ਕਰੋ।';
-      return l==='hi' ? 'कृपया लक्षण संक्षेप में लिखें।' : 'Please describe your symptoms briefly.';
+      return translations[lang].notFound;
     }
-    async function sendChat(){
-      const input = document.getElementById('chatInput');
-      const txt = input.value.trim(); if(!txt) return;
-      appendUserMsg(txt); input.value = '';
-      const typing = showTypingIndicator();
-      const detected = detectLangFromText(txt);
-      setTimeout(()=>{
-        typing.remove();
-        const reply = ruleBasedReply(txt, detected);
-        appendBotMsg(reply);
-        logActivity('Chatbot answered');
-      }, 1200);
+
+    function getRecords() {
+      return JSON.parse(localStorage.getItem(RECORDS_KEY) || '[]');
     }
-    
-    // The rest of the JS for Records, IoT, Emergency, and Init remains the same
-    function getRecords(){ return JSON.parse(localStorage.getItem(RECORDS_KEY) || '[]'); }
-    function saveRecords(arr){ localStorage.setItem(RECORDS_KEY, JSON.stringify(arr)); renderRecords(); }
-    document.getElementById('saveRecordBtn').addEventListener('click', ()=>{
+
+    function saveRecords(arr) {
+      localStorage.setItem(RECORDS_KEY, JSON.stringify(arr));
+      renderRecords();
+    }
+
+    document.getElementById('saveRecordBtn').addEventListener('click', () => {
       const name = document.getElementById('recName').value.trim();
       const notes = document.getElementById('recNotes').value.trim();
-      if(!name) return alert('Enter patient name');
+      if (!name) return showToast('Enter patient name');
       const arr = getRecords();
-      arr.unshift({id:Date.now(), name, notes, created: new Date().toISOString(), devices: []});
+      arr.unshift({ id: Date.now(), name, notes, created: new Date().toISOString(), devices: [] });
       saveRecords(arr);
-      document.getElementById('recName').value = ''; document.getElementById('recNotes').value = '';
-      showToast('Record saved'); logActivity('Saved record: ' + name);
+      document.getElementById('recName').value = '';
+      document.getElementById('recNotes').value = '';
+      showToast('Record saved');
+      logActivity('Saved record: ' + name);
     });
-    document.getElementById('exportRecordPDFBtn').addEventListener('click', ()=>{
-      const arr = getRecords(); if(arr.length===0) return alert('No records');
+
+    document.getElementById('exportRecordPDFBtn').addEventListener('click', () => {
+      const arr = getRecords();
+      if (arr.length === 0) return showToast('No records');
       const r = arr[0];
-      const { jsPDF } = window.jspdf; const doc = new jsPDF();
-      doc.setFontSize(14); doc.text('Health Record', 14, 20);
-      doc.setFontSize(12); doc.text(`Name: ${r.name}`, 14, 32);
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text('Health Record', 14, 20);
+      doc.setFontSize(12);
+      doc.text(`Name: ${r.name}`, 14, 32);
       doc.text(`Created: ${new Date(r.created).toLocaleString()}`, 14, 40);
-      doc.text('Notes:', 14, 50); doc.setFontSize(11); doc.text(r.notes || '-', 14, 60, { maxWidth: 180 });
-      doc.save('health-record.pdf'); showToast('Record exported (PDF)');
+      doc.text('Notes:', 14, 50);
+      doc.setFontSize(11);
+      doc.text(r.notes || '-', 14, 60, { maxWidth: 180 });
+      doc.save('health-record.pdf');
+      showToast('Record exported (PDF)');
     });
-    function renderRecords(){
+
+    function renderRecords() {
       const el = document.getElementById('recordsList');
       const arr = getRecords();
       const currentLang = languages[currentLangIndex];
-      if(arr.length === 0){ el.innerHTML = `<div class="muted-dark">${langStrings[currentLang].recent_records === 'Recent Records' ? 'No records' : 'कोई रिकॉर्ड नहीं'}</div>`; return; }
+      if (arr.length === 0) {
+        el.innerHTML = `<div class="muted-dark">No records</div>`;
+        return;
+      }
       el.innerHTML = arr.map(r => `
         <div style="border:1px solid var(--border-light);padding:10px;border-radius:8px;margin-bottom:8px">
           <div><strong>${escapeHtml(r.name)}</strong><div class="muted-dark" style="font-size:12px;">${new Date(r.created).toLocaleDateString()}</div></div>
@@ -440,33 +985,40 @@
         </div>
       `).join('');
     }
+
     let lastDeviceReading = null;
     document.getElementById('syncDevice').addEventListener('click', () => {
-        const bp = document.getElementById('iotBP').value.trim();
-        const sugar = document.getElementById('iotSugar').value.trim();
-        const fever = document.getElementById('iotFever').value.trim();
-        if (!bp && !sugar && !fever) return showToast('Please enter at least one reading.');
-        lastDeviceReading = { bp, sugar, fever, ts: new Date().toISOString() };
-        const arr = getRecords();
-        if (arr.length === 0) return alert('No records. Save a record first.');
-        const latestRecord = arr[0];
-        latestRecord.devices = latestRecord.devices || [];
-        latestRecord.devices.push(lastDeviceReading);
-        saveRecords(arr);
-        showToast('Device readings synced to ' + latestRecord.name);
-        logActivity('Synced IoT data');
-        document.getElementById('iotBP').value = '';
-        document.getElementById('iotSugar').value = '';
-        document.getElementById('iotFever').value = '';
+      const bp = document.getElementById('iotBP').value.trim();
+      const sugar = document.getElementById('iotSugar').value.trim();
+      const fever = document.getElementById('iotFever').value.trim();
+      if (!bp && !sugar && !fever) return showToast('Please enter at least one reading.');
+      lastDeviceReading = { bp, sugar, fever, ts: new Date().toISOString() };
+      const arr = getRecords();
+      if (arr.length === 0) return showToast('No records. Save a record first.');
+      const latestRecord = arr[0];
+      latestRecord.devices = latestRecord.devices || [];
+      latestRecord.devices.push(lastDeviceReading);
+      saveRecords(arr);
+      showToast('Device readings synced to ' + latestRecord.name);
+      logActivity('Synced IoT data');
+      document.getElementById('iotBP').value = '';
+      document.getElementById('iotSugar').value = '';
+      document.getElementById('iotFever').value = '';
     });
-    function showAmbulanceInfo(){ alert('Emergency numbers:\n108 — State Ambulance\n102 — Medical emergency\nLocal hospital: +91 12345 67890'); logActivity('Viewed ambulance info'); }
-    function init(){
-      if(!localStorage.getItem(RECORDS_KEY)) localStorage.setItem(RECORDS_KEY, JSON.stringify([]));
+
+    function showAmbulanceInfo() {
+      alert('Emergency numbers:\n108 — State Ambulance\n102 — Medical emergency\nLocal hospital: +91 12345 67890');
+      logActivity('Viewed ambulance info');
+    }
+
+    function init() {
+      if (!localStorage.getItem(RECORDS_KEY)) localStorage.setItem(RECORDS_KEY, JSON.stringify([]));
       renderRecords();
       openView('dashboard');
       logActivity('App loaded');
       updateUIText(languages[currentLangIndex]);
     }
+
     init();
     window.openView = openView;
   </script>
