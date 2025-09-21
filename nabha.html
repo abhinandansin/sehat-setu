@@ -214,6 +214,18 @@
       z-index: 999;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
+    
+    .shop-item {
+        border: 1px solid var(--border-light);
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        animation: fadeIn 0.4s;
+    }
+    .shop-item h4 { margin: 0 0 5px 0; font-size: 16px; }
+    .shop-item p { margin: 4px 0; font-size: 14px; color: var(--text-light); }
+    .shop-item .distance { font-weight: 600; color: var(--brand); }
+
 
     body.dark {
       --bg: #0d1117;
@@ -254,6 +266,7 @@
         <button data-view="video" data-lang-key="video"><i class="fas fa-video fa-fw"></i> Video</button>
         <button data-view="chatbot" data-lang-key="chatbot"><i class="fas fa-robot fa-fw"></i> Chatbot</button>
         <button data-view="records" data-lang-key="records"><i class="fas fa-file-medical fa-fw"></i> Records</button>
+        <button data-view="shops" data-lang-key="shops"><i class="fas fa-store fa-fw"></i> Shops</button>
         <button data-view="iot" data-lang-key="iot"><i class="fas fa-microchip fa-fw"></i> IoT</button>
         <button data-view="emergency" data-lang-key="emergency"><i class="fas fa-ambulance fa-fw"></i> Emergency</button>
       </nav>
@@ -357,6 +370,17 @@
             </div>
           </div>
         </div>
+        <div id="shops" class="view">
+            <div class="card">
+              <h2 data-lang-key="shops_title">Nearest Medical Shops</h2>
+              <small class="muted-dark" data-lang-key="shops_msg">Find medical shops within 5km of your location (demo).</small>
+              <div style="margin-top:12px">
+                <button class="btn" id="findShopsBtn"><i class="fas fa-map-marker-alt"></i> <span data-lang-key="find_shops">Find Shops Near Me</span></button>
+              </div>
+              <div id="shopsList" style="margin-top:20px;">
+                </div>
+            </div>
+        </div>
         <div id="iot" class="view">
           <div class="card">
             <h2 data-lang-key="iot_title">IoT Device Simulation</h2>
@@ -391,7 +415,7 @@
     const RECORDS_KEY = 'nabha_records_v4';
     const langStrings = {
       en: {
-        logged_in_as: 'Logged In As', dashboard: 'Dashboard', profile: 'Profile', video: 'Video', chatbot: 'Chatbot', records: 'Records', iot: 'IoT', emergency: 'Emergency',
+        logged_in_as: 'Logged In As', dashboard: 'Dashboard', profile: 'Profile', video: 'Video', chatbot: 'Chatbot', records: 'Records', shops: 'Shops', iot: 'IoT', emergency: 'Emergency',
         prototype_subtitle: 'Single-file prototype — replace with backend for production', welcome: 'Welcome 👋', welcome_msg: "Use left menu to navigate. App saves demo data in your browser's localStorage.",
         start_video: 'Start Video', open_chatbot: 'Open Chatbot', activity_log: 'Activity Log', emergency_quick: 'Emergency Quick', one_tap_call: 'One-tap call (demo)', call_108: 'Call 108', more: 'More',
         patient_profile: 'Patient Profile', name: 'Name', age: 'Age', blood_group: 'Blood Group', contact: 'Contact', address: 'Address',
@@ -401,10 +425,11 @@
         save_record: 'Save Record', export_pdf: 'Export PDF', recent_records: 'Recent Records',
         iot_title: 'IoT Device Simulation', iot_msg: 'Enter readings and sync to the latest record.', sync_device: 'Sync to Latest Record',
         emergency_msg: 'Call local ambulance. This is a demo link.', more_info: 'More Info',
+        shops_title: 'Nearest Medical Shops', shops_msg: 'Find medical shops within 5km of your location (demo).', find_shops: 'Find Shops Near Me',
         notFound: 'Sorry, I can only provide information for pre-programmed symptoms. Please try another common symptom.'
       },
       hi: {
-        logged_in_as: 'लॉगिन हैं', dashboard: 'डैशबोर्ड', profile: 'प्रोफ़ाइल', video: 'वीडियो', chatbot: 'चैटबॉट', records: 'अभिलेख', iot: 'IoT', emergency: 'आपातकालीन',
+        logged_in_as: 'लॉगिन हैं', dashboard: 'डैशबोर्ड', profile: 'प्रोफ़ाइल', video: 'वीडियो', chatbot: 'चैटबॉट', records: 'अभिलेख', shops: 'दुकानें', iot: 'IoT', emergency: 'आपातकालीन',
         prototype_subtitle: 'एकल-फ़ाइल प्रोटोटाइप — उत्पादन के लिए बैकएंड से बदलें', welcome: 'नमस्ते 👋', welcome_msg: "सुविधाओं पर जाने के लिए बाएँ मेनू का उपयोग करें। ऐप डेमो डेटा आपके ब्राउज़र में सहेजता है।",
         start_video: 'वीडियो शुरू करें', open_chatbot: 'चैटबॉट खोलें', activity_log: 'गतिविधि लॉग', emergency_quick: 'त्वरित आपातकाल', one_tap_call: 'एक-टैप कॉल (डेमो)', call_108: '108 पर कॉल करें', more: 'और',
         patient_profile: 'रोगी प्रोफ़ाइल', name: 'नाम', age: 'आयु', blood_group: 'रक्त समूह', contact: 'संपर्क', address: 'पता',
@@ -414,10 +439,11 @@
         save_record: 'रिकॉर्ड सहेजें', export_pdf: 'PDF निर्यात करें', recent_records: 'हाल के रिकॉर्ड',
         iot_title: 'IoT डिवाइस सिमुलेशन', iot_msg: 'रीडिंग दर्ज करें और नवीनतम रिकॉर्ड से सिंक करें।', sync_device: 'नवीनतम रिकॉर्ड से सिंक करें',
         emergency_msg: 'स्थानीय एम्बुलेंस को कॉल करें। यह एक डेमो लिंक है।', more_info: 'और जानकारी',
+        shops_title: 'नज़दीकी मेडिकल दुकानें', shops_msg: '5km के दायरे में मेडिकल दुकानें खोजें (डेमो)।', find_shops: 'मेरे पास दुकानें खोजें',
         notFound: 'माफ कीजिए, मैं केवल पहले से प्रोग्राम किए गए लक्षणों के लिए जानकारी दे सकता हूँ। कृपया कोई और सामान्य लक्षण पूछें।'
       },
       pa: {
-        logged_in_as: 'ਇਸ ਵਜੋਂ ਲੌਗਇਨ ਕੀਤਾ', dashboard: 'ਡੈਸ਼ਬੋਰਡ', profile: 'ਪ੍ਰੋਫਾਈਲ', video: 'ਵੀਡੀਓ', chatbot: 'ਚੈਟਬਾਟ', records: 'ਰਿਕਾਰਡ', iot: 'ਆਈਓਟੀ', emergency: 'ਐਮਰਜੈਂਸੀ',
+        logged_in_as: 'ਇਸ ਵਜੋਂ ਲੌਗਇਨ ਕੀਤਾ', dashboard: 'ਡੈਸ਼ਬੋਰਡ', profile: 'ਪ੍ਰੋਫਾਈਲ', video: 'ਵੀਡੀਓ', chatbot: 'ਚੈਟਬਾਟ', records: 'ਰਿਕਾਰਡ', shops: 'ਦੁਕਾਨਾਂ', iot: 'ਆਈਓਟੀ', emergency: 'ਐਮਰਜੈਂਸੀ',
         prototype_subtitle: 'ਸਿੰਗਲ-ਫਾਈਲ ਪ੍ਰੋਟੋਟਾਈਪ — ਉਤਪਾਦਨ ਲਈ ਬੈਕਐਂਡ ਨਾਲ ਬਦਲੋ', welcome: 'ਜੀ ਆਇਆਂ ਨੂੰ 👋', welcome_msg: "ਵਿਸ਼ੇਸ਼ਤਾਵਾਂ ਲਈ ਖੱਬੇ ਪਾਸੇ ਮੇਨੂ ਦੀ ਵਰਤੋਂ ਕਰੋ। ਐਪ ਡੈਮੋ ਡੇਟਾ ਨੂੰ ਤੁਹਾਡੇ ਬ੍ਰਾਊਜ਼ਰ ਵਿੱਚ ਸੁਰੱਖਿਅਤ ਕਰਦਾ ਹੈ।",
         start_video: 'ਵੀਡੀਓ ਸ਼ੁਰੂ ਕਰੋ', open_chatbot: 'ਚੈਟਬਾਟ ਖੋਲ੍ਹੋ', activity_log: 'ਗਤੀਵਿਧੀ ਲੌਗ', emergency_quick: 'ਤੁਰੰਤ ਐਮਰਜੈਂਸੀ', one_tap_call: 'ਇੱਕ-ਟੈਪ ਕਾਲ (ਡੈਮੋ)', call_108: '108 ਤੇ ਕਾਲ ਕਰੋ', more: 'ਹੋਰ',
         patient_profile: 'ਮਰੀਜ਼ ਦੀ ਪ੍ਰੋਫਾਈਲ', name: 'ਨਾਮ', age: 'ਉਮਰ', blood_group: 'ਖੂਨ ਦਾ ਗਰੁੱਪ', contact: 'ਸੰਪਰਕ', address: 'ਪਤਾ',
@@ -427,6 +453,7 @@
         save_record: 'ਰਿਕਾਰਡ ਸੁਰੱਖਿਅਤ ਕਰੋ', export_pdf: 'PDF ਐਕਸਪੋਰਟ ਕਰੋ', recent_records: 'ਤਾਜ਼ਾ ਰਿਕਾਰਡ',
         iot_title: 'ਆਈਓਟੀ ਡਿਵਾਈਸ ਸਿਮੂਲੇਸ਼ਨ', iot_msg: 'ਰੀਡਿੰਗ ਦਰਜ ਕਰੋ ਅਤੇ ਨਵੀਨਤਮ ਰਿਕਾਰਡ ਨਾਲ ਸਿੰਕ ਕਰੋ।', sync_device: 'ਨਵੀਨਤਮ ਰਿਕਾਰਡ ਨਾਲ ਸਿੰਕ ਕਰੋ',
         emergency_msg: 'ਸਥਾਨਕ ਐਂਬੂਲੈਂਸ ਨੂੰ ਕਾਲ ਕਰੋ। ਇਹ ਇੱਕ ਡੈਮੋ ਲਿੰਕ ਹੈ।', more_info: 'ਹੋਰ ਜਾਣਕਾਰੀ',
+        shops_title: 'ਨੇੜਲੇ ਮੈਡੀਕਲ ਸਟੋਰ', shops_msg: 'ਆਪਣੇ ਸਥਾਨ ਦੇ 5 ਕਿਲੋਮੀਟਰ ਦੇ ਦਾਇਰੇ ਵਿੱਚ ਮੈਡੀਕਲ ਦੁਕਾਨਾਂ ਲੱਭੋ (ਡੈਮੋ)।', find_shops: 'ਮੇਰੇ ਨੇੜੇ ਦੁਕਾਨਾਂ ਲੱਭੋ',
         notFound: 'ਮਾਫ ਕਰਨਾ, ਮੈਂ ਸਿਰਫ਼ ਪਹਿਲਾਂ ਤੋਂ ਪ੍ਰੋਗਰਾਮ ਕੀਤੇ ਲੱਛਣਾਂ ਲਈ ਜਾਣਕਾਰੀ ਦੇ ਸਕਦਾ ਹਾਂ। ਕਿਰਪਾ ਕਰਕੇ ਕੋਈ ਹੋਰ ਆਮ ਲੱਛਣ ਪੁੱਛੋ।'
       }
     };
@@ -477,7 +504,7 @@
         followUpQuestion: (symptom) => `Apne ${symptom} ke symptoms ke baare mein aur batao.`
       }
     };
-
+    
     const offline_data = [
       {
         keywords: ["fever", "temperature", "high temp", "hot body", "bukhar", "tapman", "गरम शरीर", "ਬੁਖ਼ਾਰ", "ਤਾਪਮਾਨ", "fever", "bukhar", "high temp"],
@@ -798,7 +825,77 @@
         }
       });
     }
+    
+    // --- NEW FEATURE: NEAREST SHOPS ---
 
+    const dummyShops = [
+        { name: 'Gupta Medical Hall', address: 'Patiala Gate, Nabha', phone: '+91-1765-220123', lat: 30.3725, lon: 76.1510 },
+        { name: 'Jindal Medicos', address: 'Near Civil Hospital, Nabha', phone: '+91-1765-221456', lat: 30.3751, lon: 76.1555 },
+        { name: 'Punjab Pharmacy', address: 'Malerkotla Road, Nabha', phone: '+91-1765-222789', lat: 30.3689, lon: 76.1482 },
+        { name: 'Seva Pharmacy', address: 'Bhadson Road, Nabha', phone: '+91-1765-223344', lat: 30.3801, lon: 76.1590 },
+        { name: 'City Medicos (Further Away)', address: 'Model Town, Patiala', phone: '+91-175-5001122', lat: 30.3398, lon: 76.3869 } // This one is > 5km from Nabha center
+    ];
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // Radius of the Earth in km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c; // Distance in km
+    }
+
+    document.getElementById('findShopsBtn').addEventListener('click', () => {
+        const shopsListEl = document.getElementById('shopsList');
+        shopsListEl.innerHTML = '<p class="muted-dark">Getting your location...</p>';
+
+        if (!navigator.geolocation) {
+            shopsListEl.innerHTML = '<p class="muted-dark">Geolocation is not supported by your browser.</p>';
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(position => {
+            const userLat = position.coords.latitude;
+            const userLon = position.coords.longitude;
+            logActivity('Location acquired for finding shops');
+
+            const nearbyShops = dummyShops.map(shop => {
+                const distance = calculateDistance(userLat, userLon, shop.lat, shop.lon);
+                return { ...shop, distance };
+            })
+            .filter(shop => shop.distance <= 5) // Filter within 5 km
+            .sort((a, b) => a.distance - b.distance); // Sort by nearest
+
+            renderShops(nearbyShops);
+
+        }, () => {
+            shopsListEl.innerHTML = '<p class="muted-dark">Unable to retrieve your location. Please allow location access.</p>';
+            showToast('Location access denied');
+        });
+    });
+
+    function renderShops(shops) {
+        const shopsListEl = document.getElementById('shopsList');
+        if (shops.length === 0) {
+            shopsListEl.innerHTML = '<p class="muted-dark">No medical shops found within 5 km.</p>';
+            return;
+        }
+
+        shopsListEl.innerHTML = shops.map(shop => `
+            <div class="shop-item">
+                <h4>${escapeHtml(shop.name)}</h4>
+                <p><i class="fas fa-map-marker-alt fa-fw"></i> ${escapeHtml(shop.address)}</p>
+                <p><i class="fas fa-phone fa-fw"></i> <a href="tel:${escapeHtml(shop.phone)}">${escapeHtml(shop.phone)}</a></p>
+                <p class="distance"><i class="fas fa-route fa-fw"></i> ${shop.distance.toFixed(2)} km away</p>
+            </div>
+        `).join('');
+    }
+
+    // --- END OF NEW FEATURE ---
+    
     let localStream = null;
     document.getElementById('startCam').addEventListener('click', startCamera);
     document.getElementById('stopCam').addEventListener('click', stopCamera);
