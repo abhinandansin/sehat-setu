@@ -2,154 +2,425 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Doctor Dashboard</title>
+  <title>Interactive Doctor Dashboard (Corrected)</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     body {
-      background: #f8f9fa;
+      background: #f0f2f5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     .navbar {
-      background: #2c3e50 !important;
+      background: linear-gradient(90deg, #2c3e50, #34495e) !important;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
+
     .navbar-brand {
       color: #fff !important;
       font-weight: bold;
-      font-size: 22px;
+      font-size: 24px;
     }
+
+    /* Main Section Styling for transitions */
+    .main-section {
+      display: none; /* Hidden by default */
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Dashboard Hub Styling */
+    #dashboard {
+      display: flex; /* Shown by default */
+      justify-content: center;
+      align-items: center;
+      gap: 30px;
+      padding-top: 50px;
+    }
+
+    .dashboard-card {
+      background: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-card:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+    }
+    
+    .dashboard-card i {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #3498db;
+    }
+
+    .dashboard-card h3 {
+      color: #2c3e50;
+    }
+
+    /* General Card Styling */
     .card {
       border: none;
       border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+
     .card:hover {
       transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
     }
-    .btn-accept {
-      background: #27ae60;
-      color: #fff;
+    
+    /* Animation for card removal */
+    .card-fade-out {
+        animation: fadeOut 0.5s forwards;
     }
-    .btn-reject {
-      background: #e74c3c;
-      color: #fff;
+    @keyframes fadeOut {
+        from { opacity: 1; transform: scale(1); }
+        to { opacity: 0; transform: scale(0.95); height: 0; padding: 0; margin: 0; }
     }
+
+    /* Buttons and ABHA Data */
+    .btn-accept { background: #27ae60; color: #fff; }
+    .btn-reject { background: #e74c3c; color: #fff; }
+    .btn-primary, .btn-success { transition: background-color 0.2s; }
+    
     .abha-data {
       background: #ecf0f1;
-      padding: 15px;
       border-radius: 10px;
-      margin-top: 10px;
+      margin-top: 15px;
+      /* Animation properties */
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+      padding: 0 15px;
+      transition: max-height 0.5s ease-out, opacity 0.5s ease-out, padding 0.5s ease-out;
+    }
+    
+    .abha-data.active {
+      max-height: 500px; /* Large enough to fit content */
+      opacity: 1;
+      padding: 15px;
+    }
+    
+    .stat-box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+      color: #333;
+      text-align:center;
+      flex-grow:1;
+    }
+
+    /* Call Modal Styling */
+    #callVideo { width: 100%; height: auto; background: #000; border-radius: 8px; }
+    .call-controls { display: flex; gap: 10px; margin-top: 8px; }
+    
+    .back-button {
+      margin-bottom: 20px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Doctor Dashboard</a>
+      <a class="navbar-brand" href="#" onclick="showSection('dashboard')"><i class="fas fa-clinic-medical"></i> Doctor Dashboard</a>
     </div>
   </nav>
 
-  <!-- Main Container -->
   <div class="container my-4">
-    <h2 class="mb-4">Patient Treatment Requests</h2>
 
-    <!-- Patient Card Example -->
-    <div class="card p-3 mb-4">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <h4>Rahul Sharma</h4>
-          <p class="mb-1"><strong>ABHA ID:</strong> ABHA123456</p>
-          <p class="mb-1"><strong>Issue:</strong> Fever & Cough</p>
+    <div id="dashboard" class="main-section" style="display: flex;">
+        <div class="dashboard-card" onclick="showSection('profileSection')">
+            <i class="fas fa-user-doctor"></i>
+            <h3>Profile & Stats</h3>
         </div>
-        <div>
-          <button class="btn btn-accept me-2" onclick="acceptRequest('Rahul Sharma')">Accept</button>
-          <button class="btn btn-reject" onclick="rejectRequest('Rahul Sharma')">Reject</button>
+        <div class="dashboard-card" onclick="showSection('patientsSection')">
+            <i class="fas fa-users"></i>
+            <h3>Patient Requests</h3>
         </div>
-      </div>
-      <div class="abha-data" id="abha-Rahul Sharma" style="display:none;">
-        <h5>Patient Previous Data</h5>
-        <ul>
-          <li>Blood Pressure: 120/80</li>
-          <li>Last Visit: 10-Aug-2025</li>
-          <li>Prescription: Paracetamol 500mg</li>
-        </ul>
-        <button class="btn btn-success me-2" onclick="startVideoCall('Rahul Sharma')">Start Video Call</button>
-        <button class="btn btn-primary" onclick="addNewData('Rahul Sharma','ABHA123456')">Add New Data</button>
+    </div>
+
+    <div id="profileSection" class="main-section">
+      <button class="btn btn-secondary back-button" onclick="showSection('dashboard')"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+      <h2 class="mb-4">Doctor Profile & Stats</h2>
+      <div class="card p-3 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h4>Dr. Abhinandan Singh</h4>
+            <p class="mb-1"><strong>Specialization:</strong> General Physician</p>
+            <p class="mb-1"><strong>DOCTER ID:</strong> DR123456</p>
+          </div>
+          <div>
+            <select id="filterRange" class="form-select" onchange="updateStats()" style="width:200px;">
+              <option value="7">Last 7 Days</option>
+              <option value="15">Last 15 Days</option>
+              <option value="30">Last 30 Days</option>
+              <option value="180">Last 6 Months</option>
+            </select>
+          </div>
+        </div>
+        <div class="mt-3 d-flex gap-3">
+          <div class="stat-box">
+            <div><strong>Total Patients Treated</strong></div>
+            <div id="treatedCount" style="font-size:24px; font-weight:700; color:#27ae60;">0</div>
+          </div>
+          <div class="stat-box">
+            <div><strong>Patients in Queue</strong></div>
+            <div id="queueCount" style="font-size:24px; font-weight:700; color:#e67e22;">0</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="card p-3 mb-4">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
-          <h4>Anjali Verma</h4>
-          <p class="mb-1"><strong>ABHA ID:</strong> ABHA987654</p>
-          <p class="mb-1"><strong>Issue:</strong> Chest Pain</p>
+    <div id="patientsSection" class="main-section">
+      <button class="btn btn-secondary back-button" onclick="showSection('dashboard')"><i class="fas fa-arrow-left"></i> Back to Dashboard</button>
+      <h2 class="mb-4">Patient Treatment Requests</h2>
+      
+      <div id="patientList">
+        <div class="card p-3 mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h4>Rahul Sharma</h4>
+              <p class="mb-1"><strong>ABHA ID:</strong> ABHA123456</p>
+              <p class="mb-1"><strong>Issue:</strong> Fever & Cough</p>
+            </div>
+            <div>
+              <button class="btn btn-accept me-2" onclick="acceptRequest(this, 'Rahul Sharma')"><i class="fas fa-check"></i> Accept</button>
+              <button class="btn btn-reject" onclick="rejectRequest(this, 'Rahul Sharma')"><i class="fas fa-times"></i> Reject</button>
+            </div>
+          </div>
+          <div class="abha-data" id="abha-Rahul Sharma">
+            <h5>Patient Previous Data</h5>
+            <ul>
+              <li>Blood Pressure: 120/80</li>
+              <li>Last Visit: 10-Aug-2025</li>
+              <li>Prescription: Paracetamol 500mg</li>
+            </ul>
+            <div class="d-flex gap-2">
+              <button class="btn btn-success me-2" onclick="openCallModal('Rahul Sharma')"><i class="fas fa-video"></i> Start Video Call</button>
+              <button class="btn btn-primary" onclick="addNewData('Rahul Sharma','ABHA123456')"><i class="fas fa-plus"></i> Add New Data</button>
+            </div>
+          </div>
         </div>
-        <div>
-          <button class="btn btn-accept me-2" onclick="acceptRequest('Anjali Verma')">Accept</button>
-          <button class="btn btn-reject" onclick="rejectRequest('Anjali Verma')">Reject</button>
+
+        <div class="card p-3 mb-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h4>Anjali Verma</h4>
+              <p class="mb-1"><strong>ABHA ID:</strong> ABHA987654</p>
+              <p class="mb-1"><strong>Issue:</strong> Chest Pain</p>
+            </div>
+            <div>
+              <button class="btn btn-accept me-2" onclick="acceptRequest(this, 'Anjali Verma')"><i class="fas fa-check"></i> Accept</button>
+              <button class="btn btn-reject" onclick="rejectRequest(this, 'Anjali Verma')"><i class="fas fa-times"></i> Reject</button>
+            </div>
+          </div>
+          <div class="abha-data" id="abha-Anjali Verma">
+            <h5>Patient Previous Data</h5>
+            <ul>
+              <li>Blood Pressure: 130/90</li>
+              <li>Last Visit: 02-Sep-2025</li>
+              <li>Prescription: ECG Recommended</li>
+            </ul>
+            <div class="d-flex gap-2">
+              <button class="btn btn-success me-2" onclick="openCallModal('Anjali Verma')"><i class="fas fa-video"></i> Start Video Call</button>
+              <button class="btn btn-primary" onclick="addNewData('Anjali Verma','ABHA987654')"><i class="fas fa-plus"></i> Add New Data</button>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="abha-data" id="abha-Anjali Verma" style="display:none;">
-        <h5>Patient Previous Data</h5>
-        <ul>
-          <li>Blood Pressure: 130/90</li>
-          <li>Last Visit: 02-Sep-2025</li>
-          <li>Prescription: ECG Recommended</li>
-        </ul>
-        <button class="btn btn-success me-2" onclick="startVideoCall('Anjali Verma')">Start Video Call</button>
-        <button class="btn btn-primary" onclick="addNewData('Anjali Verma','ABHA987654')">Add New Data</button>
       </div>
     </div>
 
   </div>
 
+  <div class="modal fade" id="callModal" tabindex="-1" aria-labelledby="callModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="callModalLabel">Video Call</h5>
+          <button type="button" class="btn-close" onclick="endCall()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="callWith" style="font-weight:600; margin-bottom:8px;"></div>
+          <video id="callVideo" autoplay playsinline></video>
+          <div class="call-controls">
+            <button id="muteBtn" class="btn btn-outline-secondary" onclick="toggleMute()"><i class="fas fa-microphone-slash"></i> Mute</button>
+            <button id="stopCamBtn" class="btn btn-outline-secondary" onclick="toggleVideo()"><i class="fas fa-video-slash"></i> Stop Video</button>
+            <button class="btn btn-danger" onclick="endCall()"><i class="fas fa-phone-slash"></i> End Call</button>
+          </div>
+          <div id="callStatus" style="margin-top:8px;" class="muted"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    function acceptRequest(name) {
-      document.getElementById("abha-" + name).style.display = "block";
-      alert("You accepted treatment request for " + name);
+    // --- Navigation Logic ---
+    function showSection(sectionId) {
+        document.querySelectorAll('.main-section').forEach(section => {
+            section.style.display = 'none';
+        });
+        const activeSection = document.getElementById(sectionId);
+        if (activeSection) {
+            activeSection.style.display = (sectionId === 'dashboard') ? 'flex' : 'block';
+        }
     }
 
-    function rejectRequest(name) {
-      alert("You rejected treatment request for " + name);
+    // --- Animate count up function ---
+    function animateCountUp(element, target, duration = 500) {
+        let start = 0;
+        const finalTarget = parseInt(target, 10);
+        let current = parseInt(element.innerText, 10) || 0;
+        if (current === finalTarget) return;
+        let stepTime = Math.abs(Math.floor(duration / (finalTarget - current)));
+        let timer = setInterval(() => {
+            current = (current < finalTarget) ? current + 1 : current - 1;
+            element.innerText = current;
+            if (current == finalTarget) {
+                clearInterval(timer);
+            }
+        }, stepTime > 0 ? stepTime : 1);
+    }
+  
+    // Dummy patient treatment data
+    const patientStats = { 7: 5, 15: 12, 30: 25, 180: 110 };
+    let queuePatients = 2; // patients waiting right now
+    let localStream = null;
+    let isMuted = false;
+    let videoEnabled = true;
+
+    function updateStats() {
+      const range = document.getElementById("filterRange").value;
+      animateCountUp(document.getElementById("treatedCount"), patientStats[range] || 0);
+      animateCountUp(document.getElementById("queueCount"), queuePatients);
     }
 
-    function startVideoCall(name) {
-      alert("Starting video call with " + name);
-      window.open("https://meet.jit.si/"+name, "_blank"); 
+    // Init stats on page load for the profile section
+    updateStats();
+
+    // --- *** CORRECTED SCRIPT LOGIC *** ---
+
+    // --- MODIFIED --- Accept request function
+    function acceptRequest(button, name) {
+        const el = document.getElementById("abha-" + name);
+        if (el) {
+            el.classList.toggle("active");
+        }
+        
+        const card = button.closest('.card');
+        // Only process if it hasn't been processed before
+        if (card && !card.classList.contains('processed')) {
+            alert("You accepted treatment request for " + name);
+            queuePatients = Math.max(0, queuePatients - 1);
+            updateStats();
+            // Disable buttons to prevent further action and mark as processed
+            card.querySelectorAll('.btn-accept, .btn-reject').forEach(btn => btn.disabled = true);
+            card.classList.add('processed');
+            button.innerHTML = '<i class="fas fa-check-circle"></i> Accepted';
+        }
+    }
+
+    // --- MODIFIED --- Reject request function
+    function rejectRequest(button, name) {
+        const card = button.closest('.card');
+        // Only process if it hasn't been processed before
+        if (card && !card.classList.contains('processed')) {
+            alert("You rejected treatment request for " + name);
+            queuePatients = Math.max(0, queuePatients - 1);
+            updateStats();
+            card.classList.add('processed'); // Mark as processed first
+
+            // Fade out and remove the card
+            card.classList.add('card-fade-out');
+            setTimeout(() => {
+                card.remove();
+            }, 500);
+        }
+    }
+  
+    // --- Video Call and other functions (Unchanged) ---
+    async function openCallModal(name) {
+      document.getElementById('callWith').innerText = 'Call with ' + name + ' (demo)';
+      const modalEl = new bootstrap.Modal(document.getElementById('callModal'), { backdrop: 'static', keyboard: false });
+      modalEl.show();
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        const videoEl = document.getElementById('callVideo');
+        videoEl.srcObject = localStream;
+        isMuted = false; videoEnabled = true;
+        document.getElementById('callStatus').innerText = 'Connected (local preview).';
+        document.getElementById('muteBtn').innerHTML = '<i class="fas fa-microphone"></i> Mute';
+        document.getElementById('stopCamBtn').innerHTML = '<i class="fas fa-video"></i> Stop Video';
+        window._callModalInstance = modalEl;
+      } catch (err) {
+        alert('Camera/microphone access required for call. Please allow permissions in your browser.');
+        console.error(err);
+        modalEl.hide();
+      }
+    }
+
+    function toggleMute() {
+      if(!localStream) return;
+      isMuted = !isMuted;
+      localStream.getAudioTracks().forEach(t => t.enabled = !isMuted);
+      document.getElementById('muteBtn').innerHTML = isMuted ? '<i class="fas fa-microphone"></i> Unmute' : '<i class="fas fa-microphone-slash"></i> Mute';
+    }
+
+    function toggleVideo() {
+      if(!localStream) return;
+      videoEnabled = !videoEnabled;
+      localStream.getVideoTracks().forEach(t => t.enabled = videoEnabled);
+      document.getElementById('stopCamBtn').innerHTML = videoEnabled ? '<i class="fas fa-video-slash"></i> Stop Video' : '<i class="fas fa-video"></i> Start Video';
+    }
+
+    function endCall() {
+      if(localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        localStream = null;
+      }
+      if(window._callModalInstance) {
+        window._callModalInstance.hide();
+        window._callModalInstance = null;
+      }
+      document.getElementById('callStatus').innerText = 'Call ended.';
     }
 
     async function addNewData(name, abhaID) {
       let data = prompt("Enter new medical notes for " + name + ":");
       if (data) {
         alert("New data saved for " + name + ": " + data);
-
-        // ✅ Generate PDF
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
-
         doc.setFontSize(16);
         doc.text("Patient Medical Report", 70, 20);
-        
         doc.setFontSize(12);
         doc.text("Patient Name: " + name, 20, 40);
         doc.text("ABHA ID: " + abhaID, 20, 50);
         doc.text("Date: " + new Date().toLocaleDateString(), 20, 60);
         doc.text("Doctor Notes: ", 20, 75);
-        
         doc.setFont("times", "italic");
         doc.text(data, 20, 85, { maxWidth: 170 });
-
-        // ✅ Save PDF
         doc.save(name + "_Report.pdf");
-
-        // 👉 Doctor chahe to ye PDF patient ko email / WhatsApp par bhej sakta hai (backend integration chahiye)
       }
     }
-  </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    window.addEventListener('beforeunload', ()=>{
+      if(localStream) localStream.getTracks().forEach(t=>t.stop());
+    });
+  </script>
 </body>
 </html>
