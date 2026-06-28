@@ -2,147 +2,718 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Sehet Satu</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sehat Setu – Digital Healthcare</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy:     #0B2540;
+      --teal:     #0D9488;
+      --teal2:    #14B8A6;
+      --teal-lt:  #CCFBF1;
+      --white:    #FFFFFF;
+      --off:      #F0F9FF;
+      --text:     #1E3A5F;
+      --muted:    #64748B;
+      --border:   rgba(13,148,136,0.15);
+      --card-bg:  rgba(255,255,255,0.12);
+      --glass:    rgba(255,255,255,0.08);
+    }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Montserrat', sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      background: linear-gradient(-45deg, #00C6FF, #007BFF, #00FFE1, #005FFF);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      overflow: hidden;
-      position: relative;
-      color: #fff;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background: #071828;
+      color: var(--white);
+      overflow-x: hidden;
     }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* ── BG SCENE ── */
+    .bg-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, #0D4A44 0%, #071828 60%);
+      pointer-events: none;
     }
-
-    /* Floating particles */
-    .particle {
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(13,148,136,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(13,148,136,0.06) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    .bg-glow {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255,255,255,0.2);
-      animation: float 20s linear infinite;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+    .glow-1 { width: 500px; height: 500px; background: rgba(13,148,136,0.12); top: -100px; left: -100px; }
+    .glow-2 { width: 400px; height: 400px; background: rgba(20,184,166,0.08); bottom: 100px; right: -50px; }
+
+    /* ── PULSE RINGS ── */
+    .pulse-rings {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(13,148,136,0.2);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse-ring 4s ease-out infinite;
+    }
+    .ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+    .ring:nth-child(2) { width: 350px; height: 350px; animation-delay: 1s; }
+    .ring:nth-child(3) { width: 500px; height: 500px; animation-delay: 2s; }
+    @keyframes pulse-ring {
+      0%   { opacity: 0.6; transform: translate(-50%, -50%) scale(0.8); }
+      100% { opacity: 0;   transform: translate(-50%, -50%) scale(1.2); }
     }
 
-    .particle:nth-child(1) { width: 20px; height: 20px; top: 10%; left: 15%; animation-duration: 18s; }
-    .particle:nth-child(2) { width: 15px; height: 15px; top: 50%; left: 80%; animation-duration: 22s; }
-    .particle:nth-child(3) { width: 25px; height: 25px; top: 70%; left: 30%; animation-duration: 20s; }
-    .particle:nth-child(4) { width: 10px; height: 10px; top: 30%; left: 50%; animation-duration: 25s; }
-
-    @keyframes float {
-      0% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-50px) rotate(180deg); }
-      100% { transform: translateY(0) rotate(360deg); }
-    }
-
-    /* Title */
-    h1 {
-      font-size: 48px;
-      margin-bottom: 10px;
-      text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-    }
-    h2 {
-      font-size: 22px;
-      margin-bottom: 50px;
-      opacity: 0.9;
-      text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
-    }
-
-    /* Cards for login */
-    .card-container {
+    /* ── CONTENT ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
       display: flex;
-      gap: 30px;
+      flex-direction: column;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(10px);
+      background: rgba(7,24,40,0.6);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-mark {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--teal), var(--teal2));
+      border-radius: 10px;
+      display: grid; place-items: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      font-family: 'Sora', sans-serif;
+    }
+    .logo-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .logo-name span { color: var(--teal2); }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.65);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      background: var(--teal);
+      color: white !important;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 14px !important;
+      font-weight: 600 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: #0B7A70 !important; color: white !important; }
+
+    /* ── HERO ── */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(13,148,136,0.15);
+      border: 1px solid rgba(13,148,136,0.3);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--teal2);
+      margin-bottom: 28px;
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--teal2);
+      animation: blink 2s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(38px, 6vw, 64px);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      margin-bottom: 20px;
+      max-width: 760px;
+    }
+    .hero-title .accent {
+      background: linear-gradient(135deg, var(--teal2), #5EEAD4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: rgba(255,255,255,0.55);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 52px;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 56px;
       flex-wrap: wrap;
       justify-content: center;
-      z-index: 1;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Sora', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--teal2);
+    }
+    .stat-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.45);
+      margin-top: 2px;
+    }
+    .stat-divider {
+      width: 1px;
+      background: rgba(255,255,255,0.1);
+      align-self: stretch;
     }
 
-    .card {
-      background: rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      padding: 30px 40px;
+    /* ── PORTAL CARDS ── */
+    .portal-section {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+
+    .portal-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 20px;
+      padding: 36px 32px;
+      width: 280px;
       text-align: center;
-      width: 250px;
-      transition: 0.3s;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      text-decoration: none;
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+      overflow: hidden;
       cursor: pointer;
     }
-
-    .card:hover {
-      transform: translateY(-10px) scale(1.05);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-      background: rgba(255,255,255,0.25);
-    }
-
-    .card i {
-      font-size: 50px;
-      margin-bottom: 20px;
-      display: block;
-    }
-
-    .card p {
-      font-size: 18px;
-      font-weight: 600;
-      margin-top: 10px;
-    }
-
-    .footer {
+    .portal-card::before {
+      content: '';
       position: absolute;
-      bottom: 15px;
-      font-size: 14px;
-      opacity: 0.8;
+      inset: 0;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(13,148,136,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .portal-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(13,148,136,0.5);
+      box-shadow: 0 20px 50px rgba(13,148,136,0.2);
+    }
+    .portal-card:hover::before { opacity: 1; }
+
+    .portal-card.featured {
+      background: linear-gradient(135deg, rgba(13,148,136,0.2), rgba(20,184,166,0.1));
+      border-color: rgba(13,148,136,0.4);
+    }
+    .featured-tag {
+      position: absolute;
+      top: 14px; right: 14px;
+      background: var(--teal);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .card-icon-wrap {
+      width: 72px; height: 72px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 32px;
+      margin-bottom: 20px;
+      position: relative;
       z-index: 1;
     }
+    .icon-doctor  { background: rgba(13,148,136,0.2); }
+    .icon-patient { background: rgba(20,184,166,0.15); }
+    .icon-admin   { background: rgba(148,13,97,0.15); }
 
-    @media (max-width: 768px) {
-      h1 { font-size: 36px; }
-      h2 { font-size: 18px; margin-bottom: 30px; }
-      .card { width: 200px; padding: 20px; }
+    .card-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 19px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      position: relative; z-index: 1;
+    }
+    .card-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+      margin-bottom: 20px;
+      position: relative; z-index: 1;
+    }
+    .card-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 9px 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+      background: rgba(255,255,255,0.08);
+      transition: all 0.2s;
+      position: relative; z-index: 1;
+      width: 100%;
+    }
+    .portal-card:hover .card-btn {
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+    .card-arrow { font-size: 14px; transition: transform 0.2s; }
+    .portal-card:hover .card-arrow { transform: translateX(4px); }
+
+    /* ── FEATURE STRIP ── */
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 56px;
+    }
+    .feature-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 30px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+    }
+    .feature-pill .pill-icon { font-size: 15px; }
+
+    /* ── EMERGENCY BANNER ── */
+    .emergency-bar {
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: 12px;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 600px;
+      margin: 0 auto 40px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .emergency-bar:hover { background: rgba(239,68,68,0.2); }
+    .emer-icon { font-size: 20px; }
+    .emer-text { flex: 1; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85); }
+    .emer-num { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: #FCA5A5; }
+
+    /* ── SEARCH BAR ── */
+    .search-wrap {
+      position: relative;
+      max-width: 480px;
+      margin: 0 auto 48px;
+      width: 100%;
+    }
+    .search-input {
+      width: 100%;
+      padding: 14px 50px 14px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.07);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      outline: none;
+      backdrop-filter: blur(10px);
+      transition: border 0.2s, background 0.2s;
+    }
+    .search-input::placeholder { color: rgba(255,255,255,0.3); }
+    .search-input:focus {
+      border-color: rgba(13,148,136,0.5);
+      background: rgba(255,255,255,0.1);
+    }
+    .search-btn {
+      position: absolute;
+      right: 10px; top: 50%;
+      transform: translateY(-50%);
+      background: var(--teal);
+      border: none;
+      border-radius: 8px;
+      padding: 7px 14px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .search-btn:hover { background: #0B7A70; }
+    .suggestions {
+      display: none;
+      position: absolute;
+      top: 110%;
+      left: 0; right: 0;
+      background: #0B2540;
+      border: 1px solid rgba(13,148,136,0.3);
+      border-radius: 12px;
+      overflow: hidden;
+      z-index: 50;
+    }
+    .suggestions.show { display: block; }
+    .sug-item {
+      padding: 11px 18px;
+      font-size: 14px;
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sug-item:hover { background: rgba(13,148,136,0.2); color: white; }
+    .sug-icon { opacity: 0.5; font-size: 14px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: rgba(255,255,255,0.6); }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 28px; left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: var(--teal);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 999;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      pointer-events: none;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 16px 20px; }
+      .nav-links { display: none; }
+      .hero { padding: 60px 20px 40px; }
+      .hero-title { font-size: 34px; letter-spacing: -0.5px; }
+      .stat-divider { display: none; }
+      footer { flex-direction: column; text-align: center; padding: 20px; }
     }
   </style>
-  <!-- Font Awesome for icons -->
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
-  <!-- Particles -->
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
-  <div class="particle"></div>
-
-  <h1>Welcome to Sehat Setu</h1>
-  <h2>Your Digital Healthcare Partner</h2>
-
-  <div class="card-container">
-    <!-- Doctor Card -->
-    <a href="docter.html" class="card">
-      <i class="fas fa-user-md"></i>
-      <p>Doctor Login/Sign In</p>
-    </a>
-
-    <!-- Patient Card -->
-    <a href="pateint.html" class="card">
-      <i class="fas fa-user-injured"></i>
-      <p>Patient Login/Sign In</p>
-    </a>
+<div class="bg-scene">
+  <div class="bg-grid"></div>
+  <div class="bg-glow glow-1"></div>
+  <div class="bg-glow glow-2"></div>
+  <div class="pulse-rings">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
   </div>
+</div>
 
-  <div class="footer">© 2025 Telemedicine Portal</div>
+<div class="page">
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="logo-mark">✚</div>
+      <div class="logo-name">Sehat <span>Setu</span></div>
+    </a>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+      <a href="docter.html" class="nav-cta">Quick Access →</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      Now serving 10,000+ patients across India
+    </div>
+
+    <h1 class="hero-title">
+      Healthcare,<br>
+      <span class="accent">closer to you</span>
+    </h1>
+
+    <p class="hero-sub">
+      Connect with verified doctors, book appointments, and manage your health — all in one place.
+    </p>
+
+    <!-- SEARCH -->
+    <div class="search-wrap">
+      <input class="search-input" id="searchInput" type="text"
+        placeholder="Search doctor, specialization, or symptom…"
+        oninput="showSuggestions(this.value)"
+        onblur="setTimeout(()=>closeSug(),150)">
+      <button class="search-btn" onclick="doSearch()">Search</button>
+      <div class="suggestions" id="sugBox"></div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">2,400+</div>
+        <div class="stat-label">Verified Doctors</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num">98%</div>
+        <div class="stat-label">Patient Satisfaction</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num">24/7</div>
+        <div class="stat-label">Online Support</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-num">50+</div>
+        <div class="stat-label">Specializations</div>
+      </div>
+    </div>
+
+    <!-- PORTAL CARDS -->
+    <div class="portal-section">
+
+      <a href="docter.html" class="portal-card featured">
+        <div class="featured-tag">Pro</div>
+        <div class="card-icon-wrap icon-doctor">🩺</div>
+        <div class="card-title">Doctor Portal</div>
+        <div class="card-desc">Register, manage appointments, view patient records, and issue prescriptions.</div>
+        <div class="card-btn">Enter as Doctor <span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="pateint.html" class="portal-card">
+        <div class="card-icon-wrap icon-patient">🏥</div>
+        <div class="card-title">Patient Portal</div>
+        <div class="card-desc">Book appointments, track prescriptions, and view your complete health history.</div>
+        <div class="card-btn">Enter as Patient <span class="card-arrow">→</span></div>
+      </a>
+
+      <a href="#" class="portal-card" onclick="toast('Admin portal coming soon!'); return false;">
+        <div class="card-icon-wrap icon-admin">🔐</div>
+        <div class="card-title">Admin Panel</div>
+        <div class="card-desc">Manage users, verify doctors, view analytics, and oversee platform operations.</div>
+        <div class="card-btn">Enter as Admin <span class="card-arrow">→</span></div>
+      </a>
+
+    </div>
+
+    <!-- EMERGENCY BANNER -->
+    <div class="emergency-bar" onclick="callEmergency()">
+      <div class="emer-icon">🚨</div>
+      <div class="emer-text">Medical emergency? Call our 24/7 helpline immediately.</div>
+      <div class="emer-num">108</div>
+    </div>
+
+    <!-- FEATURE PILLS -->
+    <div class="features">
+      <div class="feature-pill"><span class="pill-icon">🔒</span> End-to-end encrypted</div>
+      <div class="feature-pill"><span class="pill-icon">📋</span> Digital prescriptions</div>
+      <div class="feature-pill"><span class="pill-icon">📞</span> Video consultations</div>
+      <div class="feature-pill"><span class="pill-icon">🏠</span> Home visit booking</div>
+      <div class="feature-pill"><span class="pill-icon">💊</span> Medicine reminders</div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="contact">
+    <div>© 2025 Sehat Setu — Digital Healthcare Platform</div>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Help</a>
+      <a href="#">About</a>
+    </div>
+  </footer>
+
+</div>
+
+<div id="toastEl"></div>
+
+<script>
+  const SUGGESTIONS = [
+    { icon: '🩺', text: 'Cardiologist – Heart specialist' },
+    { icon: '🧠', text: 'Neurologist – Brain & nerves' },
+    { icon: '🦷', text: 'Dentist – Oral health' },
+    { icon: '👁️', text: 'Ophthalmologist – Eye care' },
+    { icon: '🦴', text: 'Orthopedic – Bones & joints' },
+    { icon: '🧒', text: 'Pediatrician – Child health' },
+    { icon: '🩻', text: 'Radiologist – Imaging' },
+    { icon: '🫁', text: 'Pulmonologist – Lung specialist' },
+  ];
+
+  function showSuggestions(q) {
+    const box = document.getElementById('sugBox');
+    if (!q.trim()) { box.classList.remove('show'); return; }
+    const filtered = SUGGESTIONS.filter(s => s.text.toLowerCase().includes(q.toLowerCase()));
+    if (!filtered.length) { box.classList.remove('show'); return; }
+    box.innerHTML = filtered.map(s =>
+      `<div class="sug-item" onclick="selectSug('${s.text}')">
+        <span class="sug-icon">${s.icon}</span> ${s.text}
+      </div>`
+    ).join('');
+    box.classList.add('show');
+  }
+
+  function selectSug(text) {
+    document.getElementById('searchInput').value = text.split('–')[0].trim();
+    closeSug();
+    showToast('Searching for ' + text.split('–')[0].trim() + '...');
+  }
+
+  function closeSug() {
+    document.getElementById('sugBox').classList.remove('show');
+  }
+
+  function doSearch() {
+    const q = document.getElementById('searchInput').value.trim();
+    if (!q) { showToast('Type a specialization or symptom to search.'); return; }
+    showToast('Finding ' + q + ' doctors near you…');
+    closeSug();
+  }
+
+  function callEmergency() {
+    showToast('🚨 Calling 108 – National Emergency Helpline');
+    setTimeout(() => window.location.href = 'tel:108', 800);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toastEl');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._t);
+    t._t = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // make toast accessible globally from inline onclick
+  window.toast = showToast;
+</script>
+
+<!-- Apply toast styles to the right element -->
+<style>
+  #toastEl {
+    position: fixed;
+    bottom: 28px; left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: var(--teal);
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 9999;
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+    white-space: nowrap;
+    max-width: 90vw;
+  }
+  #toastEl.show { transform: translateX(-50%) translateY(0); }
+</style>
 
 </body>
 </html>
