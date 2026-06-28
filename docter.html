@@ -3,290 +3,875 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Doctor Portal</title>
+  <title>MedConnect – Doctor Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:       #0D9488;
+      --teal-dark:  #0B7A70;
+      --teal-light: #CCFBF1;
+      --navy:       #0F2D40;
+      --slate:      #6B7280;
+      --silver:     #F3F4F6;
+      --white:      #FFFFFF;
+      --red:        #EF4444;
+      --amber:      #F59E0B;
+      --green:      #10B981;
+      --border:     #E5E7EB;
+      --shadow:     0 4px 24px rgba(13,148,136,0.10);
+    }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #007BFF, #00C6FF);
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(145deg, #0F2D40 0%, #0D4F48 50%, #0D9488 100%);
       min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
     }
-    .form-container {
-      background: #fff;
-      padding: 30px;
-      border-radius: 16px;
-      box-shadow: 0px 8px 20px rgba(0,0,0,0.2);
-      width: 750px;
-      max-width: 95%;
+
+    /* ── CARD ── */
+    .card {
+      background: var(--white);
+      border-radius: 20px;
+      width: 820px;
+      max-width: 100%;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+      overflow: hidden;
     }
-    h2 {
-      text-align: center;
-      color: #007BFF;
-      margin-bottom: 25px;
+
+    /* ── HEADER PANEL ── */
+    .card-header {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--teal-dark) 100%);
+      padding: 32px 40px 24px;
+      position: relative;
     }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .logo-icon {
+      width: 40px; height: 40px;
+      background: var(--teal);
+      border-radius: 10px;
+      display: grid; place-items: center;
+      font-size: 20px;
+    }
+    .logo-text {
+      font-family: 'Sora', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+    .logo-text span { color: var(--teal-light); }
+    .header-tagline {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.5px;
+    }
+
+    /* ── TABS ── */
     .tabs {
       display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 4px;
+      margin-top: 16px;
+      width: fit-content;
     }
     .tab-btn {
-      flex: 1;
-      padding: 12px;
-      cursor: pointer;
+      padding: 8px 28px;
       border: none;
-      background: #f1f1f1;
-      font-size: 16px;
-      font-weight: bold;
-      transition: 0.3s;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.25s;
     }
     .tab-btn.active {
-      background: #007BFF;
-      color: white;
+      background: var(--white);
+      color: var(--navy);
     }
+
+    /* ── BODY ── */
+    .card-body { padding: 32px 40px 40px; }
+
+    /* ── PROGRESS BAR (signup) ── */
+    .progress-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 28px;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+      position: relative;
+    }
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+      transition: background 0.3s;
+    }
+    .step-item.done:not(:last-child)::after,
+    .step-item.active:not(:last-child)::after { background: var(--teal); }
+    .step-dot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--white);
+      display: grid; place-items: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--slate);
+      z-index: 1;
+      transition: all 0.3s;
+    }
+    .step-item.active .step-dot {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: var(--white);
+    }
+    .step-item.done .step-dot {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: var(--white);
+    }
+    .step-label {
+      font-size: 10px;
+      color: var(--slate);
+      margin-top: 5px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .step-item.active .step-label { color: var(--teal); font-weight: 600; }
+
+    /* ── FORM PAGES ── */
+    .form-page { display: none; }
+    .form-page.active { display: block; }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--teal-light);
+    }
+
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 16px 20px;
     }
+    .full { grid-column: span 2; }
+
+    /* ── FIELD ── */
+    .field { display: flex; flex-direction: column; gap: 5px; }
     label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 5px;
-      color: #333;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: 0.2px;
     }
+    label .req { color: var(--red); margin-left: 2px; }
+
     input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 10px 12px;
+      border: 1.5px solid var(--border);
       border-radius: 8px;
       outline: none;
-      transition: border 0.3s;
-    }
-    input:focus, textarea:focus {
-      border: 1px solid #007BFF;
-      box-shadow: 0px 0px 5px rgba(0,123,255,0.5);
-    }
-    textarea {
-      resize: none;
-    }
-    .full-width {
-      grid-column: span 2;
-    }
-    button {
+      color: var(--navy);
+      background: var(--white);
+      transition: border 0.2s, box-shadow 0.2s;
       width: 100%;
-      padding: 12px;
-      background: #007BFF;
-      border: none;
-      color: #fff;
-      font-size: 18px;
-      font-weight: bold;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s;
-      grid-column: span 2;
     }
-    button:hover {
-      background: #0056b3;
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(13,148,136,0.12);
     }
-    .hidden {
+    input.error, select.error { border-color: var(--red); }
+    .field-hint {
+      font-size: 11px;
+      color: var(--slate);
+    }
+    .field-error {
+      font-size: 11px;
+      color: var(--red);
       display: none;
+    }
+    .field-error.show { display: block; }
+
+    /* password strength */
+    .strength-bar {
+      height: 4px;
+      border-radius: 2px;
+      background: var(--border);
+      margin-top: 4px;
+      overflow: hidden;
+    }
+    .strength-fill {
+      height: 100%;
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.3s, background 0.3s;
+    }
+    .strength-label { font-size: 11px; color: var(--slate); }
+
+    /* file upload */
+    .upload-box {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: border 0.2s, background 0.2s;
+      position: relative;
+    }
+    .upload-box:hover { border-color: var(--teal); background: var(--teal-light); }
+    .upload-box input[type="file"] {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+    .upload-icon { font-size: 24px; }
+    .upload-label { font-size: 12px; color: var(--slate); margin-top: 4px; }
+    .upload-name {
+      font-size: 12px;
+      color: var(--teal);
+      font-weight: 600;
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ── AVAILABILITY CHIPS ── */
+    .chip-group {
+      display: flex; flex-wrap: wrap; gap: 8px;
+    }
+    .chip {
+      padding: 5px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--slate);
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .chip.selected {
+      border-color: var(--teal);
+      background: var(--teal-light);
+      color: var(--teal-dark);
+    }
+
+    /* ── NAVIGATION BUTTONS ── */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .btn {
+      flex: 1;
+      padding: 13px;
+      border: none;
+      border-radius: 9px;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--teal);
+      color: var(--white);
+    }
+    .btn-primary:hover { background: var(--teal-dark); transform: translateY(-1px); }
+    .btn-secondary {
+      background: var(--silver);
+      color: var(--navy);
+    }
+    .btn-secondary:hover { background: #E5E7EB; }
+
+    /* ── LOGIN FORM ── */
+    #loginSection { display: none; }
+    .login-grid { display: flex; flex-direction: column; gap: 16px; }
+    .forgot-link {
+      font-size: 13px;
+      color: var(--teal);
+      text-decoration: none;
+      font-weight: 500;
+      text-align: right;
+      display: block;
+      margin-top: -4px;
+    }
+    .forgot-link:hover { text-decoration: underline; }
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      color: var(--slate); font-size: 13px; margin: 8px 0;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 32px; left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--navy);
+      color: var(--white);
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: var(--shadow);
+      transition: transform 0.35s cubic-bezier(.34,1.56,.64,1);
+      z-index: 999;
+      white-space: nowrap;
+      max-width: 90vw;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+    #toast.success { background: var(--green); }
+    #toast.error   { background: var(--red); }
+
+    /* ── ID CARD PREVIEW ── */
+    #idCard {
+      display: none;
+      margin-top: 24px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--teal-dark) 100%);
+      border-radius: 14px;
+      padding: 24px;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    #idCard::before {
+      content: '✚';
+      font-size: 120px;
+      position: absolute;
+      right: -20px; top: -20px;
+      opacity: 0.06;
+      line-height: 1;
+    }
+    .id-card-header {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      opacity: 0.6;
+      margin-bottom: 12px;
+    }
+    .id-card-name {
+      font-family: 'Sora', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .id-card-spec { font-size: 14px; opacity: 0.75; margin-bottom: 16px; }
+    .id-card-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px; margin-bottom: 12px;
+    }
+    .id-field { display: flex; flex-direction: column; gap: 2px; }
+    .id-field-label { font-size: 10px; opacity: 0.55; letter-spacing: 0.5px; text-transform: uppercase; }
+    .id-field-value { font-size: 14px; font-weight: 600; }
+    .id-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      width: fit-content;
+    }
+
+    @media (max-width: 600px) {
+      .card-header, .card-body { padding: 24px 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .full { grid-column: span 1; }
+      .id-card-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
-    <h2>Doctor Portal</h2>
 
-    <!-- Tabs -->
-    <div class="tabs">
-      <button class="tab-btn active" onclick="showForm('signup')">Sign Up</button>
-      <button class="tab-btn" onclick="showForm('login')">Login</button>
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="card-header">
+    <div class="header-logo">
+      <div class="logo-icon">✚</div>
+      <div>
+        <div class="logo-text">Med<span>Connect</span></div>
+      </div>
     </div>
-
-    <!-- Sign Up Form -->
-    <form id="signupForm" onsubmit="handleSignUp(event)" class="form-grid">
-      
-      <div>
-        <label for="fullname">Full Name</label>
-        <input type="text" id="fullname" name="fullname" placeholder="Enter doctor's full name" required>
-      </div>
-      
-      <div>
-        <label for="specialization">Specialization</label>
-        <select id="specialization" name="specialization" required>
-          <option value="">-- Select Specialization --</option>
-          <option value="general">General Physician</option>
-          <option value="pediatrician">Pediatrician</option>
-          <option value="cardiologist">Cardiologist</option>
-          <option value="gynecologist">Gynecologist</option>
-          <option value="dermatologist">Dermatologist</option>
-          <option value="orthopedic">Orthopedic</option>
-        </select>
-      </div>
-      
-      <div>
-        <label for="experience">Experience (in years)</label>
-        <input type="number" id="experience" name="experience" placeholder="e.g. 5" min="0" required>
-      </div>
-      
-      <div>
-        <label for="qualification">Qualification</label>
-        <input type="text" id="qualification" name="qualification" placeholder="e.g. MBBS, MD" required>
-      </div>
-      
-      <div class="full-width">
-        <label for="availability">Availability (Free Time)</label>
-        <input type="text" id="availability" name="availability" placeholder="e.g. 2 PM to 3 PM" required>
-      </div>
-      
-      <div>
-        <label for="contact">Contact Number</label>
-        <input type="tel" id="contact" name="contact" placeholder="Enter mobile number" pattern="[0-9]{10}" required>
-      </div>
-      
-      <div>
-        <label for="email">Email ID</label>
-        <input type="email" id="email" name="email" placeholder="Enter email address" required>
-      </div>
-
-      <div>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter password" required>
-      </div>
-
-      <div>
-        <label for="confirmPassword">Confirm Password</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required>
-      </div>
-      
-      <div class="full-width">
-        <label for="address">Address</label>
-        <textarea id="address" name="address" rows="3" placeholder="Enter address" required></textarea>
-      </div>
-
-      <!-- New Upload Fields -->
-      <div>
-        <label for="photo">Upload Doctor Photo</label>
-        <input type="file" id="photo" name="photo" accept="image/*" required>
-      </div>
-
-      <div>
-        <label for="signature">Upload Signature</label>
-        <input type="file" id="signature" name="signature" accept="image/*" required>
-      </div>
-
-      <div class="full-width">
-        <label for="certificate">Upload Certificate</label>
-        <input type="file" id="certificate" name="certificate" accept=".jpg,.png,.pdf" required>
-      </div>
-      <!-- End Upload Fields -->
-      
-      <button type="submit">Sign Up</button>
-    </form>
-
-    <!-- Login Form -->
-    <form id="loginForm" onsubmit="handleLogin(event)" class="form-grid hidden">
-      <div class="full-width">
-        <label for="doctorID">Doctor ID</label>
-        <input type="text" id="doctorID" name="doctorID" placeholder="Enter your Doctor ID" required>
-      </div>
-
-      <div class="full-width">
-        <label for="loginPassword">Password</label>
-        <input type="password" id="loginPassword" name="loginPassword" placeholder="Enter password" required>
-      </div>
-
-      <button type="submit">Login</button>
-    </form>
+    <div class="header-tagline">Verified Doctor Registration &amp; Portal Access</div>
+    <div class="tabs" style="margin-top:20px">
+      <button class="tab-btn active" onclick="switchTab('signup')">Register</button>
+      <button class="tab-btn" onclick="switchTab('login')">Sign In</button>
+    </div>
   </div>
 
-  <script>
-    // Switch Forms
-    function showForm(type) {
-      document.getElementById("signupForm").classList.add("hidden");
-      document.getElementById("loginForm").classList.add("hidden");
-      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+  <!-- BODY -->
+  <div class="card-body">
 
-      if (type === "signup") {
-        document.getElementById("signupForm").classList.remove("hidden");
-        document.querySelectorAll(".tab-btn")[0].classList.add("active");
-      } else {
-        document.getElementById("loginForm").classList.remove("hidden");
-        document.querySelectorAll(".tab-btn")[1].classList.add("active");
-      }
+    <!-- ══ SIGNUP SECTION ══ -->
+    <div id="signupSection">
+
+      <!-- Step progress -->
+      <div class="progress-wrap">
+        <div class="step-item active" id="step1">
+          <div class="step-dot">1</div>
+          <div class="step-label">Personal</div>
+        </div>
+        <div class="step-item" id="step2">
+          <div class="step-dot">2</div>
+          <div class="step-label">Professional</div>
+        </div>
+        <div class="step-item" id="step3">
+          <div class="step-dot">3</div>
+          <div class="step-label">Credentials</div>
+        </div>
+        <div class="step-item" id="step4">
+          <div class="step-dot">✓</div>
+          <div class="step-label">Done</div>
+        </div>
+      </div>
+
+      <!-- PAGE 1: Personal Info -->
+      <div class="form-page active" id="page1">
+        <div class="section-title">Personal Information</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" id="fullname" placeholder="Dr. Firstname Lastname">
+            <span class="field-error" id="err-fullname">Please enter your full name.</span>
+          </div>
+          <div class="field">
+            <label>Contact Number <span class="req">*</span></label>
+            <input type="tel" id="contact" placeholder="10-digit mobile number" maxlength="10">
+            <span class="field-error" id="err-contact">Enter a valid 10-digit number.</span>
+          </div>
+          <div class="field">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" id="email" placeholder="doctor@hospital.com">
+            <span class="field-error" id="err-email">Enter a valid email.</span>
+          </div>
+          <div class="field">
+            <label>Gender</label>
+            <select id="gender">
+              <option value="">-- Select --</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Prefer not to say</option>
+            </select>
+          </div>
+          <div class="field full">
+            <label>Clinic / Hospital Address <span class="req">*</span></label>
+            <textarea id="address" rows="2" placeholder="Full address including city and pincode"></textarea>
+            <span class="field-error" id="err-address">Address is required.</span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="goToPage(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- PAGE 2: Professional Info -->
+      <div class="form-page" id="page2">
+        <div class="section-title">Professional Details</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Specialization <span class="req">*</span></label>
+            <select id="specialization">
+              <option value="">-- Select --</option>
+              <option>General Physician</option>
+              <option>Pediatrician</option>
+              <option>Cardiologist</option>
+              <option>Gynecologist</option>
+              <option>Dermatologist</option>
+              <option>Orthopedic</option>
+              <option>Neurologist</option>
+              <option>Psychiatrist</option>
+              <option>Ophthalmologist</option>
+              <option>ENT Specialist</option>
+            </select>
+            <span class="field-error" id="err-spec">Select a specialization.</span>
+          </div>
+          <div class="field">
+            <label>Experience (years) <span class="req">*</span></label>
+            <input type="number" id="experience" min="0" max="60" placeholder="e.g. 8">
+            <span class="field-error" id="err-exp">Enter valid experience.</span>
+          </div>
+          <div class="field">
+            <label>Qualification <span class="req">*</span></label>
+            <input type="text" id="qualification" placeholder="e.g. MBBS, MD, DM">
+            <span class="field-error" id="err-qual">Qualification is required.</span>
+          </div>
+          <div class="field">
+            <label>Consultation Fee (₹)</label>
+            <input type="number" id="fee" min="0" placeholder="e.g. 500">
+          </div>
+          <div class="field full">
+            <label>Available Slots <span class="req">*</span> <span class="field-hint" style="font-weight:400;color:#6B7280"> – tap to select</span></label>
+            <div class="chip-group" id="slotChips">
+              <div class="chip" onclick="toggleChip(this)">6 AM – 9 AM</div>
+              <div class="chip" onclick="toggleChip(this)">9 AM – 12 PM</div>
+              <div class="chip" onclick="toggleChip(this)">12 PM – 3 PM</div>
+              <div class="chip" onclick="toggleChip(this)">3 PM – 6 PM</div>
+              <div class="chip" onclick="toggleChip(this)">6 PM – 9 PM</div>
+              <div class="chip" onclick="toggleChip(this)">Weekend Only</div>
+            </div>
+            <span class="field-error" id="err-slots">Select at least one slot.</span>
+          </div>
+          <div class="field full">
+            <label>Brief Bio</label>
+            <textarea id="bio" rows="2" placeholder="A short note about your approach or expertise (optional)"></textarea>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goToPage(1)">← Back</button>
+          <button class="btn btn-primary" onclick="goToPage(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- PAGE 3: Credentials & Uploads -->
+      <div class="form-page" id="page3">
+        <div class="section-title">Account &amp; Documents</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>Password <span class="req">*</span></label>
+            <input type="password" id="password" placeholder="Min 8 characters" oninput="checkStrength()">
+            <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+            <span class="strength-label" id="strengthLabel"></span>
+            <span class="field-error" id="err-pass">Min 8 characters required.</span>
+          </div>
+          <div class="field">
+            <label>Confirm Password <span class="req">*</span></label>
+            <input type="password" id="confirmPassword" placeholder="Re-enter password">
+            <span class="field-error" id="err-cpass">Passwords do not match.</span>
+          </div>
+
+          <div class="field">
+            <label>Doctor Photo <span class="req">*</span></label>
+            <div class="upload-box" id="photoBox">
+              <input type="file" id="photo" accept="image/*" onchange="showFileName('photo','photoBox','photoName')">
+              <div class="upload-icon">🖼️</div>
+              <div class="upload-label">Click to upload photo</div>
+              <div class="upload-name" id="photoName"></div>
+            </div>
+            <span class="field-error" id="err-photo">Photo is required.</span>
+          </div>
+          <div class="field">
+            <label>Signature <span class="req">*</span></label>
+            <div class="upload-box" id="sigBox">
+              <input type="file" id="signature" accept="image/*" onchange="showFileName('signature','sigBox','sigName')">
+              <div class="upload-icon">✍️</div>
+              <div class="upload-label">Click to upload signature</div>
+              <div class="upload-name" id="sigName"></div>
+            </div>
+            <span class="field-error" id="err-sig">Signature is required.</span>
+          </div>
+          <div class="field full">
+            <label>Medical Certificate <span class="req">*</span></label>
+            <div class="upload-box" id="certBox">
+              <input type="file" id="certificate" accept=".jpg,.png,.pdf" onchange="showFileName('certificate','certBox','certName')">
+              <div class="upload-icon">📄</div>
+              <div class="upload-label">JPG / PNG / PDF accepted</div>
+              <div class="upload-name" id="certName"></div>
+            </div>
+            <span class="field-error" id="err-cert">Certificate is required.</span>
+          </div>
+
+          <div class="field full" style="margin-top:4px">
+            <label style="display:flex;gap:8px;align-items:center;cursor:pointer;font-weight:400">
+              <input type="checkbox" id="agree" style="width:16px;height:16px;accent-color:var(--teal)">
+              I agree to the <a href="#" style="color:var(--teal)">Terms of Service</a> and confirm all information is accurate.
+            </label>
+            <span class="field-error" id="err-agree">You must agree to continue.</span>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-secondary" onclick="goToPage(2)">← Back</button>
+          <button class="btn btn-primary" onclick="handleSignUp()">Register Doctor ✓</button>
+        </div>
+      </div>
+
+      <!-- PAGE 4: Success -->
+      <div class="form-page" id="page4">
+        <div style="text-align:center;padding:16px 0 8px">
+          <div style="font-size:52px;margin-bottom:12px">🎉</div>
+          <div style="font-size:22px;font-weight:700;color:var(--navy);margin-bottom:8px">Registration Complete!</div>
+          <div style="color:var(--slate);font-size:14px;margin-bottom:24px">Your Doctor ID has been generated. Save it — you'll need it to log in.</div>
+        </div>
+        <div id="idCard">
+          <div class="id-card-header">MedConnect · Verified Doctor Card</div>
+          <div class="id-card-name" id="cardName"></div>
+          <div class="id-card-spec" id="cardSpec"></div>
+          <div class="id-card-row">
+            <div class="id-field">
+              <div class="id-field-label">Qualification</div>
+              <div class="id-field-value" id="cardQual"></div>
+            </div>
+            <div class="id-field">
+              <div class="id-field-label">Experience</div>
+              <div class="id-field-value" id="cardExp"></div>
+            </div>
+            <div class="id-field">
+              <div class="id-field-label">Contact</div>
+              <div class="id-field-value" id="cardContact"></div>
+            </div>
+            <div class="id-field">
+              <div class="id-field-label">Fee</div>
+              <div class="id-field-value" id="cardFee"></div>
+            </div>
+          </div>
+          <div class="id-badge">🪪 <span id="cardID"></span></div>
+        </div>
+        <div class="btn-row" style="margin-top:20px">
+          <button class="btn btn-secondary" onclick="copyID()">📋 Copy Doctor ID</button>
+          <button class="btn btn-primary" onclick="switchTab('login')">Go to Sign In →</button>
+        </div>
+      </div>
+
+    </div><!-- /signupSection -->
+
+    <!-- ══ LOGIN SECTION ══ -->
+    <div id="loginSection">
+      <div class="login-grid">
+        <div class="field">
+          <label>Doctor ID <span class="req">*</span></label>
+          <input type="text" id="doctorID" placeholder="e.g. DOC123456">
+        </div>
+        <div class="field">
+          <label>Password <span class="req">*</span></label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" onkeydown="if(event.key==='Enter')handleLogin()">
+          <a class="forgot-link" href="#" onclick="handleForgot()">Forgot password?</a>
+        </div>
+        <button class="btn btn-primary" style="margin-top:4px" onclick="handleLogin()">Sign In</button>
+        <div class="divider">or</div>
+        <button class="btn btn-secondary" onclick="switchTab('signup')">Create new account</button>
+      </div>
+    </div><!-- /loginSection -->
+
+  </div><!-- /card-body -->
+</div>
+
+<div id="toast"></div>
+
+<script>
+  let currentPage = 1;
+  let generatedID = '';
+
+  /* ── TAB SWITCH ── */
+  function switchTab(tab) {
+    document.getElementById('signupSection').style.display = tab === 'signup' ? '' : 'none';
+    document.getElementById('loginSection').style.display = tab === 'login' ? '' : 'none';
+    document.querySelectorAll('.tab-btn').forEach((b, i) => {
+      b.classList.toggle('active', (tab === 'signup' && i === 0) || (tab === 'login' && i === 1));
+    });
+  }
+
+  /* ── STEP NAVIGATION ── */
+  function goToPage(n) {
+    if (n > currentPage && !validatePage(currentPage)) return;
+    document.querySelectorAll('.form-page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page' + n).classList.add('active');
+    for (let i = 1; i <= 4; i++) {
+      const s = document.getElementById('step' + i);
+      s.classList.remove('active', 'done');
+      if (i < n) s.classList.add('done');
+      if (i === n) s.classList.add('active');
     }
+    currentPage = n;
+  }
 
-    // Convert File to Base64 (for storage)
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
+  /* ── VALIDATION ── */
+  function validatePage(p) {
+    let ok = true;
+    const show = (id, show) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('show', show);
+    };
+
+    if (p === 1) {
+      const nm = v('fullname'), ct = v('contact'), em = v('email'), ad = v('address');
+      if (!nm) { show('err-fullname', true); ok = false; } else show('err-fullname', false);
+      if (!/^\d{10}$/.test(ct)) { show('err-contact', true); ok = false; } else show('err-contact', false);
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { show('err-email', true); ok = false; } else show('err-email', false);
+      if (!ad) { show('err-address', true); ok = false; } else show('err-address', false);
     }
-
-    // Sign Up Handler
-    async function handleSignUp(event) {
-      event.preventDefault();
-
-      const password = document.getElementById("password").value;
-      const confirmPassword = document.getElementById("confirmPassword").value;
-
-      if (password !== confirmPassword) {
-        alert("❌ Passwords do not match!");
-        return;
-      }
-
-      const doctorID = "DOC" + Math.floor(Math.random() * 1000000);
-
-      const photoFile = document.getElementById("photo").files[0];
-      const signatureFile = document.getElementById("signature").files[0];
-      const certificateFile = document.getElementById("certificate").files[0];
-
-      const doctorData = {
-        id: doctorID,
-        fullname: document.getElementById("fullname").value,
-        specialization: document.getElementById("specialization").value,
-        experience: document.getElementById("experience").value,
-        qualification: document.getElementById("qualification").value,
-        availability: document.getElementById("availability").value,
-        contact: document.getElementById("contact").value,
-        email: document.getElementById("email").value,
-        address: document.getElementById("address").value,
-        password: password,
-        photo: photoFile ? await toBase64(photoFile) : null,
-        signature: signatureFile ? await toBase64(signatureFile) : null,
-        certificate: certificateFile ? await toBase64(certificateFile) : null
-      };
-
-      localStorage.setItem("doctorData", JSON.stringify(doctorData));
-
-      alert("✅ Sign Up Successful!\nYour Doctor ID is: " + doctorID + "\nPlease use this ID for login.");
-      window.location.href = "docterd.html";
-      event.target.reset();
+    if (p === 2) {
+      const sp = v('specialization'), ex = v('experience'), ql = v('qualification');
+      const slots = document.querySelectorAll('#slotChips .chip.selected');
+      if (!sp) { show('err-spec', true); ok = false; } else show('err-spec', false);
+      if (!ex || ex < 0) { show('err-exp', true); ok = false; } else show('err-exp', false);
+      if (!ql) { show('err-qual', true); ok = false; } else show('err-qual', false);
+      if (!slots.length) { show('err-slots', true); ok = false; } else show('err-slots', false);
     }
-
-    // Login Handler
-    function handleLogin(event) {
-      event.preventDefault();
-
-      const enteredID = document.getElementById("doctorID").value;
-      const enteredPassword = document.getElementById("loginPassword").value;
-
-      const doctorData = JSON.parse(localStorage.getItem("doctorData"));
-
-      if (doctorData && enteredID === doctorData.id && enteredPassword === doctorData.password) {
-        alert("✅ Login Successful! Welcome Dr. " + doctorData.fullname);
-        window.location.href = "docterd.html";
-      } else {
-        alert("❌ Invalid Doctor ID or Password!");
-      }
+    if (p === 3) {
+      const pw = v('password'), cpw = v('confirmPassword');
+      const photo = document.getElementById('photo').files.length;
+      const sig = document.getElementById('signature').files.length;
+      const cert = document.getElementById('certificate').files.length;
+      const agreed = document.getElementById('agree').checked;
+      if (pw.length < 8) { show('err-pass', true); ok = false; } else show('err-pass', false);
+      if (pw !== cpw) { show('err-cpass', true); ok = false; } else show('err-cpass', false);
+      if (!photo) { show('err-photo', true); ok = false; } else show('err-photo', false);
+      if (!sig) { show('err-sig', true); ok = false; } else show('err-sig', false);
+      if (!cert) { show('err-cert', true); ok = false; } else show('err-cert', false);
+      if (!agreed) { show('err-agree', true); ok = false; } else show('err-agree', false);
     }
-  </script>
+    return ok;
+  }
+
+  function v(id) { return document.getElementById(id)?.value?.trim() || ''; }
+
+  /* ── SLOT CHIPS ── */
+  function toggleChip(el) { el.classList.toggle('selected'); }
+
+  /* ── PASSWORD STRENGTH ── */
+  function checkStrength() {
+    const pw = document.getElementById('password').value;
+    const fill = document.getElementById('strengthFill');
+    const label = document.getElementById('strengthLabel');
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    const colors = ['#EF4444','#F59E0B','#10B981','#0D9488'];
+    const labels = ['Weak','Fair','Good','Strong'];
+    if (pw.length === 0) { fill.style.width = '0%'; label.textContent = ''; return; }
+    fill.style.width = (score * 25) + '%';
+    fill.style.background = colors[score - 1] || colors[0];
+    label.textContent = labels[score - 1] || 'Weak';
+    label.style.color = colors[score - 1] || colors[0];
+  }
+
+  /* ── FILE NAMES ── */
+  function showFileName(inputId, boxId, nameId) {
+    const file = document.getElementById(inputId).files[0];
+    if (file) {
+      document.getElementById(nameId).textContent = '✓ ' + file.name;
+      document.getElementById(boxId).style.borderColor = 'var(--teal)';
+      document.getElementById(boxId).style.background = 'var(--teal-light)';
+    }
+  }
+
+  /* ── SIGN UP ── */
+  async function handleSignUp() {
+    if (!validatePage(3)) return;
+
+    const slots = [...document.querySelectorAll('#slotChips .chip.selected')].map(c => c.textContent).join(', ');
+    const fee = v('fee') ? '₹' + v('fee') : 'Not set';
+
+    generatedID = 'DOC' + Math.floor(100000 + Math.random() * 900000);
+
+    const toB64 = file => new Promise(r => { const fr = new FileReader(); fr.readAsDataURL(file); fr.onload = () => r(fr.result); });
+    const photoB64 = await toB64(document.getElementById('photo').files[0]);
+    const sigB64   = await toB64(document.getElementById('signature').files[0]);
+    const certB64  = await toB64(document.getElementById('certificate').files[0]);
+
+    const data = {
+      id: generatedID,
+      fullname: v('fullname'),
+      specialization: v('specialization'),
+      experience: v('experience'),
+      qualification: v('qualification'),
+      availability: slots,
+      contact: v('contact'),
+      email: v('email'),
+      address: v('address'),
+      gender: v('gender'),
+      fee: v('fee'),
+      bio: v('bio'),
+      password: v('password'),
+      photo: photoB64,
+      signature: sigB64,
+      certificate: certB64
+    };
+    localStorage.setItem('doctorData', JSON.stringify(data));
+
+    // populate card
+    document.getElementById('cardName').textContent = 'Dr. ' + data.fullname;
+    document.getElementById('cardSpec').textContent = data.specialization;
+    document.getElementById('cardQual').textContent = data.qualification;
+    document.getElementById('cardExp').textContent = data.experience + ' yrs';
+    document.getElementById('cardContact').textContent = data.contact;
+    document.getElementById('cardFee').textContent = fee;
+    document.getElementById('cardID').textContent = generatedID;
+    document.getElementById('idCard').style.display = 'block';
+
+    goToPage(4);
+    toast('Registration successful! Welcome, Dr. ' + data.fullname, 'success');
+  }
+
+  /* ── LOGIN ── */
+  function handleLogin() {
+    const id = v('doctorID'), pw = v('loginPassword');
+    if (!id || !pw) { toast('Please fill in all fields.', 'error'); return; }
+    const saved = JSON.parse(localStorage.getItem('doctorData') || 'null');
+    if (saved && id === saved.id && pw === saved.password) {
+      toast('Welcome back, Dr. ' + saved.fullname + '! Redirecting…', 'success');
+      setTimeout(() => window.location.href = 'docterd.html', 1800);
+    } else {
+      toast('Invalid Doctor ID or password.', 'error');
+    }
+  }
+
+  /* ── FORGOT ── */
+  function handleForgot() {
+    const id = v('doctorID');
+    const saved = JSON.parse(localStorage.getItem('doctorData') || 'null');
+    if (!id) { toast('Enter your Doctor ID first.', 'error'); return; }
+    if (saved && id === saved.id) {
+      toast('Your registered email is: ' + saved.email, 'success');
+    } else {
+      toast('No account found for that ID.', 'error');
+    }
+  }
+
+  /* ── COPY ID ── */
+  function copyID() {
+    navigator.clipboard.writeText(generatedID).then(() => toast('Doctor ID copied!', 'success'));
+  }
+
+  /* ── TOAST ── */
+  function toast(msg, type = '') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'show ' + type;
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.className = '', 3500);
+  }
+</script>
+
 </body>
 </html>
